@@ -5,7 +5,7 @@ import { SideNavItem } from "./types";
 export const SIDENAV_ITEMS: SideNavItem[] = [
  
   {
-    title: "Reports",
+    title: "Attendance",
     path: "/admin/reports",
     icon: <Icon icon="lucide:clipboard-minus" width="24" height="24" />,
   },

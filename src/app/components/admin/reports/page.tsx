@@ -69,7 +69,6 @@ const Reports: React.FC = () => {
 
   return (
     <>
-
       <ReportsTemplate
         attendance={filteredAttendance}
         filterName={filterType === "name" ? (filterValue as string) : ""}

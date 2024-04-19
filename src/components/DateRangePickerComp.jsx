@@ -4,6 +4,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 const DateRangePickerComp = ({ onChange }) => {
+
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -15,6 +16,7 @@ const DateRangePickerComp = ({ onChange }) => {
     onChange && onChange(ranges.selection);
   };
 
+  
   return (
     <div className="calendarElement">
       <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />

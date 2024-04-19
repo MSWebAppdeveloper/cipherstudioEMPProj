@@ -1,8 +1,9 @@
-import DateRangePickerComp from "@/components/DateRangePickerComp";
+"use client"
 import React, { useState } from "react";
 import { CSVLink } from "react-csv";
 import { ReportsInterface } from "./reportsInterface";
 import { Icon } from "@iconify/react";
+import DateRangePickerComp from "@/components/DateRangePickerComp";
 
 const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) => {
   const [filterName, setFilterName] = useState("");
@@ -91,39 +92,50 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
                 </CSVLink>
               </button>
             </div>
-
-            <button
-              onClick={handleToggleFilterModal}
-              className={`px-2 py-1 m-2 sm:px-4 sm:py-2 rounded bg-blue-500 hover:bg-blue-700 text-white text-xs sm:text-sm`}
-            >
-              Filter
-            </button>
+            <div className="grid gap-4  mb-4">
+              <div className="flex justify-even gap-4 items-center ">
+                <div>
+                  <button
+                    // onClick={handleToggleFilterModal}
+                    className={`px-2 py-1 m-2 sm:px-4 sm:py-2 rounded bg-blue-500 hover:bg-blue-700 text-white text-xs sm:text-sm`}
+                  >
+                    Filter
+                  </button>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <h3 className="text-base font-bold text-gray-800 mb-2">
+                    By Name
+                  </h3>
+                  <select
+                    value={filterName}
+                    onChange={handleUserNameChange}
+                    className="border border-gray-300 rounded-md p-1"
+                  >
+                    <option value="">Select User </option>
+                    {getUserNames().map((name) => (
+                      <option key={name} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex gap-4 flex-wrap">
+                  <h3 className="text-base font-bold text-gray-800 mb-2">By Date</h3>
+                  <div className="relative">
+                    <button
+                      onClick={handleToggleFilterModal}
+                      className="border border-gray-300 rounded-md p-1"
+                    >
+                      Select Date Range
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
             {showFilterModal && (
               <div className="absolute top-0 left-0 h-full w-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
                 <div className="bg-white p-4 rounded-md shadow-md">
-                  <div className="flex justify-between mb-2">
-                    <h3 className="text-lg font-semibold">Filter Options</h3>
-                    <button
-                      className="bg-gray-500 hover:bg-gray-700 text-white font-bold  rounded m-2 sm:w-auto md:w-auto" // Adjust button size for small and medium screens
-                    >
-                      <Icon icon="material-symbols-light:cancel-outline" width="2em" height="2em" className=" hover:from-fuchsia-100 cursor-pointer" onClick={handleToggleFilterModal} />
-                    </button>
-                  </div>
                   <div className="grid gap-4  mb-4">
-                    <div className="flex gap-2">
-                      <select
-                        value={filterName}
-                        onChange={handleUserNameChange}
-                        className="cursor-pointer bg-cardColor border border-black text-textColor text-sm rounded-lg focus:outline-none block"
-                      >
-                        <option value="">Select User </option>
-                        {getUserNames().map((name) => (
-                          <option key={name} value={name}>
-                            {name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
                     <div className=" border border-black">
                       <DateRangePickerComp onChange={handleDateRangeChange} />
                     </div>
@@ -133,7 +145,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
                       onClick={resetFilters}
                       className="px-2 py-1 rounded bg-blue-500 hover:bg-blue-700 text-white text-xs sm:text-sm"
                     >
-                      Reset Filters
+                      Reset Date
                     </button>
                     <button className="px-2 py-1 rounded bg-red-500 hover:bg-red-700 text-white text-xs sm:text-sm"
                       onClick={handleToggleFilterModal}>Close</button>

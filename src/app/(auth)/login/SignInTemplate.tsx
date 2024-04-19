@@ -8,7 +8,7 @@ const SignInTemplate: React.FC<SignInInterface> = ({
   loading,
   errors,
   rememberMe,
-onRememberMeChange,
+  onRememberMeChange,
 }) => (
   <>
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -76,17 +76,17 @@ onRememberMeChange,
               </div>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                <input
-      type="checkbox"
-      id="remember"
-      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:outline-none"
-      defaultChecked={rememberMe}
-      onChange={onRememberMeChange}
-    />
-    <label
-      htmlFor="remember"
-      className="ml-2 block text-sm text-gray-700"
-    >
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:outline-none"
+                    defaultChecked={rememberMe}
+                    onChange={onRememberMeChange}
+                  />
+                  <label
+                    htmlFor="remember"
+                    className="ml-2 block text-sm text-gray-700"
+                  >
                     Remember me
                   </label>
                 </div>

@@ -9,4 +9,4 @@ export interface SignInInterface {
     errors: loginErrorType;
     rememberMe:boolean
 onRememberMeChange:(e: any) => void
-}
+} 

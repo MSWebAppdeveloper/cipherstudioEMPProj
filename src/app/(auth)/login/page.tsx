@@ -19,7 +19,7 @@ function Login() {
   const { data: session } = useSession();
   const router = useRouter();
   const [redirecting, setRedirecting] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
 
 
   useEffect(() => {
