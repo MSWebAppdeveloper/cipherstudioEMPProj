@@ -30,7 +30,7 @@ const UserTableComponent: React.FC = () => {
 
   const getAllUsers = async () => {
     try {
-      const url = "users";
+      const url = "employee/users";
       const response: any = await UserDetails(url);
       setAllUsers(response.data);
     } catch (error) {
@@ -45,7 +45,7 @@ const UserTableComponent: React.FC = () => {
 
   const confirmDeleteUser = async () => {
     try {
-      await deleteUser(`users/${selectedUserId}`);
+      await deleteUser(`employee/users/${selectedUserId}`);
       getAllUsers();
       toast.success("User deleted successfully!");
     } catch (error) {

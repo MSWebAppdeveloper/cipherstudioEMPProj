@@ -112,6 +112,28 @@ export const deleteUser = async (endpoint: string) => {
   }
 };
 
+
+//....leaveTypes
+export const LeaveTypes = async (endpoint: any) => {
+  try {
+      const response = await getMethod(endpoint);
+      return response;
+  } catch (error) {
+      throw error;
+  }
+}
+
+//....LEavRequest
+
+export const RequestLeave = async (endpoint: any, payload: any) => {
+  try {
+      const response = await postMethod(endpoint, payload);
+      return response;
+  } catch (error) {
+      throw error;
+  }
+}
+
 // Post method
 const postMethod = async (endpoint: string, payload: any) => {
   try {

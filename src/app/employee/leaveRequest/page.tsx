@@ -1,14 +1,12 @@
 import React from "react";
-import EmployeePage from "../../components/employee/attendanceDashboard/page";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
-import Navbar from "@/components/Navbar";
 import HeaderMobile from "@/components/header-mobile";
-import MarginWidthWrapper from "@/components/margin-width-wrapper";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
+import LeaveRequestComponent from "@/app/components/employee/leaverequest/page";
 
-const Employee = async () => {
+const leaveRequest = async () => {
    const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/login");
@@ -17,13 +15,13 @@ const Employee = async () => {
    
       <div className=" relative  flex flex-1 flex-col ">
         <EmployeeNavbar />
-        {/* <HeaderMobile /> */}
+        <HeaderMobile />
         <div className="h-screen flex  justify-center ">
-          <EmployeePage />
+          <LeaveRequestComponent />
         </div>
       </div>
    
   );
 };
 
-export default Employee;
+export default leaveRequest;

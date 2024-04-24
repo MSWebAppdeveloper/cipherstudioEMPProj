@@ -69,7 +69,7 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
       if (formData.id) {
         // Update existing user
         const response: any = await updateUserDetails(
-          `users/${formData.id}`,
+          `employee/users/${formData.id}`,
           userData
         );
 
@@ -82,7 +82,7 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
         }
       } else {
         // Create new user
-        const response: any = await registerUser("users", userData);
+        const response: any = await registerUser("employee/users", userData);
 
         if (response.status === 201) {
           toast.success("User added successfully");

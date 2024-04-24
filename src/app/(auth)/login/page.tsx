@@ -74,7 +74,7 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await UserLogin("users/login", formdata);
+      const response = await UserLogin("employee/users/login", formdata);
       if (response.status === 200) {
         const { UserId, name, accessToken, refreshToken, userRole = "" } = response.data;
 

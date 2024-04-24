@@ -122,7 +122,7 @@ const UserFormTemplate: React.FC<UserFormProps> = ({
                     value={formData.department}
                   >
                     <option>Choose a department</option>
-                    <option value="Developer">Web Developer</option>
+                    <option value="Web Developer">Web Developer</option>
                     <option value="Designing">Designing</option>
                   </select>
                 </div>

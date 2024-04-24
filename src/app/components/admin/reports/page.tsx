@@ -17,7 +17,7 @@ const Reports: React.FC = () => {
 
   const getAllUsers = async () => {
     try {
-      const url = "users";
+      const url = "employee/users";
       const response: any = await UserDetails(url);
       setAllUsers(response.data);
     } catch (error) {
@@ -28,7 +28,7 @@ const Reports: React.FC = () => {
   useEffect(() => {
     const fetchAttendanceHistory = async () => {
       try {
-        const url = "attendance";
+        const url = "employee/attendance";
         const response: any = await AttendanceHistory(url);
         // Parse totalHours to number
         const dataWithParsedTotalHours = response.data.map((entry: any) => ({

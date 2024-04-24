@@ -25,7 +25,7 @@ const EmployeePage: React.FC = () => {
   const [intervalId, setIntervalId] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const intervalIdRef: React.MutableRefObject<ReturnType<typeof setInterval> | null> = useRef<ReturnType<typeof setInterval> | null>(null);
-
+  const startTimeRef = React.useRef<number>(0);
   useEffect(() => {
     const updateClock = () => {
       const now = new Date();
@@ -42,7 +42,7 @@ const EmployeePage: React.FC = () => {
     const checkAttendanceStatus = async () => {
       try {
         const userId = localStorage.getItem("UserId");
-        const url = "attendance/status";
+        const url = "employee/attendance/status";
         // const res= await Attendance("attendance/status")
         const response = await axios.get(
           "http://192.168.1.25:8080/api/employee/attendance/status",
@@ -65,7 +65,7 @@ const EmployeePage: React.FC = () => {
         // Start the timer if user is already clocked in
         if (isClockedIn && existingEntry && !existingEntry.timeOut) {
           setTimerActive(true);
-          // startTimeRef.current = new Date().getTime();
+          startTimeRef.current = new Date().getTime();
         }
       } catch (error) {
         console.error("Error checking attendance status:", error);
@@ -105,7 +105,7 @@ const EmployeePage: React.FC = () => {
 
       // Start the timer
       setTimerActive(true);
-      // startTimeRef.current = new Date().getTime();
+      startTimeRef.current = new Date().getTime();
       const id: any = setInterval(() => {
         setTotalRecordTime((prevTime) => prevTime + 1);
       }, 1000);
