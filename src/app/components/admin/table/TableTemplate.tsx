@@ -65,9 +65,10 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
               <table className="table-auto border-collapse border border-gray-200 w-full">
                 <thead>
                   <tr className="border-b border-gray-200 text-center">
-                    <th className="px-2 py-1">Entry</th>
+                    <th className="px-2 py-1">S No.</th>
                     <th className="px-2 py-1">Name</th>
                     <th className="px-2 py-1">Email</th>
+                    <th className="px-2 py-1">Account Type</th>
                     <th className="px-2 py-1">Department</th>
                     <th className="px-2 py-1">Actions</th>
                     <th className="px-2 py-1">Active</th>
@@ -82,6 +83,7 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
                       <td className="px-2 py-1">{index + 1}</td>
                       <td className="px-2 py-1">{user.name}</td>
                       <td className="px-2 py-1">{user.email}</td>
+                      <td className="px-2 py-1">{user.userRole}</td>
                       <td className="px-2 py-1">{user.department}</td>
                       <td className="px-2 py-1 flex items-center justify-center gap-2">
                         <button
