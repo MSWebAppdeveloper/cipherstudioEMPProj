@@ -121,7 +121,7 @@ export const LeaveTypes = async (endpoint: any) => {
   } catch (error) {
       throw error;
   }
-}
+};
 
 //....LEavRequest
 
@@ -132,7 +132,37 @@ export const RequestLeave = async (endpoint: any, payload: any) => {
   } catch (error) {
       throw error;
   }
-}
+};
+
+//.....Approve request
+export const ApproveLeave = async (endpoint: any, payload: any) => {
+  try {
+      const response = await postMethod(endpoint, payload);
+      return response;
+  } catch (error) {
+      throw error;
+  }
+};
+//..Reject Request
+export const RejectLeave = async (endpoint: any, payload: any) => {
+  try {
+      const response = await postMethod(endpoint, payload);
+      return response;
+  } catch (error) {
+      throw error;
+  }
+};
+
+//....LeaveHistory
+
+export const HistoryLeave = async (endpoint: any) => {
+  try {
+      const response = await getMethod(endpoint);
+      return response;
+  } catch (error) {
+      throw error;
+  }
+};
 
 // Post method
 const postMethod = async (endpoint: string, payload: any) => {

@@ -4,7 +4,7 @@ import { authOptions } from "../../api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 import HeaderMobile from "@/components/header-mobile";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
-import LeaveRequestComponent from "@/app/components/employee/leaverequest/page";
+import RequestComponent from "@/app/components/employee/request/page";
 
 const leaveRequest = async () => {
    const session = await getServerSession(authOptions);
@@ -17,7 +17,7 @@ const leaveRequest = async () => {
         <EmployeeNavbar />
         <HeaderMobile />
         <div className="h-screen flex  justify-center ">
-          <LeaveRequestComponent />
+          <RequestComponent />
         </div>
       </div>
    

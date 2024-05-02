@@ -45,7 +45,7 @@ const EmployeePage: React.FC = () => {
         const url = "employee/attendance/status";
         // const res= await Attendance("attendance/status")
         const response = await axios.get(
-          "http://192.168.1.25:8080/api/employee/attendance/status",
+          "http://192.168.1.25:8082/api/employee/attendance/status",
           { params: { UserId: userId } }
         );
         const { isClockedIn, attendanceId, existingEntry } = response.data;
@@ -83,7 +83,7 @@ const EmployeePage: React.FC = () => {
     try {
       const currentDate = new Date();
       const response = await axios.post(
-        "http://192.168.1.25:8080/api/employee/attendance/signin",
+        "http://192.168.1.25:8082/api/employee/attendance/signin",
         {
           UserId: localStorage.getItem("UserId"),
           timeIn: new Date().toLocaleTimeString([], {
@@ -126,7 +126,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.put(
-        `http://192.168.1.25:8080/api/employee/attendance/signout/${attendanceId}`,
+        `http://192.168.1.25:8082/api/employee/attendance/signout/${attendanceId}`,
         {
           timeOut: formattedTimeOut,
         }

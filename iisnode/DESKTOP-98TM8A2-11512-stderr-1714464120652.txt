@@ -1,0 +1,22 @@
+ ⚠ Invalid next.config.mjs options detected: 
+ ⚠     Expected object, received boolean at "experimental.serverActions"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ⚠ Server Actions are available by default now, `experimental.serverActions` option can be safely removed.
+(node:11512) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error decryption operation failed {
+  message: 'decryption operation failed',
+  stack: 's: decryption operation failed\n' +
+    '    at E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:6:67314\n' +
+    '    at t.default (E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:6:67341)\n' +
+    '    at h (E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:6:11130)\n' +
+    '    at async a (E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:6:6802)\n' +
+    '    at async a (E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:6:33778)\n' +
+    '    at async Object.p [as decode] (E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:30:17263)\n' +
+    '    at async Object.o (E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:30:6859)\n' +
+    '    at async _ (E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:6:101939)\n' +
+    '    at async a (E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:30:19582)\n' +
+    '    at async e.length.t (E:\\Nitin\\nextjs\\EmployeeProject\\cipherstudioEMPProj\\.next\\server\\chunks\\123.js:30:20992)',
+  name: 's'
+}
