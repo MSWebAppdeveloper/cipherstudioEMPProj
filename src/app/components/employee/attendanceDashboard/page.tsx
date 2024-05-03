@@ -24,8 +24,10 @@ const EmployeePage: React.FC = () => {
   const [timerIn, setTimerIn] = useState("-");
   const [intervalId, setIntervalId] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
-  const intervalIdRef: React.MutableRefObject<ReturnType<typeof setInterval> | null> = useRef<ReturnType<typeof setInterval> | null>(null);
-  const startTimeRef = React.useRef<number>(0);
+  const intervalIdRef = useRef<number | undefined>();
+    const startTimeRef = React.useRef<number>(0);
+  const [seconds, setSeconds] = useState(0);
+  const [isActive, setIsActive] = useState(false);
   useEffect(() => {
     const updateClock = () => {
       const now = new Date();
@@ -79,18 +81,41 @@ const EmployeePage: React.FC = () => {
 
   }, [currentDate]);
 
+  useEffect(() => {
+    if (isActive) {
+      intervalIdRef.current  = setInterval(() => {
+        setSeconds((prevSeconds) => prevSeconds + 1);
+      }, 1000) as unknown as number; // Cast the return value of setInterval to number
+    } else {
+      clearInterval(intervalIdRef.current as unknown as number); // Cast intervalIdRef.current to number
+    }
+
+    return () => clearInterval(intervalIdRef.current as unknown as number); // Cast intervalIdRef.current to number
+  }, [isActive]);
+
+
+  const toggleTimer = () => {
+    setIsActive(!isActive);
+  };
+
+  const resetTimer = () => {
+    setSeconds(0);
+    setIsActive(false);
+  };
+  
   const handleSignIn = async () => {
     try {
       const currentDate = new Date();
+      const formattedTimeIn = new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
       const response = await axios.post(
         "http://192.168.1.25:8082/api/employee/attendance/signin",
         {
           UserId: localStorage.getItem("UserId"),
-          timeIn: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          }),
+          timeIn: formattedTimeIn,
           date: new Date(currentDate).toISOString().split("T")[0],
         }
       );
@@ -102,7 +127,7 @@ const EmployeePage: React.FC = () => {
       toast.success("Day-in successful");
       setIsDayInActive(false);
       setIsDayOutActive(true);
-
+      setTimerIn(formattedTimeIn);
       // Start the timer
       setTimerActive(true);
       startTimeRef.current = new Date().getTime();
