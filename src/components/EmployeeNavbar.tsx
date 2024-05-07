@@ -54,6 +54,7 @@ const EmployeeNavbar = () => {
           </div>
         </div>{" "}
       </div>
+     
     </div>
   );
 };

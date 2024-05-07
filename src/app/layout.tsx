@@ -19,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="h-screen">
+
         {loading ? (
           <Loader />
         ) : (
@@ -29,6 +30,7 @@ export default function RootLayout({
           </main>
         )}
         <Toaster />
+
       </body>
     </html>
   );

@@ -10,6 +10,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [dateRangeButtonText, setDateRangeButtonText] = useState("Select Date Range");
 
   const handleToggleFilterModal = () => {
     setShowFilterModal(!showFilterModal);
@@ -19,15 +20,22 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
     setFilterName(event.target.value);
   };
 
-  const handleDateRangeChange = (range: { startDate: Date | null; endDate: Date | null }) => {
+ const handleDateRangeChange = (range: { startDate: Date | null; endDate: Date | null }) => {
     setStartDate(range.startDate);
     setEndDate(range.endDate);
+    // Update the button text based on selected date range
+    setDateRangeButtonText(
+      range.startDate && range.endDate
+        ? `${range.startDate.toDateString()} - ${range.endDate.toDateString()}`
+        : "Select Date Range"
+    );
   };
 
   const resetFilters = () => {
     setFilterName("");
     setStartDate(null);
     setEndDate(null);
+    setDateRangeButtonText("Select Date Range")
   };
 
   const getUserNames = () => {
@@ -126,7 +134,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
                       onClick={handleToggleFilterModal}
                       className="border border-gray-300 rounded-md p-1"
                     >
-                      Select Date Range
+                      {dateRangeButtonText}
                     </button>
                   </div>
                 </div>
