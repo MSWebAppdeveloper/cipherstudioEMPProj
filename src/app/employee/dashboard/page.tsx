@@ -15,13 +15,10 @@ const Employee = async () => {
   }
   return (
    
-      <div className=" relative  flex flex-1 flex-col ">
-        <EmployeeNavbar />
-        {/* <HeaderMobile /> */}
-        <div className="h-screen flex  justify-center ">
+    
+     
           <EmployeePage />
-        </div>
-      </div>
+     
    
   );
 };

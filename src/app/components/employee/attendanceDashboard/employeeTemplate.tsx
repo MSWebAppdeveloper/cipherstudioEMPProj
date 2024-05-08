@@ -15,39 +15,35 @@ const EmployeeTemplate: React.FC<employeeAttendanceInterface> = ({
   formattedElapsedTime,
 }) => {
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-2">
-      <div className="container mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between items-center pb-4">
-          <h1 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-0">
-            Attendance
-          </h1>
-          <div className="flex items-center">
-            <span className="text-gray-500 mr-2">
-              <span> Employee:</span>{" "}
-              <span className="font-bold">{localStorage.getItem("name")}</span>
-            </span>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 gap-4">
-          <div className="bg-white shadow-md rounded px-4 py-4">
-            <h3 className="text-sm sm:text-base font-bold text-gray-800 mb-2">
-              Current Status : <span className=" text-sm">{status}</span>
-            </h3>
-            <div className="flex justify-between items-center mb-4">
-              <p className="text-gray-500 text-xs sm:text-sm">
-                Current Time: {currentTime}
-              </p>
-            </div>
-            <div className="flex justify-between items-center mb-4">
-              <p className="text-gray-500 text-xs sm:text-sm">
-                Total Active Hours :{/* {formatTime(totalRecordTime)}{" "} */}
-                {formattedElapsedTime}
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 mb-4">
-              {/* Day In Button */}
-              <button
-                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs sm:text-sm ${
+    <>
+  
+    <div className="right-sec-2 lg:px-8 md:px-4 sm:px-4">
+    <div className="py-8">
+      <div>
+        <h2 className="lg:text-2xl md:text-2xl sm:text-lg font-medium">
+          Attendance
+        </h2>
+      </div>
+    </div>
+    {/*attendance--card*/}
+    <div className="lg:pt-10 md:pt-10 sm:pt-10 pt-10 box-shadow attendace-card px-10 mt-5 rounded-lg">
+      <div className="pb-8 max-w-sm">
+        <h3 className="pt-2 flex justify-between">
+          <b>Employee</b>  <span className="font-bold">{localStorage.getItem("name")}</span>
+        </h3>
+        <h3 className="pt-2 flex justify-between">
+          <b>Current Status:</b> {status}
+        </h3>
+        <h3 className="pt-2 flex justify-between">
+          <b>Current Time:</b>  {currentTime}
+        </h3>
+        <h3 className="pt-2 flex justify-between">
+          <b>Total Active Hour:</b>  {formattedElapsedTime}
+        </h3>
+      </div>
+      <div className="flex justify-between items-center py-8 border-gray-200 border-t">
+        <div>
+          <button className={`bg-blue-500 text-white text-lg py-2 px-5 font-medium rounded-md hover:bg-blue-600 ${
                   isDayInActive ? "" : "opacity-50 cursor-not-allowed"
                 }`}
                 onClick={(e) => {
@@ -56,11 +52,10 @@ const EmployeeTemplate: React.FC<employeeAttendanceInterface> = ({
                 disabled={!isDayInActive}
               >
                 Day In
-              </button>
-
-              {/* Day Out Button */}
-              <button
-                className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-xs sm:text-sm ${
+          </button>
+        </div>
+        <div>
+          <button className={`bg-red-500 text-white text-lg py-2 px-5 font-medium rounded-md hover:bg-red-600 ${
                   isDayOutActive ? "" : "opacity-50 cursor-not-allowed"
                 }`}
                 onClick={(e) => {
@@ -69,12 +64,12 @@ const EmployeeTemplate: React.FC<employeeAttendanceInterface> = ({
                 disabled={!isDayOutActive}
               >
                 Day Out
-              </button>
-            </div>
-          </div>
+          </button>
         </div>
       </div>
     </div>
+  </div>
+  </>
   );
 };
 
