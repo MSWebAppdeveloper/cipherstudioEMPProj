@@ -45,9 +45,8 @@ const HeaderMobile = () => {
       initial={false}
       animate={isOpen ? 'open' : 'closed'}
       custom={height}
-      className={`fixed inset-0 z-50 w-full md:hidden ${
-        isOpen ? '' : 'pointer-events-none'
-      }`}
+      className={`fixed inset-0 z-50 w-full md:hidden ${isOpen ? '' : 'pointer-events-none'
+        }`}
       ref={containerRef}
     >
       <motion.div
@@ -70,9 +69,8 @@ const HeaderMobile = () => {
                   <Link
                     href={item.path}
                     onClick={() => toggleOpen()}
-                    className={`flex w-full text-2xl ${
-                      item.path === pathname ? 'font-bold' : ''
-                    }`}
+                    className={`flex w-full text-2xl ${item.path === pathname ? 'font-bold' : ''
+                      }`}
                   >
                     {item.title}
                   </Link>
@@ -182,9 +180,8 @@ const MenuItemWithSubMenu: React.FC<MenuItemWithSubMenuProps> = ({
                   <Link
                     href={subItem.path}
                     onClick={() => toggleOpen()}
-                    className={` ${
-                      subItem.path === pathname ? 'font-bold' : ''
-                    }`}
+                    className={` ${subItem.path === pathname ? 'font-bold' : ''
+                      }`}
                   >
                     {subItem.title}
                   </Link>

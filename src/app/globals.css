@@ -643,9 +643,7 @@ input:checked + .slider:before {
   .filter-sec {
     margin: 15px 10px 0px !important;
   }
-  .header-logo {
-    width: 50% !important;
-  }
+
   .header-sec .logout {
     width: 20px !important;
   }
@@ -746,9 +744,7 @@ input:checked + .slider:before {
     padding: 10px 0px;
     margin: 22px 10px 10px;
   }
-  .header-logo {
-    width: 63% !important;
-  }
+ 
   .switch {
     width: 55px;
     height: 30px;

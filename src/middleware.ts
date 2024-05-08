@@ -13,9 +13,14 @@ export async function middleware(request: NextRequest) {
   const userRole = token?.userRole;
 
   //   // Define routes that require admin access
-  const adminRoutes = ["/admin/dashboard", "/admin/users", "/admin/reports"];
+  const adminRoutes = [
+    "/admin/dashboard",
+    "/admin/users",
+    "/admin/reports",
+    "/admin/leaveApplications",
+  ];
   //   // Define routes that require employee access
-  const employeeRoutes = ["/employee/dashboard"];
+  const employeeRoutes = ["/employee/dashboard", "/employee/leaveRequest"];
   //   // Redirect to login if not authenticated
   if (
     !userRole &&
@@ -24,7 +29,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (userRole !== "Management" && adminRoutes.includes(pathname))  {
+  if (userRole !== "Management" && adminRoutes.includes(pathname)) {
     return NextResponse.redirect(new URL("/employee/dashboard", request.url));
   } else if (userRole !== "Employee" && employeeRoutes.includes(pathname)) {
     return NextResponse.redirect(new URL("/admin/reports", request.url));

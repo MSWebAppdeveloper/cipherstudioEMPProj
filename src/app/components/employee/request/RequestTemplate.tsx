@@ -16,7 +16,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
     return (
         <>
             {/*right--sec-start*/}
-            <div className="right-sec-2 lg:px-8">
+           
                 <div className="leave-sec">
                     <div className="flex justify-between items-center lg:py-8 md:py-4 btn-sec">
                         <div>
@@ -223,7 +223,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                         </div>
                     </div>
                 </div>
-            </div>
+           
         </>
     );
 };

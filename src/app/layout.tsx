@@ -26,15 +26,9 @@ export default function RootLayout({
           <Loader />
         ) : (
           <main>
-            <div className="Wrapper">
-              <EmployeeNavbar />
-              <div className="flex w-100 second-sec">
-                <Sidebar/>
-                <NextAuthProvider>
-                  {children}
-                </NextAuthProvider>
-              </div>
-            </div>
+            <NextAuthProvider>
+              {children}
+            </NextAuthProvider>
           </main>
         )}
         <Toaster />

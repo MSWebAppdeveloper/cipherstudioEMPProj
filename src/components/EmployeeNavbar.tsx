@@ -60,11 +60,11 @@ const EmployeeNavbar = () => {
       <div className="logo">
         <Link href="/employee/dashboard">
           <Image
-            src="/cipher-1.ico"
+            src="/cipher.ico"
             width={48}
             height={48}
             alt="logo-img"
-            className="w-48 header-logo"
+           
           />
         </Link>
       </div>
