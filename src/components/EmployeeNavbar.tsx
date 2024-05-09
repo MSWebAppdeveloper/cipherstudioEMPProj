@@ -59,12 +59,10 @@ const EmployeeNavbar = () => {
     <div className="bg-slate-50 w-100 px-10 py-2 border-b border-slate-300 h-20 flex justify-between items-center header sticky">
       <div className="logo">
         <Link href="/employee/dashboard">
-          <Image
-            src="/cipher.ico"
-            width={48}
-            height={48}
+          <img
+            src="/cipher-1.png"
             alt="logo-img"
-           
+            className="w-48 header-logo"
           />
         </Link>
       </div>
