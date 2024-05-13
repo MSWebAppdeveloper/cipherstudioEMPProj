@@ -35,7 +35,7 @@ const RequestComponent: React.FC = () => {
 
   const fetchLeaveOverview = async () => {
     try {
-      const response = await axios.get(`http://localhost:8082/api/leaveOverview`); // Adjust the endpoint URL as per your backend setup
+      const response = await axios.get(`http://localhost:8080/api/leaveOverview`); // Adjust the endpoint URL as per your backend setup
       console.log(response.data)
       setLeaveOverview(response.data);
     } catch (error) {
@@ -52,7 +52,7 @@ const RequestComponent: React.FC = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:8082/api/employee/user/details`, {
+      const response = await fetch(`http://localhost:8080/api/employee/user/details`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -65,7 +65,7 @@ const RequestComponent: React.FC = () => {
         setLeaveHistory(userLeaveRequests);
       } else if (response.status === 401) {
         // Token expired, try refreshing the token
-        const refreshResponse = await fetch('http://localhost:8082/api/refresh', {
+        const refreshResponse = await fetch('http://localhost:8080/api/refresh', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ const RequestComponent: React.FC = () => {
 
   const handleDelete = async (deletedItemId: any) => {
     try {
-      const response = await fetch(`http://localhost:8082/api/leave-request/${deletedItemId}`, {
+      const response = await fetch(`http://localhost:8080/api/leave-request/${deletedItemId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,

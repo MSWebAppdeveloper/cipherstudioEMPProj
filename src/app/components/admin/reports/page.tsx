@@ -44,28 +44,35 @@ const Reports: React.FC = () => {
     fetchAttendanceHistory();
   }, []);
 
-  // Filter data by name or date
-  const filteredAttendance = attendance?.filter(user => {
-    if (filterType === "name") {
-      const filterValueAsString = typeof filterValue === "string" ? filterValue : filterValue[0];
-      return user.userName.toLowerCase().includes(filterValueAsString.toLowerCase());
-    } else if (filterType === "date") {
-      const [startDate, endDate] = filterValue as [string, string];
-      const entryDate = new Date(user.date);
-      const startDateObj = new Date(startDate);
-      const endDateObj = new Date(endDate);
-      return entryDate >= startDateObj && entryDate <= endDateObj;
-    }
-    return true;
-  }) || [];
+// Filter data by name or date
+const filteredAttendance = attendance?.filter(user => {
+  if (filterType === "name") {
+    const filterValueAsString = typeof filterValue === "string" ? filterValue : filterValue[0];
+    return user.userName.toLowerCase().includes(filterValueAsString.toLowerCase());
+  } else if (filterType === "date") {
+    const [startDate, endDate] = filterValue as [string, string];
+    const entryDate = new Date(user.date);
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
+    return entryDate >= startDateObj && entryDate <= endDateObj;
+  }
+  return true;
+}) || [];
 
-  const handleFilterChange = (
-    type: "name" | "date",
-    value: string | [string, string]
-  ) => {
-    setFilterType(type);
-    setFilterValue(value);
-  };
+// Sort filteredAttendance in descending order based on the date
+filteredAttendance.sort((a, b) => {
+  const dateA: any = new Date(a.date);
+  const dateB: any = new Date(b.date);
+  return dateB - dateA; // Sort in descending order
+});
+
+const handleFilterChange = (
+  type: "name" | "date",
+  value: string | [string, string]
+) => {
+  setFilterType(type);
+  setFilterValue(value);
+};
 
   return (
     <>

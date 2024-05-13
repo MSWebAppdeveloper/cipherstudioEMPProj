@@ -56,13 +56,15 @@ const EmployeeNavbar = () => {
     //       </div>
     //     </div>{" "}
     //   </div>
-    <div className="bg-slate-50 w-100 px-10 py-2 border-b border-slate-300 h-20 flex justify-between items-center header sticky">
+    <div className="bg-slate-50 w-100 px-5 py-2 border-b border-slate-300 h-20 flex justify-between items-center header sticky">
       <div className="logo">
         <Link href="/employee/dashboard">
-          <img
+          <Image
+          width="100"
+          height="100"
             src="/cipher-1.png"
             alt="logo-img"
-            className="w-48 header-logo"
+            className="w-50 header-logo"
           />
         </Link>
       </div>

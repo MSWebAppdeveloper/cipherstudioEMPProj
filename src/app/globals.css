@@ -641,7 +641,7 @@ input:checked + .slider:before {
     margin: 15px 10px 0px !important;
   }
   .header-logo {
-    width: 50%!important;
+    width: 100%!important;
  }
   .header-sec .logout {
     width: 20px !important;

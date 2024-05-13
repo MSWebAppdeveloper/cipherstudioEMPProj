@@ -1,6 +1,7 @@
 import React from "react";
 import { SignInInterface } from "./SignInInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Image from "next/image";
 
 const SignInTemplate: React.FC<SignInInterface> = ({
   onChangeData,
@@ -15,16 +16,20 @@ const SignInTemplate: React.FC<SignInInterface> = ({
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
         <section className="relative flex md:h-64 bg-white lg:col-span-5 md:col-span-5 lg:h-full xl:col-span-6 align-center sm:h-60 img-sec">
-          <img
+          <Image
+            width="100"
+            height="100"
             alt="img"
             src="/login-img.jpg"
-            className="h-100 w-50 object-contain md:w-50 md:mx-auto sm:w-50 sm:mx-auto"
+            className="h-screen  w-full object-contain md:w-50 md:mx-auto sm:w-50 sm:mx-auto"
           />
         </section>
         <main className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-8 xl:col-span-6 right">
           <div className="max-w-xl lg:max-w-2xl px-12">
             <div className="flex justify-center">
-              <img
+              <Image
+                width="122"
+                height="122"
                 src="/cipher-1.png"
                 alt="logo-img"
                 className="w-1/2 md:mb-6 lg:mb-0 sm:mb-3"
