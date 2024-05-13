@@ -14,7 +14,7 @@ const SignInTemplate: React.FC<SignInInterface> = ({
   <>
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
-        <section className="relative flex lg:h-32 md:h-64 bg-whhite lg:col-span-5 md:col-span-5 lg:h-full xl:col-span-6 align-center sm:h-60 img-sec">
+        <section className="relative flex md:h-64 bg-white lg:col-span-5 md:col-span-5 lg:h-full xl:col-span-6 align-center sm:h-60 img-sec">
           <img
             alt="img"
             src="/login-img.jpg"
@@ -40,14 +40,14 @@ const SignInTemplate: React.FC<SignInInterface> = ({
                 <h1 className="text-4xl mb-20 mt-5 text-center text-color pb-2 relative">
                   Login
                 </h1>
-                <div className="col-span-6 input-sec relative mb-14">
+                <div className="col-span-6 input-sec relative mb-10">
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-md text-gray-700 mb-2"
                   >
                     Email Address
                   </label>
-                  <Icon icon="fa:user" />
+                  <Icon icon="ph:user" className="form-icon" />
                   <input
                     type="email"
                     id="email"
@@ -65,11 +65,11 @@ const SignInTemplate: React.FC<SignInInterface> = ({
                 <div className="col-span-6 input-sec relative">
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-md text-gray-700 mb-2"
                   >
                     Password
                   </label>
-                  <Icon icon="fa:lock" />
+                  <Icon icon="uil:padlock" className="form-icon" />
                   <input
                     type="password"
                     id="password"
@@ -117,6 +117,7 @@ const SignInTemplate: React.FC<SignInInterface> = ({
         </main>
       </div>
     </section>
+
   </>
 );
 

@@ -25,7 +25,7 @@ const EmployeePage: React.FC = () => {
   const [intervalId, setIntervalId] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const intervalIdRef = useRef<number | undefined>();
-    const startTimeRef = React.useRef<number>(0);
+  const startTimeRef = React.useRef<number>(0);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   useEffect(() => {
@@ -47,7 +47,7 @@ const EmployeePage: React.FC = () => {
         const url = "employee/attendance/status";
         // const res= await Attendance("attendance/status")
         const response = await axios.get(
-          "http://192.168.1.2:8082/api/employee/attendance/status",
+          "http://192.168.1.2:8080/api/employee/attendance/status",
           { params: { UserId: userId } }
         );
         const { isClockedIn, attendanceId, existingEntry } = response.data;
@@ -83,7 +83,7 @@ const EmployeePage: React.FC = () => {
 
   useEffect(() => {
     if (isActive) {
-      intervalIdRef.current  = setInterval(() => {
+      intervalIdRef.current = setInterval(() => {
         setSeconds((prevSeconds) => prevSeconds + 1);
       }, 1000) as unknown as number; // Cast the return value of setInterval to number
     } else {
@@ -102,7 +102,7 @@ const EmployeePage: React.FC = () => {
     setSeconds(0);
     setIsActive(false);
   };
-  
+
   const handleSignIn = async () => {
     try {
       const currentDate = new Date();
@@ -112,7 +112,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.post(
-        "http://192.168.1.2:8082/api/employee/attendance/signin",
+        "http://192.168.1.2:8080/api/employee/attendance/signin",
         {
           UserId: localStorage.getItem("UserId"),
           timeIn: formattedTimeIn,
@@ -151,7 +151,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.put(
-        `http://192.168.1.2:8082/api/employee/attendance/signout/${attendanceId}`,
+        `http://192.168.1.2:8080/api/employee/attendance/signout/${attendanceId}`,
         {
           timeOut: formattedTimeOut,
         }

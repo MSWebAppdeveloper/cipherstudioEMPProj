@@ -34,31 +34,31 @@ h1 {
 }
 .text-color {
   color: #5eaadd;
-  font-weight: medium !important;
 }
 .right input::-webkit-input-placeholder {
   color: #5eaadd;
   font-size: 16px;
   font-family: "Inter", sans-serif;
 }
-.right .input-sec i {
+.right .input-sec .form-icon {
   position: absolute;
-  font-size: 18px;
-  color: #000;
-  transform: translateY(-50%);
-  top: 53%;
-  left: 18px;
+    font-size: 18px;
+    color: #000;
+    transform: translateY(-50%);
+    top: 68%;
+    left: 18px;
+    color: #5eaadd;
 }
 form h1::before {
   content: "";
   position: absolute;
-  width: 97px;
+  width: 100px;
   height: 4px;
   z-index: 1;
   border-radius: 0px;
   background-color: #5eaadd;
   top: 100%;
-  left: 51%;
+  left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
 }
@@ -102,7 +102,11 @@ input:focus-visible {
 }
 table .btn-1 {
   background-color: #166eb2;
-  padding: 7px 12px;
+  padding: 11px 11px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
 }
 table .btn-2 {
@@ -286,10 +290,21 @@ input:checked + .slider:before {
   }
 }
 
+@media only screen and (min-width: 1024px) and (max-width: 1199px) {
+  .left-sidebar {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
 @media only screen and (min-width: 992px) and (max-width: 1023.98px) {
   .Wrapper-main .btn-sec,
   .leave-sec {
     padding: 15px 20px;
+  }
+  .left-sidebar {
+    padding-left: 0px;
+    
   }
 }
 
@@ -303,6 +318,8 @@ input:checked + .slider:before {
   .left-sidebar {
     width: 17%;
     height: 100vh;
+    padding-left: 0px;
+    padding-right: 0px;
   }
   .right-sec-2 {
     width: 83%;
@@ -313,7 +330,7 @@ input:checked + .slider:before {
   .left-sidebar nav a {
     font-size: 16px;
   }
-  .leftbar ul li a span {
+  .leftbar a span {
     display: none;
   }
   table td .modal p {
@@ -345,8 +362,8 @@ input:checked + .slider:before {
     justify-content: center;
   }
   table .btn-1 {
-    padding: 7px 10px;
-    font-size: 12px !important;
+    padding: 10px 10px !important;
+     font-size: 14px !important;
   }
   table .btn-2 {
     padding: 5px 11px !important;
@@ -363,18 +380,15 @@ input:checked + .slider:before {
   .right-sec {
     width: 90%;
   }
-  .left-sidebar nav a span,
-  ul li a span {
+  .left-sidebar a span,
+  a span {
     display: none;
   }
-  .left-sidebar nav a,
-  ul li a {
+  .left-sidebar a,
+  a {
     display: block;
-    text-align: center;
-  }
-  .left-sidebar nav a i,
-  ul li a i {
-    font-size: 25px;
+    justify-content: center;
+    display: flex;
   }
   .right-sec-2 {
     width: 90% !important;
@@ -456,7 +470,7 @@ input:checked + .slider:before {
     margin: 25px 15px 0px;
   }
   .btn-sec button {
-    padding: 7px 10px;
+    padding: 7px 10px!important;
   }
 }
 
@@ -483,18 +497,16 @@ input:checked + .slider:before {
   }
   .left-sidebar {
     width: 10%;
-    padding: 50px 0px !important;
+    padding: 40px 5px !important;
     border-top: 0;
     border-left: 0;
   }
-  .left-sidebar ul li a span {
+  .left-sidebar a span {
     display: none;
   }
-  .left-sidebar ul li {
-    text-align: center;
-  }
-  .left-sidebar ul li a i {
-    font-size: 25px;
+  .left-sidebar a {
+    justify-content: center;
+    display: flex;
   }
   .right-sec button,
   select {
@@ -523,7 +535,11 @@ input:checked + .slider:before {
     margin-bottom: 20px !important;
   }
   .form-sec .login-form input {
-    padding: 6px 6px 6px 35px !important;
+    padding: 12px 6px 12px 40px !important;
+  }
+  .right .input-sec .form-icon {
+    top: 68%;
+    left: 18px;
   }
   .form-sec .login-form i {
     font-size: 14px;
@@ -562,13 +578,9 @@ input:checked + .slider:before {
     margin-right: 6px !important;
   }
   table .btn-1 {
-    padding: 7px 10px;
+    padding: 7px 8px !important;
   }
-  .right-sec .modal .modal-box {
-    padding: 20px 20px !important;
-    margin-top: 10px;
-    max-width: 22rem;
-  }
+ 
   table th {
     font-weight: 500;
     font-size: 16px;
@@ -581,21 +593,6 @@ input:checked + .slider:before {
   }
   .box-shadow {
     padding: 20px 15px !important;
-  }
-  .modal-box h3 {
-    margin-top: 5px;
-    padding: 0px 0px 10px;
-    font-size: 20px;
-  }
-  .modal-box input,
-  .select {
-    margin-bottom: 10px !important;
-  }
-  .modal-box label {
-    font-size: 14px !important;
-  }
-  .modal-action button {
-    margin-bottom: 5px !important;
   }
   .header-sec {
     padding: 12px 20px !important;
@@ -637,8 +634,8 @@ input:checked + .slider:before {
     display: block;
     text-align: center;
   }
-  .left-sidebar nav a i {
-    font-size: 25px;
+  .left-sidebar a {
+    padding: 8px 0px!important;
   }
   .filter-sec {
     margin: 15px 10px 0px !important;
@@ -660,18 +657,9 @@ input:checked + .slider:before {
     font-size: 23px !important;
     margin: 5px 0px 25px 0px !important;
   }
-  .right-sec .add-modal select,
-  input {
-    padding: 8px 8px !important;
-  }
-  .Wrapper-main .right-sec-2 .add-modal select,
-  input {
-    padding: 8px 8px !important;
-  }
   .Wrapper-main .btn-sec option {
     width: 160px;
   }
-
   .filter-sec input[type="date"] {
     padding: 4px 10px !important;
   }

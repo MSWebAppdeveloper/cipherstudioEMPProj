@@ -19,11 +19,29 @@ const RequestComponent: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isModal, setModal] = useState<boolean>(false);
   const [leaveHistory, setLeaveHistory] = useState<RequestInterface[]>([]);
+  const [leaveOverview, setLeaveOverview] = useState<any>({});
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
     fetchLeaveHistory();
+
   }, [isModal]);
+
+  useEffect(() => {
+    // Fetch all users from the server when the component mounts
+
+    fetchLeaveOverview()
+  }, []);
+
+  const fetchLeaveOverview = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8082/api/leaveOverview`); // Adjust the endpoint URL as per your backend setup
+      console.log(response.data)
+      setLeaveOverview(response.data);
+    } catch (error) {
+      console.error("Error fetching leave overview:", error);
+    }
+  };
 
   const fetchLeaveHistory = async () => {
     try {
@@ -90,31 +108,31 @@ const RequestComponent: React.FC = () => {
 
   const handleFormSubmit = async (editedItem: any) => {
     try {
-        const response = await fetch(`http://localhost:8080/api/leave-request/${editedItem.id}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(editedItem),
+      const response = await fetch(`http://localhost:8080/api/leave-request/${editedItem.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editedItem),
+      });
+      if (response.ok) {
+        const updatedLeaveHistory: any = leaveHistory.map(item => {
+          if (item.id === editedItem.id) {
+            return editedItem;
+          }
+          return item;
         });
-        if (response.ok) {
-            const updatedLeaveHistory: any = leaveHistory.map(item => {
-                if (item.id === editedItem.id) {
-                    return editedItem;
-                }
-                return item;
-            });
-            setLeaveHistory(updatedLeaveHistory);
-            setModal(false);
-            console.log('Edit successful');
-        } else {
-            console.error('Edit failed:', response.statusText);
-        }
+        setLeaveHistory(updatedLeaveHistory);
+        setModal(false);
+        console.log('Edit successful');
+      } else {
+        console.error('Edit failed:', response.statusText);
+      }
     } catch (error) {
-        console.error('Error editing item:', error);
+      console.error('Error editing item:', error);
     }
-};
+  };
 
   const handleDelete = async (deletedItemId: any) => {
     try {
@@ -135,14 +153,14 @@ const RequestComponent: React.FC = () => {
       console.error('Error deleting item:', error);
     }
   };
-//   const handleEditItemUpdate = (updatedItem: LeaveHistoryInterface) => {
-//     // Update the item in leaveHistory array
-//     const updatedLeaveHistory = leaveHistory.map(item =>
-//         item.id === updatedItem.id ? updatedItem : item
-//     );
-//     setLeaveHistory(updatedLeaveHistory);
-//     setModal(false);
-// };
+  //   const handleEditItemUpdate = (updatedItem: LeaveHistoryInterface) => {
+  //     // Update the item in leaveHistory array
+  //     const updatedLeaveHistory = leaveHistory.map(item =>
+  //         item.id === updatedItem.id ? updatedItem : item
+  //     );
+  //     setLeaveHistory(updatedLeaveHistory);
+  //     setModal(false);
+  // };
   return (
     <>
       <LeaveRequestComponent
@@ -164,6 +182,7 @@ const RequestComponent: React.FC = () => {
         reason={''}
         status={''}
         id={''}
+        leaveOverview={leaveOverview}
       />
     </>
   );

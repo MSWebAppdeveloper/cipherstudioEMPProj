@@ -74,7 +74,7 @@ const UserTableComponent: React.FC = () => {
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(`
-      http://192.168.1.2:8082/api/employee/users/${userId}/status`, { isActive });
+      http://192.168.1.2:8080/api/employee/users/${userId}/status`, { isActive });
       getAllUsers(); // Refresh the user list after updating status
       toast.success(`User ${isActive ? 'enabled' : 'disabled'} successfully!`);
     } catch (error) {
@@ -101,7 +101,7 @@ const UserTableComponent: React.FC = () => {
         confirmDeleteUser={confirmDeleteUser}
         cancelDeleteUser={cancelDeleteUser}
         isDeleteConfirmationVisible={isDeleteConfirmationVisible}
-         handleToggleUserStatus={handleToggleUserStatus}        
+        handleToggleUserStatus={handleToggleUserStatus}
       />
     </>
   );

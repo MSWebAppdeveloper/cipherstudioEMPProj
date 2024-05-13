@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { UserTableProps } from "./TableInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Pagination from "@/components/Pagination";
 
 const UserTableTemplate: React.FC<UserTableProps> = ({
   allUsers,
@@ -16,6 +17,9 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
   const [currentTab, setCurrentTab] = useState("ALL");
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+
 
   const handleFilterChange = (value: string) => {
     setCurrentTab(value);
@@ -36,11 +40,18 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
     deleteSelected(userId);
   };
 
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <>
       <div>
         <div>
-          <h2 className="lg:py-8 md:py-8 sm:py-8 py-8 md:py-4 text-2xl font-medium">
+          <h2 className="lg:py-8 md:py-8 sm:py-8 py-8 text-2xl font-medium">
             Users
           </h2>
         </div>
@@ -51,7 +62,7 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
               <form className="max-w-52">
                 <select
                   id="countries"
-                  className="border border-gray-300 text-gray-800 text-lg rounded-md block w-full lg:p-3 md:p-2 sm:p-2 dark:placeholder-gray-800 bg-slate-50 focus:none"
+                  className="border border-gray-300 text-gray-800 text-md rounded-md block w-full lg:p-3 py-2 px-2 md:p-2 sm:p-2 dark:placeholder-gray-800 bg-slate-50 focus:none"
                   value={currentTab}
                   onChange={(e) => handleFilterChange(e.target.value)}
                 >
@@ -65,7 +76,7 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
             </div>
             <div>
               <button
-                className="block text-white bg-green-500 hover:bg-green-400 rounded-md text-lg lg:px-8 lg:py-3 md:py-3 md:px-8 sm:py-2 sm:px-6 text-center"
+                className="block text-white bg-green-500 hover:bg-green-400 rounded-md lg:text-lg lg:px-8 lg:py-2 md:py-3 md:px-8 sm:py-2 sm:px-6 text-center"
                 type="button"
                 onClick={() => setModal((prev) => !prev)}
               >
@@ -76,92 +87,68 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
           {/*table*/}
           <div className="mt-10">
             <div className="overflow-x-auto">
-              <table className="table-auto w-full">
+              <table className="table-auto w-full text-left ">
                 <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50">
                   <tr>
-                    <th className="p-2 whitespace-nowrap text-gray-700">
-                      <div className="font-semibold text-left">S NO.</div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-left text-gray-700">
-                        NAME
-                      </div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-left text-gray-700">
-                        EMAIL
-                      </div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-left text-gray-700">
-                        ACCOUNT TYPE
-                      </div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-left text-gray-700">
-                        DEPARTMENT
-                      </div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-left text-gray-700">
-                        ACTIONS
-                      </div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold text-left text-gray-700">
-                        ACTIVE
-                      </div>
-                    </th>
+                    <th className="p-2 whitespace-nowrap font-semibold">S NO.</th>
+                    <th className="p-2 whitespace-nowrap font-semibold">NAME</th>
+                    <th className="p-2 whitespace-nowrap font-semibold">EMAIL</th>
+                    <th className="p-2 whitespace-nowrap font-semibold">ACCOUNT TYPE</th>
+                    <th className="p-2 whitespace-nowrap font-semibold">DEPARTMENT</th>
+                    <th className="p-2 whitespace-nowrap font-semibold">ACTIONS</th>
+                    <th className="p-2 whitespace-nowrap font-semibold">ACTIVE</th>
                   </tr>
                 </thead>
                 <tbody className="text-md divide-y divide-gray-100">
-                  {filteredUsers.map((user: any, index: any) => (
-                    <tr key={user.id}>
+                  {currentItems.map((user: any, index: any) => (
+                    <tr key={user.id} className="text-lg text-gray-600">
+                      <td className="p-2 whitespace-nowrap">{index + 1} </td>
+                      <td className="p-2 whitespace-nowrap">{user.name}</td>
+                      <td className="p-2 whitespace-nowrap">{user.email}</td>
+                      <td className="p-2 whitespace-nowrap">{user.userRole}</td>
                       <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-gray-600">{index + 1}</div>
+                        {user.department}
                       </td>
                       <td className="p-2 whitespace-nowrap">
-                        <div className="text-left text-lg text-gray-600">
-                          {user.name}
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-left text-lg text-gray-600">
-                          {user.email}
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-left text-gray-600">
-                          {user.userRole}
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-left text-gray-600">
-                          {user.department}
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        {/* <div class="text-md text-left"> */}
+                        {/* {/ <div class="text-md text-left"> /} */}
                         <div className="flex">
-                          <button className="btn-1 mr-3 shadow-xl" onClick={() => openEditPopup(user)}>
-                            <span>
-                              <Icon icon="uil:edit" width={24} height={24} />
-                            </span>
+                          <button
+                            className="btn-1 mr-3 shadow-xl"
+                            onClick={() => openEditPopup(user)}
+                          >
+
+                            <Icon
+                              icon="flowbite:edit-outline"
+                              width="1.2em"
+                              height="1.2em"
+                              style={{ color: "#ffffff" }}
+                            />
+
                           </button>
-                          <button className="btn-2 btn-1 shadow-xl" onClick={() => deleteSelected(user.id)}>
-                            <span>
-                              <Icon icon="ph:trash" width={24} height={24} />
-                            </span>
+                          <button
+                            className="btn-2 btn-1 shadow-xl"
+                            onClick={() => deleteSelected(user.id)}
+                          >
+
+                            <Icon
+                              icon="mi:delete"
+                              width="1.2em"
+                              height="1.2em"
+                              style={{ color: "#ffffff" }}
+                            />
+
                           </button>
                         </div>
                       </td>
                       <td className="p-2 whitespace-nowrap">
-                        <div className="text-md text-left cursor-pointer
-                      
-                      "
+                        <div
+                          className="text-md text-left cursor-pointer
+                    
+                    "
                         >
                           <label className="switch">
-                            <input type="checkbox"
+                            <input
+                              type="checkbox"
                               checked={user.isActive}
                               onChange={(e) =>
                                 handleToggleUserStatus(
@@ -169,16 +156,17 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
                                   e.target.checked
                                 )
                               }
-                              className="sr-only peer" />
+                              className="sr-only peer"
+                            />
                             <span
                               className={`relative w-11 h-6 ${user.isActive ? "bg-green-500" : "bg-gray-200"
-                                } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600`} />
+                                } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600`}
+                            />
                           </label>
                         </div>
                       </td>
                     </tr>
                   ))}
-
                 </tbody>
               </table>
             </div>
@@ -284,98 +272,21 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
               </div>
             )}
             {/*pagination*/}
-            <div className="mt-4 py-6">
-              <nav aria-label="Page navigation example">
-                <ul className="flex items-center -space-x-px h-8 text-sm justify-end">
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      <span className="sr-only">Previous</span>
-                      <svg
-                        className="w-2.5 h-2.5 rtl:rotate-180"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 6 10"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 1 1 5l4 4"
-                        />
-                      </svg>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      1
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      2
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      aria-current="page"
-                      className="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                    >
-                      3
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      4
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      5
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      <span className="sr-only">Next</span>
-                      <svg
-                        className="w-2.5 h-2.5 rtl:rotate-180"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 6 10"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="m1 9 4-4-4-4"
-                        />
-                      </svg>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
+            <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+              <div>
+                <p className="text-sm text-gray-700">
+                  Showing <span className="font-medium">{indexOfFirstItem + 1}</span> to{" "}
+                  <span className="font-medium">{Math.min(indexOfLastItem, filteredUsers.length)}</span> of{" "}
+                  <span className="font-medium">{filteredUsers.length}</span> results
+                </p>
+              </div>
+              <div>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={Math.ceil(filteredUsers.length / itemsPerPage)}
+                  paginate={paginate}
+                />
+              </div>
             </div>
           </div>
         </div>
