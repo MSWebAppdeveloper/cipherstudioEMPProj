@@ -727,7 +727,7 @@ input:checked + .slider:before {
     box-shadow: 1px 1px 7px lightgray;
     border-radius: 5px;
   }
-  .btn-sec h2 {
+  .btn-sec h2, .right-sec-2 h2 {
     font-size: 16px;
   }
   .btn-sec {

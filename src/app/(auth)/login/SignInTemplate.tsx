@@ -17,8 +17,8 @@ const SignInTemplate: React.FC<SignInInterface> = ({
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
         <section className="relative flex md:h-64 bg-white lg:col-span-5 md:col-span-5 lg:h-full xl:col-span-6 align-center sm:h-60 img-sec">
           <Image
-            width="100"
-            height="100"
+            width="7500"
+            height="5000"
             alt="img"
             src="/login-img.jpg"
             className="h-screen  w-full object-contain md:w-50 md:mx-auto sm:w-50 sm:mx-auto"
@@ -28,8 +28,8 @@ const SignInTemplate: React.FC<SignInInterface> = ({
           <div className="max-w-xl lg:max-w-2xl px-12">
             <div className="flex justify-center">
               <Image
-                width="122"
-                height="122"
+                width="800"
+                height="185"
                 src="/cipher-1.png"
                 alt="logo-img"
                 className="w-1/2 md:mb-6 lg:mb-0 sm:mb-3"

@@ -15,7 +15,7 @@ interface LeaveRequestComponentProps {
     handleClose: () => void;
     user: any;
     onUpdate: () => void;
-  }
+}
 const LeaveRequestComponent: React.FC<LeaveRequestComponentProps> = ({
     isModal,
     handleClose,
@@ -109,7 +109,7 @@ const LeaveRequestComponent: React.FC<LeaveRequestComponentProps> = ({
     const handleClosePopup = () => {
         setFormdata(initialValues); // Clear formData before closing
         handleClose();
-      };
+    };
     return (
         <LeaveRequestTemplate
             dataChange={dataChange}
