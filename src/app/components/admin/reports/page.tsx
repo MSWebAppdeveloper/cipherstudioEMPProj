@@ -35,9 +35,9 @@ const Reports: React.FC = () => {
   }, [filterValue]);
 
   useEffect(() => {
-    const fetchAttendanceHistory = async (page: number) => {
+    const fetchAttendanceHistory = async (page: number, itemsPage: number) => {
       try {
-        const url = `employee/attendance?page=${page}&pageSize=${itemsPerPage}`;
+        const url = `employee/attendance?page=${page}&pageSize=${itemsPage}`;
         const response: any = await AttendanceHistory(url);
         // Parse totalHours to number
         console.log()
@@ -55,7 +55,7 @@ const Reports: React.FC = () => {
       }
     };
 
-    fetchAttendanceHistory(currentPage);
+    fetchAttendanceHistory(currentPage, itemsPerPage);
   }, [currentPage]);
 
 

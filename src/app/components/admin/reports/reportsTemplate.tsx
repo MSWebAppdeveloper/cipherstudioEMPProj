@@ -13,7 +13,7 @@ const ReportsTemplate: React.FC<ReportsInterface & { currentPage: number; pagina
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [dateRangeButtonText, setDateRangeButtonText] = useState("Select Date Range");
   // const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(4);
+  const [itemsPerPage] = useState(10);
 
   const handleToggleFilterModal = () => {
     setShowFilterModal(!showFilterModal);
