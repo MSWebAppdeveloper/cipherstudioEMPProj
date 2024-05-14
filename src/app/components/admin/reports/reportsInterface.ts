@@ -22,5 +22,8 @@ export interface ReportsInterface {
 
   handleFilterChange: (type: "name" | "date", value: string | [string, string]) => void; 
   allUsers: Array<{ id: string; name: string;  email: string; department: string }>;
-
+  paginate:any;
+  totalPages:any;
+  totalCount:any;
+  getColorForStatus:any;
 }

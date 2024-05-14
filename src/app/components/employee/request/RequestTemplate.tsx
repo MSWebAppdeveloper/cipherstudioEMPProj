@@ -22,6 +22,19 @@ const RequestTemplate: React.FC<RequestInterface> = ({
     const currentItems = leaveHistory.slice(indexOfFirstItem, indexOfLastItem);
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+    function getColorForStatus(status: string) {
+        switch (status) {
+            case "Approved":
+                return "text-green-500";// Green for Present
+            case "Rejected":
+                return "text-red-500"; // Red for Reject
+            case "Pending":
+                return "text-yellow-500"; // Yellow for Pending
+            default:
+                return ""; // No color for unknown status
+        }
+    }
     return (
         <>
             {/*right--sec-start*/}
@@ -113,7 +126,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                                         <td className="p-2 whitespace-nowrap">
                                             <div className="text-lg text-center">{user.reason}</div>
                                         </td>
-                                        <td className="p-2 whitespace-nowrap">
+                                        <td className={`p-2 whitespace-nowrap  ${getColorForStatus(user.status)}`}>
                                             <div className="text-lg text-center">{user.status}</div>
                                         </td>
                                         <td className="p-2 whitespace-nowrap">

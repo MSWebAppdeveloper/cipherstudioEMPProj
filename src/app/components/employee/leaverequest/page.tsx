@@ -91,7 +91,8 @@ const LeaveRequestComponent: React.FC<LeaveRequestComponentProps> = ({
         try {
             const requestData = {
                 ...formdata,
-                UserId: UserId
+                UserId: UserId,
+                userName: localStorage.getItem("name"),
             };
             const url = `leave-request`;
             const response: any = await RequestLeave(url, requestData);

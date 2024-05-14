@@ -8,8 +8,8 @@ import LeaveApplicationsTemplate from './leaveApplicationsTemplate';
 
 const LeaveApplications: React.FC = () => {
     const [applications, setApplications] = useState([
-        { id: 1, status: 'pending' },
-        { id: 2, status: 'approved' }
+        { id: 1, status: 'Pending' },
+        { id: 2, status: 'Approved' }
         // Add more applications as needed
     ]);
 
@@ -66,12 +66,12 @@ const LeaveApplications: React.FC = () => {
         try {
             await fetchApproverId();
             const url = `approval`; // Update the URL based on your backend API
-            await ApproveLeave(url, { leave_request_id: id, response: 'approved', approver_id: approverId });
+            await ApproveLeave(url, { leave_request_id: id, response: 'Approved', approver_id: approverId });
 
             // Update the leaveHistory state with the modified data
             setLeaveHistory(leaveHistory.map(leave => {
                 if (leave.id === id) {
-                    return { ...leave, status: 'approved' };
+                    return { ...leave, status: 'Approved' };
                 }
                 return leave;
             }));
@@ -84,12 +84,12 @@ const LeaveApplications: React.FC = () => {
         try {
             await fetchApproverId();
             const url = `approval`; // Update the URL based on your backend API
-            await RejectLeave(url, { leave_request_id: id, response: 'rejected', approver_id: approverId });
+            await RejectLeave(url, { leave_request_id: id, response: 'Rejected', approver_id: approverId });
 
             // Update the leaveHistory state with the modified data
             setLeaveHistory(leaveHistory.map(leave => {
                 if (leave.id === id) {
-                    return { ...leave, status: 'rejected' };
+                    return { ...leave, status: 'Rejected' };
                 }
                 return leave;
             }));
@@ -116,6 +116,7 @@ const LeaveApplications: React.FC = () => {
                 endDate={''}
                 reason={''}
                 status={''}
+                userName={''}
                 id={''}
                 approveApplication={approveApplication}
                 rejectApplication={rejectApplication}
@@ -125,4 +126,5 @@ const LeaveApplications: React.FC = () => {
 }
 
 export default LeaveApplications;
+
 

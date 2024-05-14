@@ -19,7 +19,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
         setCurrentPage(1);
     };
 
-    const filterOptions = ["ALL", "pending", "approved", "rejected"];
+    const filterOptions = ["ALL", "Pending", "Approved", "Rejected"];
     // Filter users based on the current tab
     const filteredUsers: any =
         currentStatus === "ALL"
@@ -117,7 +117,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
                                                     <div>{index + 1}</div>
                                                 </td>
                                                 <td className="p-2 whitespace-nowrap">
-                                                    <div>Shree</div>
+                                                    <div>{leave.userName}</div>
                                                 </td>
                                                 <td className="p-2 whitespace-nowrap">
                                                     <div>{leave.leaveType}</div>
@@ -143,7 +143,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
                                                     </div>
                                                 </td>
                                                 <td className="p-2 whitespace-nowrap">
-                                                    {leave.status === "pending" && (
+                                                    {leave.status === "Pending" && (
                                                         <div className="flex">
                                                             <div>
                                                                 <button className="rounded-full bg-green-500 text-white text-md hover:bg-green-600 shadow-xl mr-3 p-2"
