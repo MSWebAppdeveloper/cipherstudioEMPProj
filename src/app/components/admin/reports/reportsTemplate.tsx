@@ -6,13 +6,13 @@ import { Icon } from "@iconify/react";
 import DateRangePickerComp from "@/components/DateRangePickerComp";
 import Pagination from "@/components/Pagination";
 
-const ReportsTemplate: React.FC<ReportsInterface & { currentPage: number; paginate: (pageNumber: number) => void }> = ({ attendance, allUsers, currentPage, paginate, getColorForStatus, totalPages, totalCount }) => {
+const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) => {
   const [filterName, setFilterName] = useState("");
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [dateRangeButtonText, setDateRangeButtonText] = useState("Select Date Range");
-  // const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
   const handleToggleFilterModal = () => {
@@ -54,12 +54,34 @@ const ReportsTemplate: React.FC<ReportsInterface & { currentPage: number; pagina
     return matchName && matchDate;
   });
 
-
+  function getColorForStatus(status: string) {
+    switch (status) {
+      case "Active":
+        return "text-green-500";
+      case "Absent":
+        return "text-red-500"; // Red for Absent
+      case "Leave":
+        return "text-orange-500"; // Orange for Leave
+      case "Leave (Half Day)":
+        return "text-lightcoral"; // Lighter orange for Half Day Leave
+      case "Short Leave":
+        return "text-violet-500"; // Violet for Short Leave
+      case "Full Day":
+        return "text-yellow-500"; // Green for Present
+      case "Present(forget dayout)":
+        return "text-yellow-500"; // Lighter green for Present (Extra Hours)
+      default:
+        return ""; // No color for unknown status
+    }
+  }
 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredAttendance.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <>
 
@@ -228,14 +250,14 @@ const ReportsTemplate: React.FC<ReportsInterface & { currentPage: number; pagina
             <div>
               <p className="text-sm text-gray-700">
                 Showing <span className="font-medium">{indexOfFirstItem + 1}</span> to{" "}
-                <span className="font-medium">{Math.min(indexOfLastItem, totalCount)}</span> of{" "}
-                <span className="font-medium">{totalCount}</span> results
+                <span className="font-medium">{Math.min(indexOfLastItem, filteredAttendance.length)}</span> of{" "}
+                <span className="font-medium">{filteredAttendance.length}</span> results
               </p>
             </div>
             <div>
               <Pagination
                 currentPage={currentPage}
-                totalPages={totalPages}
+                totalPages={Math.ceil(filteredAttendance.length / itemsPerPage)}
                 paginate={paginate}
               />
             </div>
