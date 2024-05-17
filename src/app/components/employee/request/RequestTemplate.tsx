@@ -26,7 +26,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
     function getColorForStatus(status: string) {
         switch (status) {
             case "Approved":
-                return "text-green-500";// Green for Present
+                return "text-green-500"; // Green for Present
             case "Rejected":
                 return "text-red-500"; // Red for Reject
             case "Pending":
@@ -45,9 +45,12 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                         <h2 className="text-2xl font-medium">Leave Reports</h2>
                     </div>
                     <div>
-                        <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
+                        <button
+                            data-modal-target="authentication-modal"
+                            data-modal-toggle="authentication-modal"
                             onClick={() => setModal((prev) => !prev)}
-                            className="rounded-md bg-green-500 lg:px-8 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white hover:bg-green-400 lg:text-lg focus:outline-0">
+                            className="rounded-md bg-green-500 lg:px-8 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white hover:bg-green-400 lg:text-lg focus:outline-0"
+                        >
                             Request Leave
                         </button>
                     </div>
@@ -56,32 +59,73 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     <h3 className="text-2xl font-medium px-2 py-4">Leave Overview</h3>
                     <div className="flex flex-wrap -m-1 mt-6">
                         {/*-card*/}
-                        {Object.keys(leaveOverview).map((leaveType) => (
-                            <div key={leaveType} className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
-                                <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
 
-                                    <div key={leaveType} className="px-10 py-6 flex-1 flex flex-col">
-                                        <h3 className="mb-4 text-2xl py-3 border-b text-size">
-                                            {leaveType}
-                                        </h3>
-                                        <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
-                                            <ul className="space-y-4">
-                                                <li className="text-lg flex justify-between">
-                                                    Total leave: {leaveOverview[leaveType].total}
-                                                </li>
-                                                <li className="text-lg flex justify-between">
-                                                    Taken  leave: {leaveOverview[leaveType].taken}
-                                                </li>
-                                                <li className="text-lg flex justify-between">
-                                                    Left  leave: {leaveOverview[leaveType].remaining}
-                                                </li>
-                                            </ul>
-                                        </div>
+                        <div className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
+                            <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
+                                <div className="px-10 py-6 flex-1 flex flex-col">
+                                    <h3 className="mb-4 text-2xl py-3 border-b text-size">
+                                        Casual Leave
+                                    </h3>
+                                    <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
+                                        <ul className="space-y-4">
+                                            <li className="text-lg flex justify-between">
+                                            Total leave: {leaveOverview.casualLeaveTotal}
+                                            </li>
+                                            <li className="text-lg flex justify-between">
+                                            Taken leave: {leaveOverview.casualLeaveTaken}
+                                            </li>
+                                            <li className="text-lg flex justify-between">
+                                            Left leave: {leaveOverview.casualLeaveRemaining}
+                                            </li>
+                                        </ul>
                                     </div>
-
                                 </div>
                             </div>
-                        ))}
+                        </div>
+                        <div className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
+                            <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
+                                <div className="px-10 py-6 flex-1 flex flex-col">
+                                    <h3 className="mb-4 text-2xl py-3 border-b text-size">
+                                        Medical Leave
+                                    </h3>
+                                    <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
+                                        <ul className="space-y-4">
+                                            <li className="text-lg flex justify-between">
+                                            Total  leave: {leaveOverview.medicalLeaveTotal}
+                                            </li>
+                                            <li className="text-lg flex justify-between">
+                                            Taken leave: {leaveOverview.medicalLeaveTaken}
+                                            </li>
+                                            <li className="text-lg flex justify-between">
+                                            Left leave: {leaveOverview.medicalLeaveRemaining}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
+                            <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
+                                <div className="px-10 py-6 flex-1 flex flex-col">
+                                    <h3 className="mb-4 text-2xl py-3 border-b text-size">
+                                        Earned Leave
+                                    </h3>
+                                    <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
+                                        <ul className="space-y-4">
+                                            <li className="text-lg flex justify-between">
+                                            Total  leave: {leaveOverview.earnedLeaveTotal}
+                                            </li>
+                                            <li className="text-lg flex justify-between">
+                                            Taken leave: {leaveOverview.earnedLeaveTaken}
+                                            </li>
+                                            <li className="text-lg flex justify-between">
+                                            Left leave: {leaveOverview.earnedLeaveRemaining}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {/*table*/}
@@ -115,7 +159,9 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                                 {currentItems.map((user: any, index: any) => (
                                     <tr key={user.id}>
                                         <td className="p-2 whitespace-nowrap">
-                                            <div className="text-lg text-gray-600">{user.leaveType}</div>
+                                            <div className="text-lg text-gray-600">
+                                                {user.leaveType}
+                                            </div>
                                         </td>
                                         <td className="p-2 whitespace-nowrap">
                                             <div className="text-left text-lg">{user.startDate}</div>
@@ -126,12 +172,17 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                                         <td className="p-2 whitespace-nowrap">
                                             <div className="text-lg text-center">{user.reason}</div>
                                         </td>
-                                        <td className={`p-2 whitespace-nowrap  ${getColorForStatus(user.status)}`}>
+                                        <td
+                                            className={`p-2 whitespace-nowrap  ${getColorForStatus(
+                                                user.status
+                                            )}`}
+                                        >
                                             <div className="text-lg text-center">{user.status}</div>
                                         </td>
                                         <td className="p-2 whitespace-nowrap">
                                             <div className="text-lg text-center">
-                                                <button className="px-3 py-1 bg-red-500 text-white text-md rounded-md hover:bg-red-600"
+                                                <button
+                                                    className="px-3 py-1 bg-red-500 text-white text-md rounded-md hover:bg-red-600"
                                                 //   onclick="my_modal_11.showModal()"
                                                 >
                                                     Delete
@@ -159,7 +210,6 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                                         </td>
                                     </tr>
                                 ))}
-
                             </tbody>
                         </table>
                     </div>
@@ -167,9 +217,13 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
                         <div>
                             <p className="text-sm text-gray-700">
-                                Showing <span className="font-medium">{indexOfFirstItem + 1}</span> to{" "}
-                                <span className="font-medium">{Math.min(indexOfLastItem, leaveHistory.length)}</span> of{" "}
-                                <span className="font-medium">{leaveHistory.length}</span> results
+                                Showing{" "}
+                                <span className="font-medium">{indexOfFirstItem + 1}</span> to{" "}
+                                <span className="font-medium">
+                                    {Math.min(indexOfLastItem, leaveHistory.length)}
+                                </span>{" "}
+                                of <span className="font-medium">{leaveHistory.length}</span>{" "}
+                                results
                             </p>
                         </div>
                         <div>
@@ -182,10 +236,8 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     </div>
                 </div>
             </div>
-
         </>
     );
 };
-
 
 export default RequestTemplate;

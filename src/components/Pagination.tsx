@@ -8,6 +8,23 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, paginate }) => {
+    const pageNumbers: number[] = [];
+
+    const maxVisiblePages = 5; // Change this value as needed
+
+    // Calculate the range of pages to display
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    // Adjust startPage and endPage if needed
+    if (totalPages - endPage < Math.floor(maxVisiblePages / 2)) {
+        startPage = Math.max(1, totalPages - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+    }
+
     return (
         <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
             <button
@@ -18,16 +35,16 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, pagina
                 <span className="sr-only">Previous</span>
                 <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
-            {Array.from({ length: totalPages }, (_, i) => (
+            {pageNumbers.map((pageNumber) => (
                 <button
-                    key={i + 1}
-                    onClick={() => paginate(i + 1)}
-                    className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${i + 1 === currentPage
+                    key={pageNumber}
+                    onClick={() => paginate(pageNumber)}
+                    className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${pageNumber === currentPage
                         ? "bg-indigo-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                    }`}
+                        }`}
                 >
-                    {i + 1}
+                    {pageNumber}
                 </button>
             ))}
             <button

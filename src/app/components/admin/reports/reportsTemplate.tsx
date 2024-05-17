@@ -6,14 +6,15 @@ import { Icon } from "@iconify/react";
 import DateRangePickerComp from "@/components/DateRangePickerComp";
 import Pagination from "@/components/Pagination";
 
-const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) => {
+const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers, currentPage, totalPages, paginate, totalCount, OnchangeData, formdata, handleOrderChange }) => {
   const [filterName, setFilterName] = useState("");
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [dateRangeButtonText, setDateRangeButtonText] = useState("Select Date Range");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+
+
+
 
   const handleToggleFilterModal = () => {
     setShowFilterModal(!showFilterModal);
@@ -45,7 +46,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
     return allUsers.map((user) => user.name);
   };
 
-  const filteredAttendance = attendance.filter((record) => {
+  const filteredAttendance = attendance?.filter(record => {
     const matchName = !filterName || record.userName === filterName;
     const matchDate =
       !startDate ||
@@ -53,6 +54,10 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
       (new Date(record.date) >= startDate && new Date(record.date) <= endDate);
     return matchName && matchDate;
   });
+
+  const handleSortOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    handleOrderChange(e.target.value);
+  };
 
   function getColorForStatus(status: string) {
     switch (status) {
@@ -76,11 +81,10 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
   }
 
   // Pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const indexOfLastItem = currentPage * formdata.limit;
+  const indexOfFirstItem = indexOfLastItem - formdata.limit;
   const currentItems = filteredAttendance.slice(indexOfFirstItem, indexOfLastItem);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <>
@@ -162,7 +166,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
         {/*table*/}
         <div className="lg:px-6 lg:py-6 md:py-3 md:px-5 sm:px-4 sm:py-5 rounded-md box-shadow lg:mt-7 md:mt-4 sm:mt-6 attendance-table">
           <div className="overflow-x-auto">
-            {currentItems.length > 0 ? (
+            {attendance.length > 0 ? (
               <table className="table-auto w-full">
                 <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50 text-left">
                   <tr>
@@ -190,25 +194,26 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
                   </tr>
                 </thead>
                 <tbody className="text-lg divide-y divide-gray-100">
-                  {currentItems
-                    .slice() // Create a copy of the array to avoid mutating the original
-                    .sort((a, b) => {
-                      // Convert dates to Date objects
-                      const dateA: any = new Date(a.date);
-                      const dateB: any = new Date(b.date);
+                  {attendance
+                    // .slice() // Create a copy of the array to avoid mutating the original
+                    // .sort((a, b) => {
+                    //   // Convert dates to Date objects
+                    //   const dateA: any = new Date(a.date);
+                    //   const dateB: any = new Date(b.date);
 
-                      // If dates are equal, compare timeIn
-                      if (dateA.getTime() === dateB.getTime()) {
-                        // Convert timeIn to time
-                        const timeInA = new Date(`1970-01-01T${a.timeIn}`);
-                        const timeInB = new Date(`1970-01-01T${b.timeIn}`);
-                        // Subtract timeInB from timeInA for descending order
-                        return timeInB.getTime() - timeInA.getTime();
-                      }
+                    //   // If dates are equal, compare timeIn
+                    //   if (dateA.getTime() === dateB.getTime()) {
+                    //     // Convert timeIn to time
+                    //     const timeInA = new Date(`1970-01-01T${a.timeIn}`);
+                    //     const timeInB = new Date(`1970-01-01T${b.timeIn}`);
+                    //     // Subtract timeInB from timeInA for descending order
+                    //     return timeInB.getTime() - timeInA.getTime();
+                    //   }
 
-                      // Subtract dateB from dateA for descending order
-                      return dateB - dateA;
-                    }).map((user, index) => (
+                    //   // Subtract dateB from dateA for descending order
+                    //   return dateB - dateA;
+                    // })
+                    .map((user, index) => (
                       <tr key={index} className="text-lg text-gray-600">
                         <td className="p-2 whitespace-nowrap">
                           <div>{index + 1}</div>
@@ -248,16 +253,54 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({ attendance, allUsers }) =
           {/* Pagination */}
           <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
             <div>
+              <label htmlFor="limit" className="mr-2">
+                Items per page:
+              </label>
+              <input
+                id="limit"
+                type="number"
+                min="1"
+                value={formdata.limit}
+                onChange={OnchangeData}
+                className="border border-gray-300 rounded-md p-1 text-sm"
+                name="limit"
+
+              />
+            </div>
+            <div>
               <p className="text-sm text-gray-700">
-                Showing <span className="font-medium">{indexOfFirstItem + 1}</span> to{" "}
-                <span className="font-medium">{Math.min(indexOfLastItem, filteredAttendance.length)}</span> of{" "}
-                <span className="font-medium">{filteredAttendance.length}</span> results
+                Showing{" "}
+                <span className="font-medium">
+                  {currentPage === 1 ? 1 : (currentPage - 1) * formdata.limit + 1}
+                </span>{" "}
+                to{" "}
+                <span className="font-medium">
+                  {currentPage === totalPages
+                    ? (currentPage - 1) * formdata.limit + filteredAttendance.length
+                    : currentPage * formdata.limit}
+                </span>{" "}
+                of{" "}
+                <span className="font-medium">{totalCount}</span> results
               </p>
             </div>
             <div>
+              <select
+                id="order"
+                name="order"
+                value={formdata.order}
+                onChange={OnchangeData}
+                className="border border-gray-300 rounded-md p-1 text-sm"
+              >
+                 <option value="">Select sorting</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+            <div>
+
               <Pagination
                 currentPage={currentPage}
-                totalPages={Math.ceil(filteredAttendance.length / itemsPerPage)}
+                totalPages={totalPages}
                 paginate={paginate}
               />
             </div>
