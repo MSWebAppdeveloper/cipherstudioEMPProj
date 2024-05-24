@@ -48,7 +48,7 @@ const RequestComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://localhost:8080/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}`,
+        `http://192.168.1.2:8080/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}`,
         {
           method: "GET",
           headers: {
@@ -69,7 +69,7 @@ const RequestComponent: React.FC = () => {
       } else if (response.status === 401) {
         // Token expired, try refreshing the token
         const refreshResponse = await fetch(
-          "http://localhost:8080/api/refresh",
+          "http://192.168.1.2:8080/api/refresh",
           {
             method: "POST",
             headers: {
@@ -182,7 +182,7 @@ const RequestComponent: React.FC = () => {
         formdata={formdata}
         leaveTypes={leaveTypes}
         total_days={0}
-      />
+        createdAt={undefined} />
     </>
   );
 };

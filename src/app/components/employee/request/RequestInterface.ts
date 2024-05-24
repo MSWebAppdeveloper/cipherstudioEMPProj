@@ -18,6 +18,7 @@ export interface RequestInterface {
   reason: string;
   status: string;
   total_days: number;
+  createdAt:any;
   onDelete: (e: any) => void;
   getColorForStatus: (e: any) => void;
   isDeleteConfirmationVisible:boolean;
