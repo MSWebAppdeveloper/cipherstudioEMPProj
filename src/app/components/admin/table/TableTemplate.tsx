@@ -13,12 +13,16 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
   cancelDeleteUser,
   isDeleteConfirmationVisible,
   handleToggleUserStatus,
+  currentPage,
+  totalPages,
+  paginate,
+  totalCount,
+  OnchangeData,
+  formdata
 }) => {
   const [currentTab, setCurrentTab] = useState("ALL");
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
 
 
   const handleFilterChange = (value: string) => {
@@ -40,12 +44,8 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
     deleteSelected(userId);
   };
 
-  // Pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
 
   return (
     <>
@@ -100,7 +100,7 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
                   </tr>
                 </thead>
                 <tbody className="text-md divide-y divide-gray-100">
-                  {currentItems.map((user: any, index: any) => (
+                  {filteredUsers.map((user: any, index: any) => (
                     <tr key={user.id} className="text-lg text-gray-600">
                       <td className="p-2 whitespace-nowrap">{index + 1} </td>
                       <td className="p-2 whitespace-nowrap">{user.name}</td>
@@ -260,21 +260,59 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
             )}
             {/*pagination*/}
             <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-              <div>
-                <p className="text-sm text-gray-700">
-                  Showing <span className="font-medium">{indexOfFirstItem + 1}</span> to{" "}
-                  <span className="font-medium">{Math.min(indexOfLastItem, filteredUsers.length)}</span> of{" "}
-                  <span className="font-medium">{filteredUsers.length}</span> results
-                </p>
-              </div>
-              <div>
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={Math.ceil(filteredUsers.length / itemsPerPage)}
-                  paginate={paginate}
-                />
-              </div>
+            <div>
+              <label htmlFor="limit" className="mr-2">
+                Items per page:
+              </label>
+              <input
+                id="limit"
+                type="number"
+                min="1"
+                value={formdata.limit}
+                onChange={OnchangeData}
+                className="border border-gray-300 rounded-md p-1 text-sm"
+                name="limit"
+              />
             </div>
+            <div>
+              <p className="text-sm text-gray-700">
+                Showing{" "}
+                <span className="font-medium">
+                  {currentPage === 1
+                    ? 1
+                    : (currentPage - 1) * formdata.limit + 1}
+                </span>{" "}
+                to{" "}
+                <span className="font-medium">
+                  {currentPage === totalPages
+                    ? (currentPage - 1) * formdata.limit +
+                    filteredUsers.length
+                    : currentPage * formdata.limit}
+                </span>{" "}
+                of <span className="font-medium">{totalCount}</span> results
+              </p>
+            </div>
+            <div>
+              <select
+                id="order"
+                name="order"
+                value={formdata.order}
+                onChange={OnchangeData}
+                className="border border-gray-300 rounded-md p-1 text-sm"
+              >
+                <option value="">Select sorting</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+            <div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                paginate={paginate}
+              />
+            </div>
+          </div>
           </div>
         </div>
       </div>

@@ -57,7 +57,7 @@ const LeaveRequestComponent: React.FC<LeaveRequestComponentProps> = ({
         try {
 
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch('http://localhost:8082/api/users/user/details', {
+            const response = await fetch('http://localhost:8080/api/users/user/details', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -100,10 +100,12 @@ const LeaveRequestComponent: React.FC<LeaveRequestComponentProps> = ({
                 toast.success("Leave request submitted successfully")
                 setFormdata(initialValues);
                 handleClose();
+            } else {
+                toast.error(response.data)
             }
-        } catch (error) {
-            console.error('Error submitting leave request:', error);
-            toast.error("Something went wrong");
+        } catch (error: any) {
+            console.error('Error submitting leave request:', error.response.data.error);
+            toast.error(error.response.data.error)
         }
     };
 

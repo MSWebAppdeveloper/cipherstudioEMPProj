@@ -47,7 +47,7 @@ const EmployeePage: React.FC = () => {
         const url = "employee/attendance/status";
         // const res= await Attendance("attendance/status")
         const response = await axios.get(
-          "http://192.168.1.2:8082/api/employee/attendance/status",
+          "http://192.168.1.2:8080/api/employee/attendance/status",
           { params: { UserId: userId } }
         );
         const { isClockedIn, attendanceId, existingEntry } = response.data;
@@ -70,7 +70,7 @@ const EmployeePage: React.FC = () => {
           startTimeRef.current = new Date().getTime();
         }
       } catch (error) {
-        console.error("Error checking attendance status:", error);
+        toast.error
       }
     };
     checkAttendanceStatus();
@@ -93,16 +93,6 @@ const EmployeePage: React.FC = () => {
     return () => clearInterval(intervalIdRef.current as unknown as number); // Cast intervalIdRef.current to number
   }, [isActive]);
 
-
-  const toggleTimer = () => {
-    setIsActive(!isActive);
-  };
-
-  const resetTimer = () => {
-    setSeconds(0);
-    setIsActive(false);
-  };
-
   const handleSignIn = async () => {
     try {
       const currentDate = new Date();
@@ -112,7 +102,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.post(
-        "http://192.168.1.2:8082/api/employee/attendance/signin",
+        "http://192.168.1.2:8080/api/employee/attendance/signin",
         {
           UserId: localStorage.getItem("UserId"),
           timeIn: formattedTimeIn,
@@ -138,7 +128,6 @@ const EmployeePage: React.FC = () => {
 
       setIntervalId(id);
     } catch (error: any) {
-      console.error("Error Day in:", error);
       toast.error(error.response?.data?.error);
     }
   };
@@ -151,7 +140,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.put(
-        `http://192.168.1.2:8082/api/employee/attendance/signout/${attendanceId}`,
+        `http://192.168.1.2:8080/api/employee/attendance/signout/${attendanceId}`,
         {
           timeOut: formattedTimeOut,
         }
@@ -174,7 +163,7 @@ const EmployeePage: React.FC = () => {
       // Reset total record time
       setElapsedTime(0)
     } catch (error: any) {
-      console.error("Error Day out:", error);
+      toast.error
     }
   };
 

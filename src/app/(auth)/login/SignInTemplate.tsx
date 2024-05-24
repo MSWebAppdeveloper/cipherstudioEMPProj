@@ -22,6 +22,7 @@ const SignInTemplate: React.FC<SignInInterface> = ({
             alt="img"
             src="/login-img.jpg"
             className="h-screen  w-full object-contain md:w-50 md:mx-auto sm:w-50 sm:mx-auto"
+            priority={true}
           />
         </section>
         <main className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-8 xl:col-span-6 right">

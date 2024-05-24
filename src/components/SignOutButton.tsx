@@ -25,14 +25,14 @@ export default function SignoutButton({ }: { type?: string }) {
 
     return (
         <>
-            <div>
-                <button
+          
+                <div
                     className="signout p-2  rounded-md"
                     onClick={handleSignOut}
                 >
                     <Icon icon="icon-park:logout" width="2rem" height="2rem" />
-                </button>
-            </div>
+                </div>
+            
         </>
     );
 }

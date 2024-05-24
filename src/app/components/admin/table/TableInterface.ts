@@ -1,10 +1,12 @@
 export interface UserTableProps {
-  formValues: {
+  formdata: {
     name: string;
     email: string;
     department: string;
     userRole: string;
     isActive: boolean;
+    limit: any;
+    order:any;
   };
   allUsers?: Array<{
     id: string;
@@ -21,4 +23,11 @@ export interface UserTableProps {
   cancelDeleteUser: (user: any) => void;
   isDeleteConfirmationVisible:boolean;
   handleToggleUserStatus: (userId: string, isActive: boolean) => void;
+  currentPage: any;
+  totalPages: any;
+  totalRecords: any;
+  paginate: any;
+  totalCount: any;
+  // limit: any;
+  OnchangeData: (e: any) => void;
 }

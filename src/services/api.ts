@@ -27,7 +27,6 @@ export const UserLogin = async (endpoint: string, payload: any) => {
     const response = await postMethod(endpoint, payload);
     return response;
   } catch (error) {
-    console.error("Error in UserLogin", error);
     throw error;
   }
 };
@@ -170,7 +169,6 @@ const postMethod = async (endpoint: string, payload: any) => {
     const response = await axios.post(`${BASE_URL}${endpoint}`, payload);
     return response;
   } catch (error) {
-    console.error("Error in postMethod", error);
     throw error;
   }
 };
@@ -191,7 +189,6 @@ const putMethod = async (endpoint: string, payload: any) => {
     const response = await axios.put(`${BASE_URL}${endpoint}`, payload);
     return response;
   } catch (error) {
-    console.error("Error in putMethod", error);
     throw error;
   }
 };
@@ -202,7 +199,6 @@ const deleteMethod = async (endpoint: string) => {
     const response = await axios.delete(`${BASE_URL}${endpoint}`);
     return response;
   } catch (error) {
-    console.error("Error in deleteMethod", error);
     throw error;
   }
 };

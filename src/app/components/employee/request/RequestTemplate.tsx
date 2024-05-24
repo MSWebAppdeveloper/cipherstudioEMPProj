@@ -4,37 +4,37 @@ import { RequestInterface } from "./RequestInterface";
 import Pagination from "@/components/Pagination";
 
 const RequestTemplate: React.FC<RequestInterface> = ({
-    // deleteSelected,
+    deleteSelected,
+    isDeleteConfirmationVisible,
+    selectedUserId,
     openEditPopup,
     setModal,
     leaveHistory,
-    leaveOverview,
+    getColorForStatus,
+    currentPage,
+    totalPages,
+    paginate,
+    totalCount,
+    OnchangeData,
+    formdata,
+    leaveTypes,
+    confirmDeleteUser,
+    cancelDeleteUser,
 }) => {
-    const [currentTab, setCurrentTab] = useState("All");
-    const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
-    const [selectedUserId, setSelectedUserId] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(10);
+    const [currentStatus, setCurrentStatus] = useState("ALL");
 
-    // Pagination
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = leaveHistory.slice(indexOfFirstItem, indexOfLastItem);
+    const handleFilterChange = (value: string) => {
+        setCurrentStatus(value);
+    };
 
-    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    const filterOptions = ["ALL", "Pending", "Approved", "Rejected"];
+    // Filter users based on the current tab
+    const filteredUsers: any =
+        currentStatus === "ALL"
+            ? leaveHistory
+            : leaveHistory?.filter((user) => user.status === currentStatus);
 
-    function getColorForStatus(status: string) {
-        switch (status) {
-            case "Approved":
-                return "text-green-500"; // Green for Present
-            case "Rejected":
-                return "text-red-500"; // Red for Reject
-            case "Pending":
-                return "text-yellow-500"; // Yellow for Pending
-            default:
-                return ""; // No color for unknown status
-        }
-    }
+
     return (
         <>
             {/*right--sec-start*/}
@@ -59,177 +59,223 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     <h3 className="text-2xl font-medium px-2 py-4">Leave Overview</h3>
                     <div className="flex flex-wrap -m-1 mt-6">
                         {/*-card*/}
-
-                        <div className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
-                            <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
-                                <div className="px-10 py-6 flex-1 flex flex-col">
-                                    <h3 className="mb-4 text-2xl py-3 border-b text-size">
-                                        Casual Leave
-                                    </h3>
-                                    <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
-                                        <ul className="space-y-4">
-                                            <li className="text-lg flex justify-between">
-                                            Total leave: {leaveOverview.casualLeaveTotal}
-                                            </li>
-                                            <li className="text-lg flex justify-between">
-                                            Taken leave: {leaveOverview.casualLeaveTaken}
-                                            </li>
-                                            <li className="text-lg flex justify-between">
-                                            Left leave: {leaveOverview.casualLeaveRemaining}
-                                            </li>
-                                        </ul>
+                        {leaveTypes.map((leaveType, id) => (
+                            <div key={id} className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
+                                <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
+                                    <div className="px-10 py-6 flex-1 flex flex-col">
+                                        <h3 className="mb-4 text-2xl py-3 border-b text-size">
+                                            {leaveType.leaveType}
+                                        </h3>
+                                        <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
+                                            <ul className="space-y-4">
+                                                <li className="text-lg flex justify-between">
+                                                    Allowed Leaves : {leaveType.allowed_leaves}
+                                                </li>
+                                                <li className="text-lg flex justify-between">
+                                                    Taken Leaves : {leaveType.totaltakenleave}
+                                                </li>
+                                                <li className="text-lg flex justify-between">
+                                                    Left Leaves : {leaveType.leaves_left}
+                                                </li>
+                                                <li className="text-lg flex justify-between">
+                                                    Extra Taken Leaves : {leaveType.extra_leaves}
+                                                </li>
+                                                <li className="text-lg flex justify-between">
+                                                    Pending Leaves : {leaveType.pending_leaves}
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
-                            <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
-                                <div className="px-10 py-6 flex-1 flex flex-col">
-                                    <h3 className="mb-4 text-2xl py-3 border-b text-size">
-                                        Medical Leave
-                                    </h3>
-                                    <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
-                                        <ul className="space-y-4">
-                                            <li className="text-lg flex justify-between">
-                                            Total  leave: {leaveOverview.medicalLeaveTotal}
-                                            </li>
-                                            <li className="text-lg flex justify-between">
-                                            Taken leave: {leaveOverview.medicalLeaveTaken}
-                                            </li>
-                                            <li className="text-lg flex justify-between">
-                                            Left leave: {leaveOverview.medicalLeaveRemaining}
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
-                            <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
-                                <div className="px-10 py-6 flex-1 flex flex-col">
-                                    <h3 className="mb-4 text-2xl py-3 border-b text-size">
-                                        Earned Leave
-                                    </h3>
-                                    <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
-                                        <ul className="space-y-4">
-                                            <li className="text-lg flex justify-between">
-                                            Total  leave: {leaveOverview.earnedLeaveTotal}
-                                            </li>
-                                            <li className="text-lg flex justify-between">
-                                            Taken leave: {leaveOverview.earnedLeaveTaken}
-                                            </li>
-                                            <li className="text-lg flex justify-between">
-                                            Left leave: {leaveOverview.earnedLeaveRemaining}
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
                 {/*table*/}
                 <div className="lg:px-6 lg:pb-10 lg:pt-4 md:py-5 md:px-5 sm:px-4 sm:py-5 rounded-lg box-shadow lg:mt-12 md:mt-4 sm:mt-6 attendance-table mb-8">
                     <h3 className="text-2xl font-medium py-5">Leave History</h3>
-                    <div className="overflow-x-auto">
-                        <table className="table-auto w-full mt-6">
-                            <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50">
-                                <tr>
-                                    <th className="p-2 whitespace-nowrap">
-                                        <div className="font-semibold text-left">LEAVE TYPE</div>
-                                    </th>
-                                    <th className="p-2 whitespace-nowrap">
-                                        <div className="font-semibold text-left">START DATE</div>
-                                    </th>
-                                    <th className="p-2 whitespace-nowrap">
-                                        <div className="font-semibold text-left">END DATE</div>
-                                    </th>
-                                    <th className="p-2 whitespace-nowrap">
-                                        <div className="font-semibold text-center">REASON</div>
-                                    </th>
-                                    <th className="p-2 whitespace-nowrap">
-                                        <div className="font-semibold text-center">STATUS</div>
-                                    </th>
-                                    <th className="p-2 whitespace-nowrap">
-                                        <div className="font-semibold">ACTIONS</div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-md divide-y divide-gray-100">
-                                {currentItems.map((user: any, index: any) => (
-                                    <tr key={user.id}>
-                                        <td className="p-2 whitespace-nowrap">
-                                            <div className="text-lg text-gray-600">
-                                                {user.leaveType}
-                                            </div>
-                                        </td>
-                                        <td className="p-2 whitespace-nowrap">
-                                            <div className="text-left text-lg">{user.startDate}</div>
-                                        </td>
-                                        <td className="p-2 whitespace-nowrap">
-                                            <div className="text-left text-lg">{user.endDate}</div>
-                                        </td>
-                                        <td className="p-2 whitespace-nowrap">
-                                            <div className="text-lg text-center">{user.reason}</div>
-                                        </td>
-                                        <td
-                                            className={`p-2 whitespace-nowrap  ${getColorForStatus(
-                                                user.status
-                                            )}`}
-                                        >
-                                            <div className="text-lg text-center">{user.status}</div>
-                                        </td>
-                                        <td className="p-2 whitespace-nowrap">
-                                            <div className="text-lg text-center">
-                                                <button
-                                                    className="px-3 py-1 bg-red-500 text-white text-md rounded-md hover:bg-red-600"
-                                                //   onclick="my_modal_11.showModal()"
-                                                >
-                                                    Delete
-                                                </button>
-                                                {/*popup*/}
-                                                <dialog id="my_modal_11" className="modal rounded-md">
-                                                    <div className="modal-box-2 px-8 modal-2 py-4">
-                                                        <p className="text-xl pt-3 pb-5">
-                                                            Are you sure you want to delete this user?
-                                                        </p>
-                                                        <div className="modal-action text-end">
-                                                            <form method="dialog">
-                                                                {/* if there is a button in form, it will close the modal */}
-                                                                <button className="btn bg-red-600 text-white mt-2 font-medium text-lg hover:bg-red-500 mb-3 mr-2 px-3 py-2 rounded-md">
-                                                                    Yes
-                                                                </button>
-                                                                <button className="btn bg-gray-300 text-white mt-2 font-medium text-lg hover:bg-gray-500 mb-3 px-3 py-2 rounded-md">
-                                                                    No
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </dialog>
-                                            </div>
-                                        </td>
-                                    </tr>
+                    <div className="px-2">
+                        <form className="max-w-52">
+                            <label className="text-lg font-medium">Sort by</label>
+                            <select
+                                id="response"
+                                className="border border-gray-300 text-gray-800 text-md rounded-md block w-full lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50 mt-2 mb-4"
+                                value={currentStatus}
+                                onChange={(e) => handleFilterChange(e.target.value)}
+                            >
+                                {filterOptions.map((option) => (
+                                    <option key={option} value={option}>
+                                        {option}
+                                    </option>
                                 ))}
-                            </tbody>
-                        </table>
+                            </select>
+                        </form>
+                    </div>
+                    <div className="overflow-x-auto">
+                        {filteredUsers.length > 0 ? (
+                            <table className="table-auto w-full mt-6">
+                                <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50  text-left">
+                                    <tr>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold">S NO.</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold ">LEAVE TYPE</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold ">Submitted Date&Time</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold ">START DATE</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold ">END DATE</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold ">Total Days</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold ">REASON</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold ">STATUS</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold">ACTIONS</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-md divide-y divide-gray-100">
+                                    {filteredUsers.map((user: any, index: any) => (
+                                        <tr key={user.id}>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div>{index + 1}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div >
+                                                    {user.leaveType}
+                                                </div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div >
+                                                    {user.createdAt}
+                                                </div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div >{user.startDate}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div >{user.endDate}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div >{user.total_days}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div>{user.reason}</div>
+                                            </td>
+                                            <td
+                                                className={`p-2 whitespace-nowrap  ${getColorForStatus(
+                                                    user.status
+                                                )}`}
+                                            >
+                                                <div >{user.status}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                {user.status === "Pending" && (
+                                                    <div className="text-lg text-center">
+                                                        <button
+                                                            className="px-3 py-1 bg-red-500 text-white text-md rounded-md hover:bg-red-600"
+                                                            onClick={() => deleteSelected(user.id)}
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p>No Leave Applications data available.</p>
+                        )}
+                        {isDeleteConfirmationVisible && (
+                            <div className="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center">
+                                <div className="absolute inset-0 bg-black opacity-50"></div>
+                                <div className="relative bg-white rounded-lg p-8">
+                                    <p className="text-lg font-semibold mb-4">
+                                        Are you sure you want to delete this LeaveApplication?
+                                    </p>
+                                    <div className="flex justify-end">
+                                        <button
+                                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+                                            // onClick={confirmDeleteUser}
+                                            onClick={() => confirmDeleteUser(selectedUserId)}
+                                        >
+                                            Yes
+                                        </button>
+                                        <button
+                                            className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+                                            onClick={cancelDeleteUser}
+                                        >
+                                            No
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     {/* Pagination */}
                     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
                         <div>
+                            <label htmlFor="limit" className="mr-2">
+                                Items per page:
+                            </label>
+                            <input
+                                id="limit"
+                                type="number"
+                                min="1"
+                                value={formdata.limit}
+                                onChange={OnchangeData}
+                                className="border border-gray-300 rounded-md p-1 text-sm"
+                                name="limit"
+                            />
+                        </div>
+                        <div>
                             <p className="text-sm text-gray-700">
                                 Showing{" "}
-                                <span className="font-medium">{indexOfFirstItem + 1}</span> to{" "}
                                 <span className="font-medium">
-                                    {Math.min(indexOfLastItem, leaveHistory.length)}
+                                    {currentPage === 1
+                                        ? 1
+                                        : (currentPage - 1) * formdata.limit + 1}
                                 </span>{" "}
-                                of <span className="font-medium">{leaveHistory.length}</span>{" "}
-                                results
+                                to{" "}
+                                <span className="font-medium">
+                                    {currentPage === totalPages
+                                        ? (currentPage - 1) * formdata.limit +
+                                        filteredUsers.length
+                                        : currentPage * formdata.limit}
+                                </span>{" "}
+                                of <span className="font-medium">{totalCount}</span> results
                             </p>
+                        </div>
+                        <div>
+                            <select
+                                id="order"
+                                name="order"
+                                value={formdata.order}
+                                onChange={OnchangeData}
+                                className="border border-gray-300 rounded-md p-1 text-sm"
+                            >
+                                <option value="">Select sorting</option>
+                                <option value="asc">Ascending</option>
+                                <option value="desc">Descending</option>
+                            </select>
                         </div>
                         <div>
                             <Pagination
                                 currentPage={currentPage}
-                                totalPages={Math.ceil(leaveHistory.length / itemsPerPage)}
+                                totalPages={totalPages}
                                 paginate={paginate}
                             />
                         </div>

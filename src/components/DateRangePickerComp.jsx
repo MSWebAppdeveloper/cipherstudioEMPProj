@@ -19,7 +19,13 @@ const DateRangePickerComp = ({ onChange }) => {
   
   return (
     <div className="calendarElement">
-      <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />
+      <DateRangePicker 
+      ranges={[selectionRange]}
+      onChange={handleSelect}
+      moveRangeOnFirstSelection={false} // Disable auto-selection of date range on first click
+      editableDateInputs={true} // Allow manual input of dates
+      showDateDisplay={false} // Hide the date display below the calendar
+      />
     </div>
   );
 };

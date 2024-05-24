@@ -7,20 +7,36 @@ import LeaveApplicationsTemplate from './leaveApplicationsTemplate';
 // ... (previous imports)
 
 const LeaveApplications: React.FC = () => {
-    const [applications, setApplications] = useState([
-        { id: 1, status: 'Pending' },
-        { id: 2, status: 'Approved' }
-        // Add more applications as needed
-    ]);
+
 
     const [approverId, setApproverId] = useState<number | null>(null);
     const [leaveHistory, setLeaveHistory] = useState<leaveApplicationsInterface[]>([]);
+    const [filterType, setFilterType] = useState<"status">("status");
+    const [filterValue, setFilterValue] = useState<string | [string, string]>("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalRecords, setTotalRecords] = useState(0);
+    const [totalCount, setTotalCount] = useState(0);
+    const [formdata, setFormdata] = useState(
+        {
+            limit: "12",
+            order: "",
+            status: "",
+        }
+    )
+    const OnchangeData = (e: any) => {
+        setFormdata({
+            ...formdata,
+            [e.target.name]: e.target.value
+        });
+    };
+
 
     const ApproverId = async () => {
         try {
 
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch('http://localhost:8082/api/employee/user/details', {
+            const response = await fetch('http://localhost:8080/api/employee/user/details', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -51,12 +67,15 @@ const LeaveApplications: React.FC = () => {
         }
     };
 
-    const fetchLeaveHistory = async () => {
+    const fetchLeaveHistory = async (page: number) => {
         try {
-            const url = `leave-requests`;
-            const response: any = await HistoryLeave(url);
-            setLeaveHistory(response.data);
+            const url = `leave-requests?page=${page}&limit=${formdata.limit}&order=${formdata.order}`;
 
+            const response: any = await HistoryLeave(url);
+
+            setLeaveHistory(response.data.data);
+            setTotalPages(response.data.totalPages);
+            setTotalCount(response.data.totalCount);
         } catch (error) {
             console.error('Error fetching leave history:', error);
         }
@@ -101,12 +120,34 @@ const LeaveApplications: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             await fetchApproverId();
-            await fetchLeaveHistory();
+            await fetchLeaveHistory(currentPage);
         };
 
         fetchData();
-    }, []);
+    }, [currentPage, formdata.limit, formdata.order]);
 
+    const handleFilterChange = (
+        type: "status",
+        value: string | [string, string]
+    ) => {
+        setFilterType(type);
+        setFilterValue(value);
+    };
+
+    function getColorForStatus(status: string) {
+        switch (status) {
+            case "Approved":
+                return "text-green-500"; // Green for Present
+            case "Rejected":
+                return "text-red-500"; // Red for Reject
+            case "Pending":
+                return "text-yellow-500"; // Yellow for Pending
+            default:
+                return ""; // No color for unknown status
+        }
+    }
+
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     return (
         <>
             <LeaveApplicationsTemplate
@@ -120,7 +161,18 @@ const LeaveApplications: React.FC = () => {
                 id={''}
                 approveApplication={approveApplication}
                 rejectApplication={rejectApplication}
-            />
+                filterName={filterType === "status" ? (filterValue as string) : ""}
+                setFilterName={(value: any) => setFilterValue(value)}
+                getColorForStatus={getColorForStatus}
+                currentPage={currentPage}
+                paginate={paginate}
+                totalPages={totalPages}
+                totalRecords={totalRecords}
+                totalCount={totalCount}
+                OnchangeData={OnchangeData}
+                formdata={formdata}
+                handleFilterChange={handleFilterChange}
+                total_days={0} />
         </>
     );
 }

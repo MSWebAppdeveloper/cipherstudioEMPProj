@@ -42,5 +42,8 @@ export interface ReportsInterface {
     limit: any;
     order:any;
   };
-  handleOrderChange: (e: any) => void;
+  startDate:any;
+  endDate:any;
+  setStartDate:any;
+  setEndDate:any;
 }
