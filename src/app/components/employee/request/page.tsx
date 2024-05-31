@@ -15,6 +15,7 @@ const RequestComponent: React.FC = () => {
   const [formdata, setFormdata] = useState({
     limit: "12",
     order: "",
+    year: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -24,12 +25,14 @@ const RequestComponent: React.FC = () => {
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<number>();
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
 
     fetchLeaveHistory(currentPage);
-  }, [isModal, currentPage, formdata.limit, formdata.order]);
+  }, [isModal, currentPage, formdata.limit, formdata.order,formdata.year]);
+
 
   const OnchangeData = (e: any) => {
     setFormdata({
@@ -48,7 +51,7 @@ const RequestComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://192.168.1.2:8080/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}`,
+        `http://192.168.1.3:8082/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}`,
         {
           method: "GET",
           headers: {
@@ -69,7 +72,7 @@ const RequestComponent: React.FC = () => {
       } else if (response.status === 401) {
         // Token expired, try refreshing the token
         const refreshResponse = await fetch(
-          "http://192.168.1.2:8080/api/refresh",
+          "http://192.168.1.3:8082/api/refresh",
           {
             method: "POST",
             headers: {
@@ -182,7 +185,10 @@ const RequestComponent: React.FC = () => {
         formdata={formdata}
         leaveTypes={leaveTypes}
         total_days={0}
-        createdAt={undefined} />
+        createdAt={undefined}
+       
+        selectedYear={selectedYear}
+         />
     </>
   );
 };

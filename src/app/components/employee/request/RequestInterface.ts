@@ -11,6 +11,7 @@ export interface RequestInterface {
     status: string;
     total_days: number;
     createdAt:any;
+    selectedYear:any;
   }[];
   leaveType: string;
   startDate: string;
@@ -19,6 +20,7 @@ export interface RequestInterface {
   status: string;
   total_days: number;
   createdAt:any;
+  selectedYear:any;
   onDelete: (e: any) => void;
   getColorForStatus: (e: any) => void;
   isDeleteConfirmationVisible:boolean;
@@ -35,15 +37,18 @@ export interface RequestInterface {
   formdata: {
     limit: any;
     order: any;
+    year:any;
   };
   leaveTypes: {
     leave_type_id: number;
+    leave_type_name: string;
     leaveType: string;
-    allowed_leaves: number;
-    leaves_left: number;
+    allowedLeaves: number;
+    leavesLeft: number;
     total_days: number;
-    totaltakenleave: number;
-    extra_leaves: number;
-    pending_leaves:number;
+    totalTakenLeave: number;
+    extraTakenLeaves: number;
+    pendingLeaves:number;
+    assign_year:string;
   }[];
 }

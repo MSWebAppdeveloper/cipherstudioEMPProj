@@ -53,7 +53,7 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
                                     >
                                         <option value="" disabled>Select Leave Type</option>
                                         {leaveTypes.map((leaveType) => (
-                                            <option key={leaveType.leave_type_id} value={leaveType.leave_type_name}>
+                                            <option key={leaveType.leave_type_id} value={leaveType.leave_type_id}>
                                                 {leaveType.leave_type_name}
                                             </option>
                                         ))}
@@ -140,11 +140,11 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
                                     )}
                                 </button>
 
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </UseModal >
+            </UseModal >
         </>
     );
 };

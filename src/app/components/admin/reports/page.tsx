@@ -32,7 +32,7 @@ const Reports: React.FC = () => {
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
-    
+    getAllUsers(currentPage);
     +(currentPage);
   }, []);
 

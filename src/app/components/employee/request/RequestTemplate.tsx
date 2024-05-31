@@ -20,6 +20,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
     leaveTypes,
     confirmDeleteUser,
     cancelDeleteUser,
+    selectedYear,
 }) => {
     const [currentStatus, setCurrentStatus] = useState("ALL");
 
@@ -34,7 +35,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
             ? leaveHistory
             : leaveHistory?.filter((user) => user.status === currentStatus);
 
-
+    const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
     return (
         <>
             {/*right--sec-start*/}
@@ -56,7 +57,24 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     </div>
                 </div>
                 <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5">
-                    <h3 className="text-2xl font-medium px-2 py-4">Leave Overview</h3>
+                    <div className="flex justify-between items-center">
+                        <h3 className="text-2xl font-medium px-2 py-4">Leave Overview</h3>
+                        <div className="flex items-center">
+                            <span className="mr-4 text-lg font-medium">Year:</span>
+                            <select
+                                value={formdata.year}
+                                name="year"
+                                onChange={OnchangeData}
+                                className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
+                            >
+                                <option value="">Select year</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+                    </div>
                     <div className="flex flex-wrap -m-1 mt-6">
                         {/*-card*/}
                         {leaveTypes.map((leaveType, id) => (
@@ -69,19 +87,19 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                                         <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
                                             <ul className="space-y-4">
                                                 <li className="text-lg flex justify-between">
-                                                    Allowed Leaves : {leaveType.allowed_leaves}
+                                                    Allowed Leaves : {leaveType.allowedLeaves}
                                                 </li>
                                                 <li className="text-lg flex justify-between">
-                                                    Taken Leaves : {leaveType.totaltakenleave}
+                                                    Taken Leaves : {leaveType.totalTakenLeave}
                                                 </li>
                                                 <li className="text-lg flex justify-between">
-                                                    Left Leaves : {leaveType.leaves_left}
+                                                    Left Leaves : {leaveType.leavesLeft}
                                                 </li>
                                                 <li className="text-lg flex justify-between">
-                                                    Extra Taken Leaves : {leaveType.extra_leaves}
+                                                    Extra Taken Leaves : {leaveType.extraTakenLeaves}
                                                 </li>
                                                 <li className="text-lg flex justify-between">
-                                                    Pending Leaves : {leaveType.pending_leaves}
+                                                    Pending Leaves : {leaveType.pendingLeaves}
                                                 </li>
                                             </ul>
                                         </div>
