@@ -1,10 +1,5 @@
 import UserTableComponent from "@/app/components/admin/table/page";
 import React from "react";
-
-import Navbar from "@/components/Navbar";
-import SideNav from "@/components/Sidenav";
-import MarginWidthWrapper from "@/components/margin-width-wrapper";
-import HeaderMobile from "@/components/header-mobile";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";

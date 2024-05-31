@@ -24,6 +24,11 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     icon: <Icon icon="cil:applications" width="24" height="24"  style={{color: "#1565e5"}} />,
   },
   {
+    title: "Options",
+    path: "/admin/options",
+    icon: <Icon icon="cil:options" width="24" height="24"  style={{color: "#1565e5"}} />,
+  },
+  {
     title: "Dashboard",
     path: "/employee/dashboard",
     icon: <Icon icon="material-symbols:dashboard-outline" width="24" height="24"  style={{color: "#1565e5"}} />,

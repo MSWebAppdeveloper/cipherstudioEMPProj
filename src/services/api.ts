@@ -163,6 +163,34 @@ export const HistoryLeave = async (endpoint: any) => {
   }
 };
 
+// Register Leave
+export const registerLeave = async (endpoint: string, payload: any) => {
+  try {
+    const response = await postMethod(endpoint, payload);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+// Update Leave Details
+export const updateLeaveDetails = async (endpoint: string, payload: any) => {
+  try {
+    const response = await putMethod(endpoint, payload);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+// Delete Leave
+export const deleteLeave = async (endpoint: string) => {
+  try {
+    const response = await deleteMethod(endpoint);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Post method
 const postMethod = async (endpoint: string, payload: any) => {
   try {
