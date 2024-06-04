@@ -64,31 +64,11 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   return (
     <>
       <div>
-        <div className="flex justify-between items-center lg:py-5 md:py-4 btn-sec">
-          <div>
-            <h2 className="text-2xl font-medium">Attendance Report</h2>
-          </div>
-          <div>
-            <button className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-8 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0">
-              <CSVLink
-                data={filteredAttendance.map((record) => ({
-                  userName: record.userName,
-                  date: record.date,
-                  timeIn: record.timeIn,
-                  timeOut: record.timeOut,
-                  status: record.status,
-                  totalHours: record.totalHours,
-                }))}
-                filename={"attendance_report.csv"}
-              >
-                Download Report
-              </CSVLink>
-            </button>
-          </div>
-        </div>
         {/*filter-sec*/}
-        <div className="filter-sec lg:px-8 lg:py-5 md:py-5 md:px-5 rounded-md box-shadow lg:mt-3 md:mt-3 flex lg:gap-9 md:gap-4 sm:gap-3 items-center">
-          <div className="max-w-52 grow">
+        <div className="filter-sec lg:px-8 lg:py-5 md:py-5 md:px-5 rounded-md box-shadow lg:mt-5 md:mt-3 items-center">
+          <div className="flex justify-between">
+          <div className="flex">
+          <div className="max-w-52 grow mr-4">
             <form className="max-w-52">
               <select
                 id="name"
@@ -156,6 +136,26 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
                 </div>
               </div>
             )}
+          </div>
+          </div>
+
+          <div>
+            <button className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-8 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0">
+              <CSVLink
+                data={filteredAttendance.map((record) => ({
+                  userName: record.userName,
+                  date: record.date,
+                  timeIn: record.timeIn,
+                  timeOut: record.timeOut,
+                  status: record.status,
+                  totalHours: record.totalHours,
+                }))}
+                filename={"attendance_report.csv"}
+              >
+                Download Report
+              </CSVLink>
+            </button>
+          </div>
           </div>
         </div>
 

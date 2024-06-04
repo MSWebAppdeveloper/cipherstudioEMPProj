@@ -27,23 +27,19 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
   return (
     <>
       <div>
-        <div>
-          <h2 className="lg:py-5 md:py-8 sm:py-8 py-5 text-2xl font-medium">
-            Options
-          </h2>
-        </div>
+        
         <div className="box-shadow rounded-md mt-3 lg:px-8 lg:pb-12 lg:pt-5">
           <div>
 
             <div className="flex justify-between items-center">
 
-              <div className="flex items-center">
+              <div className="">
                 <span className="mr-4 text-lg font-medium">Year:</span>
                 <select
                   value={formdata.year}
                   name="year"
                   onChange={OnchangeData}
-                  className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
+                  className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50 mt-2"
                 >
                   <option value="">Select year</option>
                   <option value="2022">2022</option>

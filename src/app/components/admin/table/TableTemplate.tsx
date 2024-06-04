@@ -50,12 +50,8 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
   return (
     <>
       <div>
-        <div>
-          <h2 className="lg:py-5 md:py-8 sm:py-8 py-5 text-2xl font-medium">
-            Users
-          </h2>
-        </div>
-        <div className="box-shadow rounded-md mt-3 lg:px-8 lg:pb-12 lg:pt-5">
+        
+        <div className="box-shadow rounded-md mt-5 lg:px-8 lg:pb-12 lg:pt-5">
           <div className="flex justify-between items-center">
             <div>
               {/* Dropdown menu start*/}

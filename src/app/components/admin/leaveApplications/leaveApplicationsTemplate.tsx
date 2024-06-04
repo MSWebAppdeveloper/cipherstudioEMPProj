@@ -32,12 +32,8 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
   return (
     <>
       <div>
-        <div>
-          <h2 className="lg:py-5 md:py-8 sm:py-8 py-8 text-2xl font-medium">
-            Leave Status
-          </h2>
-        </div>
-        <div className="box-shadow pb-12 pt-5 px-8 rounded-md mt-3">
+       
+        <div className="box-shadow pb-12 pt-5 px-8 rounded-md mt-5">
           {/*-dropdown*/}
           <div>
             <form className="max-w-52">
