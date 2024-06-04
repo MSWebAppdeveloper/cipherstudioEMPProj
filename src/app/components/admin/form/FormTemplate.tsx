@@ -23,7 +23,7 @@ const UserFormTemplate: React.FC<UserFormProps> = ({
           <button
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold  rounded m-2 sm:w-auto md:w-auto" // Adjust button size for small and medium screens
           >
-            <Icon icon="material-symbols-light:cancel-outline" width="2em" height="2em" className=" hover:from-fuchsia-100 cursor-pointer" onClick={handleClose} />
+            <Icon icon="material-symbols-light:cancel-outline" width="2em" height="2em" className=" hover:from-fuchsia-100 cursor-pointer" onClick={handleClose}/>
           </button>
         </div>
         <div className="w-auto">

@@ -64,12 +64,12 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   return (
     <>
       <div>
-        <div className="flex justify-between items-center lg:py-8 md:py-4 btn-sec">
+        <div className="flex justify-between items-center lg:py-5 md:py-4 btn-sec">
           <div>
             <h2 className="text-2xl font-medium">Attendance Report</h2>
           </div>
           <div>
-            <button className="rounded-md bg-green-500 lg:px-8 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white hover:bg-green-400 lg:text-lg focus:outline-0">
+            <button className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-8 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0">
               <CSVLink
                 data={filteredAttendance.map((record) => ({
                   userName: record.userName,
@@ -87,7 +87,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
           </div>
         </div>
         {/*filter-sec*/}
-        <div className="filter-sec lg:px-6 lg:py-6 md:py-5 md:px-5 rounded-md box-shadow lg:mt-3 md:mt-3 flex lg:gap-9 md:gap-4 sm:gap-3 items-center">
+        <div className="filter-sec lg:px-8 lg:py-5 md:py-5 md:px-5 rounded-md box-shadow lg:mt-3 md:mt-3 flex lg:gap-9 md:gap-4 sm:gap-3 items-center">
           <div className="max-w-52 grow">
             <form className="max-w-52">
               <select
@@ -160,7 +160,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
         </div>
 
         {/*table*/}
-        <div className="lg:px-6 lg:py-6 md:py-3 md:px-5 sm:px-4 sm:py-5 rounded-md box-shadow lg:mt-7 md:mt-4 sm:mt-6 attendance-table">
+        <div className="lg:px-8 lg:py-6 md:py-3 md:px-5 sm:px-4 sm:py-5 rounded-md box-shadow lg:mt-7 md:mt-4 sm:mt-6 attendance-table">
           <div className="overflow-x-auto">
             {attendance.length > 0 ? (
               <table className="table-auto w-full">

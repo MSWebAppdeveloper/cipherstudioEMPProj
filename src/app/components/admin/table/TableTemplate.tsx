@@ -51,12 +51,12 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
     <>
       <div>
         <div>
-          <h2 className="lg:py-8 md:py-8 sm:py-8 py-8 text-2xl font-medium">
+          <h2 className="lg:py-5 md:py-8 sm:py-8 py-5 text-2xl font-medium">
             Users
           </h2>
         </div>
-        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-          <div className="flex justify-between items-center mt-5 mb-12">
+        <div className="box-shadow rounded-md mt-3 lg:px-8 lg:pb-12 lg:pt-5">
+          <div className="flex justify-between items-center">
             <div>
               {/* Dropdown menu start*/}
               <form className="max-w-52">
@@ -76,7 +76,7 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
             </div>
             <div>
               <button
-                className="block text-white bg-green-500 hover:bg-green-400 rounded-md lg:text-lg lg:px-8 lg:py-2 md:py-3 md:px-8 sm:py-2 sm:px-6 text-center"
+                className="block text-white bg-blue-500 hover:bg-blue-400 rounded-md lg:text-lg lg:px-8 lg:py-2 md:py-3 md:px-8 sm:py-2 sm:px-6 text-center"
                 type="button"
                 onClick={() => setModal((prev) => !prev)}
               >

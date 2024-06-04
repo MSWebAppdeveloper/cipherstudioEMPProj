@@ -25,7 +25,7 @@ h1 {
 }
 
 .right button {
-  background-color: #77ccff;
+  background-color: #26a1eb;
   border: none;
   padding: 8px 90px;
 }
@@ -49,19 +49,7 @@ h1 {
     left: 18px;
     color: #5eaadd;
 }
-form h1::before {
-  content: "";
-  position: absolute;
-  width: 100px;
-  height: 4px;
-  z-index: 1;
-  border-radius: 0px;
-  background-color: #5eaadd;
-  top: 100%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 10px;
-}
+
 input:focus-visible {
   outline: none;
 }

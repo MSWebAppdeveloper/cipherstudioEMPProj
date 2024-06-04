@@ -18,7 +18,7 @@ const EmployeeTemplate: React.FC<employeeAttendanceInterface> = ({
     <>
 
 
-      <div className="py-8">
+      <div className="py-5">
         <div>
           <h2 className="lg:text-2xl md:text-2xl sm:text-lg font-medium">
             Attendance
@@ -26,7 +26,7 @@ const EmployeeTemplate: React.FC<employeeAttendanceInterface> = ({
         </div>
       </div>
       {/*attendance--card*/}
-      <div className="lg:pt-10 md:pt-10 sm:pt-10 pt-10 box-shadow attendace-card px-10 mt-5 rounded-lg">
+      <div className="lg:pt-10 md:pt-10 sm:pt-10 pt-10 box-shadow attendace-card px-10 mt-4 rounded-lg">
         <div className="pb-8 max-w-sm">
           <h3 className="pt-2 flex justify-between">
             <b>Employee</b>  <span className="font-bold">{localStorage.getItem("name")}</span>

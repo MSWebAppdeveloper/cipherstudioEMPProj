@@ -33,18 +33,18 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
     <>
       <div>
         <div>
-          <h2 className="lg:py-8 md:py-8 sm:py-8 py-8 text-2xl font-medium">
+          <h2 className="lg:py-5 md:py-8 sm:py-8 py-8 text-2xl font-medium">
             Leave Status
           </h2>
         </div>
-        <div className="box-shadow py-12 px-4 rounded-md mt-4">
+        <div className="box-shadow pb-12 pt-5 px-8 rounded-md mt-3">
           {/*-dropdown*/}
-          <div className="px-2">
+          <div>
             <form className="max-w-52">
               <label className="text-lg font-medium">Sort by</label>
               <select
                 id="response"
-                className="border border-gray-300 text-gray-800 text-md rounded-md block w-full lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50 mt-2 mb-4"
+                className="border border-gray-300 text-gray-800 text-md rounded-md block w-full lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50 mt-2"
                 value={currentStatus}
                 onChange={(e) => handleFilterChange(e.target.value)}
               >
@@ -59,7 +59,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
           {/*table*/}
           <div className="overflow-x-auto">
             {filteredUsers.length > 0 ? (
-              <table className="table-auto w-full mt-6">
+              <table className="table-auto w-full mt-10">
                 <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50 text-left">
                   <tr>
                     <th className="p-2 whitespace-nowrap">
@@ -96,7 +96,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
                 </thead>
                 <tbody className="text-md divide-y divide-gray-100">
                   {filteredUsers.map((leave: any, index: any) => (
-                    <tr key={leave.id} >
+                    <tr key={leave.id} className="text-lg text-gray-600">
                       <td className="p-2 whitespace-nowrap">
                         <div>{index + 1}</div>
                       </td>

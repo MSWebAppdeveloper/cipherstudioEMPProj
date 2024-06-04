@@ -41,7 +41,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
             {/*right--sec-start*/}
 
             <div className="leave-sec">
-                <div className="flex justify-between items-center lg:py-8 md:py-4 btn-sec">
+                <div className="flex justify-between items-center lg:py-5 md:py-4 btn-sec">
                     <div>
                         <h2 className="text-2xl font-medium">Leave Reports</h2>
                     </div>
@@ -56,7 +56,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                         </button>
                     </div>
                 </div>
-                <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5">
+                <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-4">
                     <div className="flex justify-between items-center">
                         <h3 className="text-2xl font-medium px-2 py-4">Leave Overview</h3>
                         <div className="flex items-center">
@@ -75,17 +75,17 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                             </select>
                         </div>
                     </div>
-                    <div className="flex flex-wrap -m-1 mt-6">
+                    <div className="flex flex-wrap -m-1 mt-3">
                         {/*-card*/}
                         {leaveTypes.map((leaveType, id) => (
                             <div key={id} className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
                                 <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
-                                    <div className="px-10 py-6 flex-1 flex flex-col">
+                                    <div className="px-8 py-3 flex-1 flex flex-col">
                                         <h3 className="mb-4 text-2xl py-3 border-b text-size">
                                             {leaveType.leaveType}
                                         </h3>
-                                        <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
-                                            <ul className="space-y-4">
+                                        <div className="mb-3 mt-1 text-grey-darker text-sm flex-1">
+                                            <ul className="space-y-2">
                                                 <li className="text-lg flex justify-between">
                                                     Allowed Leaves : {leaveType.allowedLeaves}
                                                 </li>

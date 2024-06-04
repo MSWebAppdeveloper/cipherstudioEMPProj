@@ -28,11 +28,11 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
     <>
       <div>
         <div>
-          <h2 className="lg:py-8 md:py-8 sm:py-8 py-8 text-2xl font-medium">
+          <h2 className="lg:py-5 md:py-8 sm:py-8 py-5 text-2xl font-medium">
             Options
           </h2>
         </div>
-        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
+        <div className="box-shadow rounded-md mt-3 lg:px-8 lg:pb-12 lg:pt-5">
           <div>
 
             <div className="flex justify-between items-center">
@@ -54,7 +54,7 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
               </div>
               <div>
                 <button
-                  className="block text-white bg-green-500 hover:bg-green-400 rounded-md lg:text-lg lg:px-8 lg:py-2 md:py-3 md:px-8 sm:py-2 sm:px-6 text-center"
+                  className="block text-white bg-blue-500 hover:bg-blue-400 rounded-md lg:text-lg lg:px-8 lg:py-2 md:py-3 md:px-8 sm:py-2 sm:px-6 text-center "
                   type="button"
                   onClick={() => setModal((prev) => !prev)}
                 >
@@ -67,7 +67,7 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
           {/*table*/}
           <div className="mt-10">
             <div className="overflow-x-auto">
-              <table className="table-auto w-full text-left ">
+              <table className="table-auto w-full text-left">
                 <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50">
                   <tr>
                     <th className="p-2 whitespace-nowrap font-semibold">S NO.</th>
