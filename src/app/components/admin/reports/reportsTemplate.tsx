@@ -253,15 +253,18 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
               <label htmlFor="limit" className="mr-2">
                 Items per page:
               </label>
-              <input
-                id="limit"
-                type="number"
-                min="1"
+              <select name="limit" id="limit"
                 value={formdata.limit}
                 onChange={OnchangeData}
                 className="border border-gray-300 rounded-md p-1 text-sm"
-                name="limit"
-              />
+                >
+                  <option aria-placeholder="12">12</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="40">40</option>
+                  <option value="50">50</option>
+                </select>
+              
             </div>
             <div>
               <p className="text-sm text-gray-700">

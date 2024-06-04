@@ -20,20 +20,26 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
   OnchangeData,
   formdata
 }) => {
-  const [currentTab, setCurrentTab] = useState("ALL");
+  const [currentTab, setCurrentTab] = useState("Active");
+  const [selectedRole, setSelectedRole] = useState("ALL");
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
 
-
-  const handleFilterChange = (value: string) => {
+  const handleTabChange = (value: string) => {
     setCurrentTab(value);
   };
 
-  // Filter users based on the current tab
-  const filteredUsers: any =
-    currentTab === "ALL"
-      ? allUsers
-      : allUsers?.filter((user) => user.userRole === currentTab);
+  const handleRoleChange = (value: string) => {
+    setSelectedRole(value);
+  };
+
+  // Filter users based on the current tab and role
+  const filteredUsers: any = allUsers?.filter((user) => {
+    const isActiveMatch = currentTab === "Active" ? user.isActive : !user.isActive;
+    const isRoleMatch = selectedRole === "ALL" || user.userRole === selectedRole;
+    return isActiveMatch && isRoleMatch;
+  });
+
   // Dropdown options
   const filterOptions = ["ALL", "Employee", "Management"];
 
@@ -43,9 +49,6 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
     console.log("Soft delete user with ID:", userId);
     deleteSelected(userId);
   };
-
-
-
 
   return (
     <>
@@ -58,13 +61,30 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
           <div className="flex justify-between items-center mt-5 mb-12">
             <div>
-              {/* Dropdown menu start*/}
+              {/* Tab buttons */}
+              <div className="flex space-x-4">
+                <button
+                  className={`px-4 py-2 rounded ${currentTab === "Active" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                  onClick={() => handleTabChange("Active")}
+                >
+                  Active Users
+                </button>
+                <button
+                  className={`px-4 py-2 rounded ${currentTab === "Inactive" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+                  onClick={() => handleTabChange("Inactive")}
+                >
+                  Inactive Users
+                </button>
+              </div>
+            </div>
+            <div>
+              {/* Dropdown menu start */}
               <form className="max-w-52">
                 <select
-                  id="countries"
+                  id="roleFilter"
                   className="border border-gray-300 text-gray-800 text-md rounded-md block w-full lg:p-3 py-2 px-2 md:p-2 sm:p-2 dark:placeholder-gray-800 bg-slate-50 focus:none"
-                  value={currentTab}
-                  onChange={(e) => handleFilterChange(e.target.value)}
+                  value={selectedRole}
+                  onChange={(e) => handleRoleChange(e.target.value)}
                 >
                   {filterOptions.map((option) => (
                     <option key={option} value={option}>
@@ -110,33 +130,28 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
                         {user.department}
                       </td>
                       <td className="p-2 whitespace-nowrap">
-                        {/* {/ <div class="text-md text-left"> /} */}
                         <div className="flex">
                           <button
                             className="btn-1 mr-3 shadow-xl"
                             onClick={() => openEditPopup(user)}
                           >
-
                             <Icon
                               icon="flowbite:edit-outline"
                               width="1.2em"
                               height="1.2em"
                               style={{ color: "#ffffff" }}
                             />
-
                           </button>
                           <button
                             className="btn-2 btn-1 shadow-xl"
                             onClick={() => deleteSelected(user.id)}
                           >
-
                             <Icon
                               icon="mi:delete"
                               width="1.2em"
                               height="1.2em"
                               style={{ color: "#ffffff" }}
                             />
-
                           </button>
                         </div>
                       </td>
@@ -150,7 +165,6 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
                           />
                           <div className={`relative w-11 h-6 ${user.isActive ? 'bg-green-500' : 'bg-gray-200'} peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600`} />
                         </label>
-
                       </td>
                     </tr>
                   ))}
@@ -260,59 +274,61 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
             )}
             {/*pagination*/}
             <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-            <div>
-              <label htmlFor="limit" className="mr-2">
-                Items per page:
-              </label>
-              <input
-                id="limit"
-                type="number"
-                min="1"
-                value={formdata.limit}
-                onChange={OnchangeData}
-                className="border border-gray-300 rounded-md p-1 text-sm"
-                name="limit"
-              />
+              <div>
+                <label htmlFor="limit" className="mr-2">
+                  Items per page:
+                </label>
+                <select name="limit" id="limit"
+                  value={formdata.limit}
+                  onChange={OnchangeData}
+                  className="border border-gray-300 rounded-md p-1 text-sm"
+                >
+                  <option aria-placeholder="12">12</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="40">40</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700">
+                  Showing{" "}
+                  <span className="font-medium">
+                    {currentPage === 1
+                      ? 1
+                      : (currentPage - 1) * formdata.limit + 1}
+                  </span>{" "}
+                  to{" "}
+                  <span className="font-medium">
+                    {currentPage === totalPages
+                      ? (currentPage - 1) * formdata.limit +
+                      filteredUsers.length
+                      : currentPage * formdata.limit}
+                  </span>{" "}
+                  of <span className="font-medium">{totalCount}</span> results
+                </p>
+              </div>
+              <div>
+                <select
+                  id="order"
+                  name="order"
+                  value={formdata.order}
+                  onChange={OnchangeData}
+                  className="border border-gray-300 rounded-md p-1 text-sm"
+                >
+                  <option value="">Select sorting</option>
+                  <option value="asc">Ascending</option>
+                  <option value="desc">Descending</option>
+                </select>
+              </div>
+              <div>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  paginate={paginate}
+                />
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-gray-700">
-                Showing{" "}
-                <span className="font-medium">
-                  {currentPage === 1
-                    ? 1
-                    : (currentPage - 1) * formdata.limit + 1}
-                </span>{" "}
-                to{" "}
-                <span className="font-medium">
-                  {currentPage === totalPages
-                    ? (currentPage - 1) * formdata.limit +
-                    filteredUsers.length
-                    : currentPage * formdata.limit}
-                </span>{" "}
-                of <span className="font-medium">{totalCount}</span> results
-              </p>
-            </div>
-            <div>
-              <select
-                id="order"
-                name="order"
-                value={formdata.order}
-                onChange={OnchangeData}
-                className="border border-gray-300 rounded-md p-1 text-sm"
-              >
-                <option value="">Select sorting</option>
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-            </div>
-            <div>
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                paginate={paginate}
-              />
-            </div>
-          </div>
           </div>
         </div>
       </div>

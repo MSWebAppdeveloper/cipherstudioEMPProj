@@ -111,7 +111,7 @@ const SignInTemplate: React.FC<SignInInterface> = ({
                 <div className="col-span-6 sm:flex sm:items-center sm:gap-4 justify-center lg:mt-14 md:mt-14 sm:mt-6 flex login-button">
                   <button
                     type="submit"
-                    className="inline-block shrink-0 rounded-full text-xl text-white transition hover:bg-blue-300 focus:outline-none focus:ring active:text-blue-500 lg:mb-16 md:mb-16 sm:mb-8"
+                    className="inline-block shrink-0 rounded-full text-xl text-white transition hover:bg-blue-500 focus:outline-none focus:ring active:text-blue-500 lg:mb-16 md:mb-16 sm:mb-8"
                   >
                     {loading ? "Processing" : "Sign-In"}
                   </button>
