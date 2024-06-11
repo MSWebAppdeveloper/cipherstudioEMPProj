@@ -7,6 +7,7 @@ export interface UserTableProps {
     isActive: boolean;
     limit: any;
     order:any;
+    status: any;
   };
   allUsers?: Array<{
     id: string;

@@ -1,16 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useEffect, useState } from "react";
 import { RequestInterface } from "./RequestInterface";
-import Pagination from "@/components/Pagination";
+
+import TableComponent from "@/components/TableComponent";
 
 const RequestTemplate: React.FC<RequestInterface> = ({
     deleteSelected,
     isDeleteConfirmationVisible,
     selectedUserId,
-    openEditPopup,
     setModal,
     leaveHistory,
-    getColorForStatus,
     currentPage,
     totalPages,
     paginate,
@@ -20,7 +19,6 @@ const RequestTemplate: React.FC<RequestInterface> = ({
     leaveTypes,
     confirmDeleteUser,
     cancelDeleteUser,
-    selectedYear,
 }) => {
     const [currentStatus, setCurrentStatus] = useState("ALL");
 
@@ -36,6 +34,57 @@ const RequestTemplate: React.FC<RequestInterface> = ({
             : leaveHistory?.filter((user) => user.status === currentStatus);
 
     const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
+    const columns = [
+        {
+          key: "index",
+          label: "S NO.",
+          render: (item: any, index: number) => <span>{index + 1}</span>
+        },
+        { key: "userName", label: "NAME" },
+        { key: "leaveType", label: "LEAVE TYPE" },
+        { key: "createdAt", label: "Submitted Date&Time" },
+        { key: "startDate", label: "START DATE" },
+        { key: "endDate", label: "END DATE" },
+        { key: "total_days", label: "Total Days" },
+        { key: "reason", label: "REASON" },
+        {
+          key: "status",
+          label: "STATUS",
+          render: (item: { status: any }) => {
+            let colorClass = "";
+            switch (item.status) {
+              case "Pending":
+                colorClass = "bg-yellow-500";
+                break;
+              case "Approved":
+                colorClass = "bg-green-500";
+                break;
+              case "Rejected":
+                colorClass = "bg-red-500";
+                break;
+              default:
+                colorClass = "bg-gray-500";
+            }
+            return <span className={`px-2 py-1 rounded text-white ${colorClass}`} > {item.status}</ span>;
+          }
+        },
+        {
+          key: "actions",
+          label: "ACTIONS",
+          render: (leave: { id: any, status: string }) => (
+            leave.status === "Pending" ? (
+                <div className="text-lg text-center">
+                <button
+                    className="px-3 py-1 bg-red-500 text-white text-md rounded-md hover:bg-red-600"
+                    onClick={() => deleteSelected(leave.id)}
+                >
+                    Delete
+                </button>
+            </div>
+            ) : null
+          )
+        }
+      ];
     return (
         <>
             {/*right--sec-start*/}
@@ -131,89 +180,17 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     </div>
                     <div className="overflow-x-auto">
                         {filteredUsers.length > 0 ? (
-                            <table className="table-auto w-full mt-6">
-                                <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50  text-left">
-                                    <tr>
-                                        <th className="p-2 whitespace-nowrap">
-                                            <div className="font-semibold">S NO.</div>
-                                        </th>
-                                        <th className="p-2 whitespace-nowrap">
-                                            <div className="font-semibold ">LEAVE TYPE</div>
-                                        </th>
-                                        <th className="p-2 whitespace-nowrap">
-                                            <div className="font-semibold ">Submitted Date&Time</div>
-                                        </th>
-                                        <th className="p-2 whitespace-nowrap">
-                                            <div className="font-semibold ">START DATE</div>
-                                        </th>
-                                        <th className="p-2 whitespace-nowrap">
-                                            <div className="font-semibold ">END DATE</div>
-                                        </th>
-                                        <th className="p-2 whitespace-nowrap">
-                                            <div className="font-semibold ">Total Days</div>
-                                        </th>
-                                        <th className="p-2 whitespace-nowrap">
-                                            <div className="font-semibold ">REASON</div>
-                                        </th>
-                                        <th className="p-2 whitespace-nowrap">
-                                            <div className="font-semibold ">STATUS</div>
-                                        </th>
-                                        <th className="p-2 whitespace-nowrap">
-                                            <div className="font-semibold">ACTIONS</div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="text-md divide-y divide-gray-100">
-                                    {filteredUsers.map((user: any, index: any) => (
-                                        <tr key={user.id}>
-                                            <td className="p-2 whitespace-nowrap">
-                                                <div>{index + 1}</div>
-                                            </td>
-                                            <td className="p-2 whitespace-nowrap">
-                                                <div >
-                                                    {user.leaveType}
-                                                </div>
-                                            </td>
-                                            <td className="p-2 whitespace-nowrap">
-                                                <div >
-                                                    {user.createdAt}
-                                                </div>
-                                            </td>
-                                            <td className="p-2 whitespace-nowrap">
-                                                <div >{user.startDate}</div>
-                                            </td>
-                                            <td className="p-2 whitespace-nowrap">
-                                                <div >{user.endDate}</div>
-                                            </td>
-                                            <td className="p-2 whitespace-nowrap">
-                                                <div >{user.total_days}</div>
-                                            </td>
-                                            <td className="p-2 whitespace-nowrap">
-                                                <div>{user.reason}</div>
-                                            </td>
-                                            <td
-                                                className={`p-2 whitespace-nowrap  ${getColorForStatus(
-                                                    user.status
-                                                )}`}
-                                            >
-                                                <div >{user.status}</div>
-                                            </td>
-                                            <td className="p-2 whitespace-nowrap">
-                                                {user.status === "Pending" && (
-                                                    <div className="text-lg text-center">
-                                                        <button
-                                                            className="px-3 py-1 bg-red-500 text-white text-md rounded-md hover:bg-red-600"
-                                                            onClick={() => deleteSelected(user.id)}
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <TableComponent
+                            data={filteredUsers}
+                            columns={columns}
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            paginate={paginate}
+                            totalCount={totalCount}
+                            OnchangeData={OnchangeData}
+                            formdata={formdata} />
+            
+            
                         ) : (
                             <p>No Leave Applications data available.</p>
                         )}
@@ -243,63 +220,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                             </div>
                         )}
                     </div>
-                    {/* Pagination */}
-                    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-                        <div>
-                            <label htmlFor="limit" className="mr-2">
-                                Items per page:
-                            </label>
-                            <select name="limit" id="limit"
-                                value={formdata.limit}
-                                onChange={OnchangeData}
-                                className="border border-gray-300 rounded-md p-1 text-sm"
-                            >
-                                <option aria-placeholder="12">12</option>
-                                <option value="20">20</option>
-                                <option value="30">30</option>
-                                <option value="40">40</option>
-                                <option value="50">50</option>
-                            </select>
-                        </div>
-                        <div>
-                            <p className="text-sm text-gray-700">
-                                Showing{" "}
-                                <span className="font-medium">
-                                    {currentPage === 1
-                                        ? 1
-                                        : (currentPage - 1) * formdata.limit + 1}
-                                </span>{" "}
-                                to{" "}
-                                <span className="font-medium">
-                                    {currentPage === totalPages
-                                        ? (currentPage - 1) * formdata.limit +
-                                        filteredUsers.length
-                                        : currentPage * formdata.limit}
-                                </span>{" "}
-                                of <span className="font-medium">{totalCount}</span> results
-                            </p>
-                        </div>
-                        <div>
-                            <select
-                                id="order"
-                                name="order"
-                                value={formdata.order}
-                                onChange={OnchangeData}
-                                className="border border-gray-300 rounded-md p-1 text-sm"
-                            >
-                                <option value="">Select sorting</option>
-                                <option value="asc">Ascending</option>
-                                <option value="desc">Descending</option>
-                            </select>
-                        </div>
-                        <div>
-                            <Pagination
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                paginate={paginate}
-                            />
-                        </div>
-                    </div>
+                 
                 </div>
             </div>
         </>

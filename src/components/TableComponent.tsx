@@ -1,32 +1,101 @@
 import React from "react";
 
-interface TableProps {
-  columns: { key: string; label: string }[];
+interface TableComponentProps {
+  columns: any[];
   data: any[];
-  renderRow: (item: any, index: number) => React.ReactNode;
+  currentPage: number;
+  totalPages: number;
+  paginate: (pageNumber: number) => void;
+  totalCount: number;
+  nameOptions: string[];
+  filterName: string;
+  setFilterName: (value: any) => void;
+  OnchangeData: (e: any) => void;
+  formdata: any;
+  handleSort: (column: string) => void;
+  sortOrder: "asc" | "desc";
+  sortColumn: string;
 }
 
-const TableComponent: React.FC<TableProps> = ({ columns, data, renderRow }) => {
+const TableComponent: React.FC<TableComponentProps> = ({
+  columns,
+  data,
+  currentPage,
+  totalPages,
+  paginate,
+  totalCount,
+  nameOptions,
+  filterName,
+  setFilterName,
+  OnchangeData,
+  formdata,
+  handleSort, 
+  sortOrder, 
+  sortColumn,
+
+}) => {
   return (
     <div className="overflow-x-auto">
-      {data.length > 0 ? (
-        <table className="table-auto w-full">
-          <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50 text-left">
-            <tr>
+      <table className="min-w-full bg-white">
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th
+                key={column.key}
+                className={`py-2 px-4 border-b ${
+                  column.sortable ? "cursor-pointer" : ""
+                }`}
+                onClick={() => column.sortable && handleSort(column.key)}
+              >
+                {column.label}
+                {column.sortable && (
+                  <span>
+                    {sortColumn === column.key && sortOrder === "asc" ? " 🔼" : ""}
+                    {sortColumn === column.key && sortOrder === "desc" ? " 🔽" : ""}
+                  </span>
+                )}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
               {columns.map((column) => (
-                <th key={column.key} className="p-2 whitespace-nowrap">
-                  <div className="font-semibold">{column.label}</div>
-                </th>
+                <td key={column.key} className="py-2 px-4 border-b">
+                  {column.render ? column.render(item, index) : item[column.key]}
+                </td>
               ))}
             </tr>
-          </thead>
-          <tbody className="text-lg divide-y divide-gray-100">
-            {data.map((item, index) => renderRow(item, index))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No data available.</p>
-      )}
+          ))}
+        </tbody>
+      </table>
+
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => paginate(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 rounded-md ${
+            currentPage === 1 ? "bg-gray-200 cursor-not-allowed" : "bg-blue-500 text-white"
+          }`}
+        >
+          Previous
+        </button>
+
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+
+        <button
+          onClick={() => paginate(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2 rounded-md ${
+            currentPage === totalPages ? "bg-gray-200 cursor-not-allowed" : "bg-blue-500 text-white"
+          }`}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

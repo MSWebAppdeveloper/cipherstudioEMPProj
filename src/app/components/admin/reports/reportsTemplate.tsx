@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { CSVLink } from "react-csv";
 import { ReportsInterface } from "./reportsInterface";
 import DateRangePickerComp from "@/components/DateRangePickerComp";
-import Pagination from "@/components/Pagination";
+import TableComponent from "@/components/TableComponent";
+import { render } from "react-dom";
 
 const ReportsTemplate: React.FC<ReportsInterface> = ({
   attendance,
+  reports,
   allUsers,
   currentPage,
   totalPages,
@@ -17,11 +19,16 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   filterName,
   setFilterName,
   handleFilterChange,
-  getColorForStatus,
   startDate,
   endDate,
   setStartDate,
   setEndDate,
+  fetchAllRecords,
+  downloadData,
+  handleSort, 
+  sortOrder,
+  sortColumn,
+  nameOptions,
 }) => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [dateRangeButtonText, setDateRangeButtonText] =
@@ -51,16 +58,104 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
     return matchName && matchDate;
   });
 
+  //   <td className="p-2 whitespace-nowrap">
+  //   <div>
+  //     {new Date(`1970-01-01T${user.timeIn}`).toLocaleString(
+  //       "en-US",
+  //       {
+  //         hour: "numeric",
+  //         minute: "numeric",
+  //         hour12: true,
+  //       }
+  //     )}
+  //   </div>
+  // </td>
+  // <td className="p-2 whitespace-nowrap">
+  //   <div className="">
+  //     {user.timeOut
+  //       ? new Date(
+  //           `1970-01-01T${user.timeOut}`
+  //         ).toLocaleString("en-US", {
+  //           hour: "numeric",
+  //           minute: "numeric",
+  //           hour12: true,
+  //         })
+  //       : "--:--"}
+  //   </div>
+  // </td>
   const columns = [
-    { key: "sno", label: "S NO." },
-    { key: "name", label: "NAME" },
+    {
+      key: "index",
+      label: "S NO.",
+      render: (item: any, index: number) => <span>{index + 1}</span>
+    },
+    { key: "userName", label: "NAME" },
     { key: "date", label: "DATE" },
-    { key: "timeIn", label: "TIME-IN" },
-    { key: "timeOut", label: "TIME-OUT" },
+    {
+      key: "timeIn", label: "TIME-IN",
+      render: (item: { timeIn: any }) => {
+        return <div>
+          {new Date(`1970-01-01T${item.timeIn}`).toLocaleString(
+            "en-US",
+            {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            }
+          )}
+        </div>
+      }
+    },
+    {
+      key: "timeOut", label: "TIME-OUT",
+      render: (item: { timeOut: any }) => {
+        return <div>
+          {new Date(`1970-01-01T${item.timeOut}`).toLocaleString(
+            "en-US",
+            {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            }
+          )}
+        </div>
+      }
+    },
     { key: "totalHours", label: "TOTAL-HRS" },
-    { key: "status", label: "STATUS" },
+    {
+      key: "status",
+      label: "Status",
+      render: (item: { status: any }) => {
+        let colorClass = "";
+        switch (item.status) {
+          case "Active":
+            colorClass = "text-green-500";
+          case "Absent":
+            colorClass = "text-red-500"; // Red for Absent
+            break;
+          case "Leave":
+            colorClass = "text-orange-500"; // Orange for Leave
+            break;
+          case "Leave (Half Day)":
+            colorClass = "text-lightcoral"; // Lighter orange for Half Day Leave
+            break;
+          case "Short Leave":
+            colorClass = "text-violet-500"; // Violet for Short Leave
+            break;
+          case "Full Day":
+            colorClass = "text-yellow-500"; // yellow for Present
+            break;
+          case "Present(forget dayout)":
+            colorClass = "text-yellow-300"; // Lighter green for Present (Extra Hours)
+            break;
+          default:
+            colorClass = ""; // No color for unknown status  
+        }
+        return <span className={colorClass}>{item.status}</span>;
+      },
+    },
   ];
-  
+
   return (
     <>
       <div>
@@ -68,22 +163,18 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
           <div>
             <h2 className="text-2xl font-medium">Attendance Report</h2>
           </div>
-          <div>
-            <button className="rounded-md bg-green-500 lg:px-8 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white hover:bg-green-400 lg:text-lg focus:outline-0">
-              <CSVLink
-                data={filteredAttendance.map((record) => ({
-                  userName: record.userName,
-                  date: record.date,
-                  timeIn: record.timeIn,
-                  timeOut: record.timeOut,
-                  status: record.status,
-                  totalHours: record.totalHours,
-                }))}
-                filename={"attendance_report.csv"}
-              >
-                Download Report
-              </CSVLink>
+          <div className="flex space-x-4">
+            <button
+              onClick={fetchAllRecords}
+              className="bg-green-500 text-white px-4 py-2 rounded"
+            >
+              Fetch data
             </button>
+            <CSVLink data={downloadData} filename="attendance_report.csv">
+              <button className="bg-green-500 text-white px-4 py-2 rounded">
+                Download Reports
+              </button>
+            </CSVLink>
           </div>
         </div>
         {/*filter-sec*/}
@@ -129,7 +220,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
                       <div className=" border border-black">
                         <DateRangePickerComp
                           onChange={(range: {
-                            startDate: Date | null;
+                             startDate: Date | null;
                             endDate: Date | null;
                           }) => {
                             setStartDate(range.startDate);
@@ -160,153 +251,23 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
         </div>
 
         {/*table*/}
-        <div className="lg:px-6 lg:py-6 md:py-3 md:px-5 sm:px-4 sm:py-5 rounded-md box-shadow lg:mt-7 md:mt-4 sm:mt-6 attendance-table">
-          <div className="overflow-x-auto">
-            {attendance.length > 0 ? (
-              <table className="table-auto w-full">
-                <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50 text-left">
-                  <tr>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold">S NO.</div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold">NAME</div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold">DATE</div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold">TIME-IN</div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold">TIME-OUT</div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold">TOTAL-HRS</div>
-                    </th>
-                    <th className="p-2 whitespace-nowrap">
-                      <div className="font-semibold">STATUS</div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-lg divide-y divide-gray-100">
-                  {attendance.map((user, index) => (
-                    <tr key={index} className="text-lg text-gray-600">
-                      <td className="p-2 whitespace-nowrap">
-                        <div>{index + 1}</div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div>{user.userName}</div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div>{user.date}</div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div>
-                          {new Date(`1970-01-01T${user.timeIn}`).toLocaleString(
-                            "en-US",
-                            {
-                              hour: "numeric",
-                              minute: "numeric",
-                              hour12: true,
-                            }
-                          )}
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="">
-                          {user.timeOut
-                            ? new Date(
-                                `1970-01-01T${user.timeOut}`
-                              ).toLocaleString("en-US", {
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                              })
-                            : "--:--"}
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div>
-                          {" "}
-                          {user.totalHours == "0.00" ? "-" : user.totalHours}
-                        </div>
-                      </td>
-                      <td
-                        className={`p-2 whitespace-nowrap  ${getColorForStatus(
-                          user.status
-                        )}`}
-                      >
-                        <div className="text-lg">{user.status}</div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p>No attendance data available.</p>
-            )}
-          </div>
-          {/* Pagination */}
-          <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-            <div>
-              <label htmlFor="limit" className="mr-2">
-                Items per page:
-              </label>
-              <select name="limit" id="limit"
-                value={formdata.limit}
-                onChange={OnchangeData}
-                className="border border-gray-300 rounded-md p-1 text-sm"
-                >
-                  <option aria-placeholder="12">12</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                  <option value="40">40</option>
-                  <option value="50">50</option>
-                </select>
-              
-            </div>
-            <div>
-              <p className="text-sm text-gray-700">
-                Showing{" "}
-                <span className="font-medium">
-                  {currentPage === 1
-                    ? 1
-                    : (currentPage - 1) * formdata.limit + 1}
-                </span>{" "}
-                to{" "}
-                <span className="font-medium">
-                  {currentPage === totalPages
-                    ? (currentPage - 1) * formdata.limit +
-                      filteredAttendance.length
-                    : currentPage * formdata.limit}
-                </span>{" "}
-                of <span className="font-medium">{totalCount}</span> results
-              </p>
-            </div>
-            <div>
-              <select
-                id="order"
-                name="order"
-                value={formdata.order}
-                onChange={OnchangeData}
-                className="border border-gray-300 rounded-md p-1 text-sm"
-              >
-                <option value="">Select sorting</option>
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-            </div>
-            <div>
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                paginate={paginate}
-              />
-            </div>
-          </div>
-        </div>
-        {/*table-end*/}
+        <TableComponent
+          data={filteredAttendance}
+          columns={columns}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          paginate={paginate}
+          totalCount={totalCount}
+          OnchangeData={OnchangeData}
+          formdata={formdata}
+          handleSort={handleSort}
+          sortOrder={sortOrder}
+          sortColumn={sortColumn} 
+           nameOptions={getUserNames()}
+          filterName={filterName}
+          setFilterName={setFilterName}
+          OnchangeData={OnchangeData} />
+
       </div>
     </>
   );

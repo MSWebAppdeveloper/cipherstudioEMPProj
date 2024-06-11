@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { OptionsProps } from './optionsInterface'
 import { Icon } from '@iconify/react/dist/iconify.js'
+import TableComponent from '@/components/TableComponent';
 
 const OptionsTemplate: React.FC<OptionsProps> = ({
   setModal,
@@ -12,6 +13,11 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
   leaveTypes,
   OnchangeData,
   formdata,
+  currentPage,
+  totalPages,
+  totalRecords,
+  paginate,
+  totalCount,
 }) => {
 
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
@@ -24,6 +30,32 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
     console.log("Soft delete leave with ID:", leaveId);
     deleteSelected(leaveId);
   };
+  const columns = [
+    {
+      key: "index",
+      label: "S NO.",
+      render: (item: any, index: number) => <span>{index + 1}</span>
+    },
+    { key: "leave_type_name", label: "Leave Type" },
+    { key: "assign_year", label: "Assign Year" },
+    { key: "allowed_leaves", label: "Allowed Days" },
+    { key: "leave_description", label: "Description" },
+    {
+      key: "actions",
+      label: "ACTIONS",
+      render: (user: { id: any; }) => (
+        <div className="flex">
+          <button className="btn-1 mr-3 shadow-xl" onClick={() => openEditPopup(user)}>
+            <Icon icon="flowbite:edit-outline" width="1.2em" height="1.2em" style={{ color: "#ffffff" }} />
+          </button>
+          <button className="btn-2 btn-1 shadow-xl" onClick={() => deleteSelected(user.id)}>
+            <Icon icon="mi:delete" width="1.2em" height="1.2em" style={{ color: "#ffffff" }} />
+          </button>
+        </div>
+      ),
+    },
+
+  ];
   return (
     <>
       <div>
@@ -67,62 +99,17 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
           {/*table*/}
           <div className="mt-10">
             <div className="overflow-x-auto">
-              <table className="table-auto w-full text-left ">
-                <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50">
-                  <tr>
-                    <th className="p-2 whitespace-nowrap font-semibold">S NO.</th>
-                    <th className="p-2 whitespace-nowrap font-semibold">Leave Type</th>
-                    <th className="p-2 whitespace-nowrap font-semibold">Assign Year</th>
-                    <th className="p-2 whitespace-nowrap font-semibold">Allowed Days</th>
-                    <th className="p-2 whitespace-nowrap font-semibold">Description</th>
-                    <th className="p-2 whitespace-nowrap font-semibold">ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody className="text-md divide-y divide-gray-100">
-                  {leaveTypes.map((leave: any, index: any) => (
-                    <tr key={leave.leave_type_id} className="text-lg text-gray-600">
-                      <td className="p-2 whitespace-nowrap">{index + 1} </td>
-                      <td className="p-2 whitespace-nowrap">{leave.leave_type_name}</td>
-                      <td className="p-2 whitespace-nowrap">{leave.assign_year}</td>
-                      <td className="p-2 whitespace-nowrap">{leave.allowed_leaves}</td>
-                      <td className="p-2 whitespace-nowrap">{leave.leave_description}</td>
+              <TableComponent
+                data={leaveTypes}
+                columns={columns}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                paginate={paginate}
+                totalCount={totalCount}
+                OnchangeData={OnchangeData}
+                formdata={formdata}
+              />
 
-                      <td className="p-2 whitespace-nowrap">
-                        {/* {/ <div class="text-md text-left"> /} */}
-                        <div className="flex">
-                          <button
-                            className="btn-1 mr-3 shadow-xl"
-                            onClick={() => openEditPopup(leave)}
-                          >
-
-                            <Icon
-                              icon="flowbite:edit-outline"
-                              width="1.2em"
-                              height="1.2em"
-                              style={{ color: "#ffffff" }}
-                            />
-
-                          </button>
-                          <button
-                            className="btn-2 btn-1 shadow-xl"
-                            onClick={() => deleteSelected(leave.leave_type_id)}
-                          >
-
-                            <Icon
-                              icon="mi:delete"
-                              width="1.2em"
-                              height="1.2em"
-                              style={{ color: "#ffffff" }}
-                            />
-
-                          </button>
-                        </div>
-                      </td>
-
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
             {/* Delete alert */}
             {isDeleteAlertVisible && (

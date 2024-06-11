@@ -16,6 +16,7 @@ const RequestComponent: React.FC = () => {
     limit: "12",
     order: "",
     year: "",
+    status:"",
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -51,7 +52,7 @@ const RequestComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://192.168.1.3:8082/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}`,
+        `http://192.168.1.2:8082/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}`,
         {
           method: "GET",
           headers: {
@@ -62,6 +63,7 @@ const RequestComponent: React.FC = () => {
       );
       if (response.ok) {
         const userDetails = await response.json();
+        console.log(userDetails)
         const userLeaveRequests = userDetails[0].leaveRequests;
         const userLeaveBalance = userDetails[0].leaveBalance;
         // const { leaveRequests, totalPages, totalCount } = userDetails.data;
@@ -72,7 +74,7 @@ const RequestComponent: React.FC = () => {
       } else if (response.status === 401) {
         // Token expired, try refreshing the token
         const refreshResponse = await fetch(
-          "http://192.168.1.3:8082/api/refresh",
+          "http://192.168.1.2:8082/api/refresh",
           {
             method: "POST",
             headers: {
@@ -128,18 +130,7 @@ const RequestComponent: React.FC = () => {
     }
   };
 
-  function getColorForStatus(status: string) {
-    switch (status) {
-      case "Approved":
-        return "text-green-500"; // Green for Present
-      case "Rejected":
-        return "text-red-500"; // Red for Reject
-      case "Pending":
-        return "text-yellow-500"; // Yellow for Pending
-      default:
-        return ""; // No color for unknown status
-    }
-  }
+
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -175,7 +166,7 @@ const RequestComponent: React.FC = () => {
         cancelDeleteUser={cancelDeleteUser}
         selectedUserId={selectedUserId}
         isDeleteConfirmationVisible={isDeleteConfirmationVisible}
-        getColorForStatus={getColorForStatus}
+     
         currentPage={currentPage}
         paginate={paginate}
         totalPages={totalPages}

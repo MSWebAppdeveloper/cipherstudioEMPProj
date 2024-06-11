@@ -24,7 +24,6 @@ export interface leaveApplicationsInterface {
   totalRecords: any;
   paginate: any;
   totalCount: any;
-  getColorForStatus: (e: any) => void;
   OnchangeData: (e: any) => void;
   formdata: {
     limit: any;

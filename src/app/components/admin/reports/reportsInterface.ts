@@ -17,8 +17,9 @@ export interface formValues {
 
 export interface ReportsInterface {
   attendance: ReportEntry[];
+  reports:ReportEntry[];
   filterName: string;
-  setFilterName: React.Dispatch<React.SetStateAction<string>>;
+  setFilterName: (value: any) => void;
 
   handleFilterChange: (
     type: "name" | "date",
@@ -34,16 +35,21 @@ export interface ReportsInterface {
   totalPages: any;
   totalRecords: any;
   paginate: any;
-  getColorForStatus: any;
   totalCount: any;
   // limit: any;
   OnchangeData: (e: any) => void;
   formdata: {
     limit: any;
     order:any;
+    status: any;
   };
   startDate:any;
   endDate:any;
   setStartDate:any;
   setEndDate:any;
+  downloadData: ReportEntry[];
+  fetchAllRecords: () => void;
+  handleSort: (column: string) => void;
+  sortOrder: "asc" | "desc";
+  sortColumn: string;
 }

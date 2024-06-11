@@ -22,7 +22,6 @@ export interface RequestInterface {
   createdAt:any;
   selectedYear:any;
   onDelete: (e: any) => void;
-  getColorForStatus: (e: any) => void;
   isDeleteConfirmationVisible:boolean;
   confirmDeleteUser: (user: any) => void;
   cancelDeleteUser: (user: any) => void;
@@ -38,6 +37,7 @@ export interface RequestInterface {
     limit: any;
     order: any;
     year:any;
+    status:any;
   };
   leaveTypes: {
     leave_type_id: number;

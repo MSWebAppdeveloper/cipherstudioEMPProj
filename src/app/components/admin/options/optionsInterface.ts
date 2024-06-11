@@ -15,5 +15,13 @@ export interface OptionsProps {
   OnchangeData: (e: any) => void;
   formdata: {
     year: any;
+    limit: any;
+    order: any;
+    status: any;
   };
+  currentPage: any;
+  totalPages: any;
+  totalRecords: any;
+  paginate: any;
+  totalCount: any;
 }

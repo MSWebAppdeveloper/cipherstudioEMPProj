@@ -36,7 +36,7 @@ const LeaveApplications: React.FC = () => {
         try {
 
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch('http://192.168.1.3:8082/api/employee/user/details', {
+            const response = await fetch('http://192.168.1.2:8082/api/employee/user/details', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -134,19 +134,6 @@ const LeaveApplications: React.FC = () => {
         setFilterValue(value);
     };
 
-    function getColorForStatus(status: string) {
-        switch (status) {
-            case "Approved":
-                return "text-green-500"; // Green for Present
-            case "Rejected":
-                return "text-red-500"; // Red for Reject
-            case "Pending":
-                return "text-yellow-500"; // Yellow for Pending
-            default:
-                return ""; // No color for unknown status
-        }
-    }
-
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     return (
         <>
@@ -163,7 +150,6 @@ const LeaveApplications: React.FC = () => {
                 rejectApplication={rejectApplication}
                 filterName={filterType === "status" ? (filterValue as string) : ""}
                 setFilterName={(value: any) => setFilterValue(value)}
-                getColorForStatus={getColorForStatus}
                 currentPage={currentPage}
                 paginate={paginate}
                 totalPages={totalPages}

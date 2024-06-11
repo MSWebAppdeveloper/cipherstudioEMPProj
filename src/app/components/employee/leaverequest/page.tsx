@@ -33,7 +33,7 @@ const LeaveRequestComponent: React.FC<LeaveRequestComponentProps> = ({
                 const url = `leavetypes`;
                 const response: any = await LeaveTypes(url);
                 // console.log(response.data);
-                setLeaveTypes(response.data)
+                setLeaveTypes(response.data.data)
             } catch (error) {
                 console.error('Error fetching leaveTypes:', error);
             }

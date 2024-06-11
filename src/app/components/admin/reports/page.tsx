@@ -6,132 +6,129 @@ import { ReportEntry } from "./reportsInterface";
 
 const Reports: React.FC = () => {
   const [attendance, setAttendance] = useState<ReportEntry[]>([]);
+  const [reports, setReports] = useState<ReportEntry[]>([]);
   const [filterType, setFilterType] = useState<"name" | "date">("name");
   const [filterValue, setFilterValue] = useState<string | [string, string]>("");
+
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
-  const [formdata, setFormdata] = useState(
-    {
-      limit: "12",
-      order: ""
-    }
-  )
+  const [formdata, setFormdata] = useState({
+    limit: "12",
+    order: "",
+    status: "",
+  });
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [downloadData, setDownloadData] = useState<ReportEntry[]>([]);
 
-  
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortColumn, setSortColumn] = useState<string>("");
+
   const OnchangeData = (e: any) => {
     setFormdata({
       ...formdata,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   useEffect(() => {
-    // Fetch all users from the server when the component mounts
     getAllUsers(currentPage);
-    +(currentPage);
   }, []);
 
   const getAllUsers = async (page: number) => {
     try {
       const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}`;
       const response: any = await UserDetails(url);
-      setAllUsers(response.data.data);
+      setAllUsers(response.data.data.filter((user: any) => user.status === "IsActive"));
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
   useEffect(() => {
-    // When the filter value changes, reset the current page to 1
     setCurrentPage(1);
   }, [filterValue, formdata.limit, formdata.order]);
 
-  useEffect(() => {
-    const fetchAttendanceHistory = async (page: number) => {
-      try {
-        const url = `employee/attendance?page=${page}&limit=${formdata.limit}&order=${formdata.order}`;
+  const fetchAttendanceHistory = async (page: number, forDownload = false) => {
+    try {
+      const baseUrl = `employee/attendance?page=${page}&order=${formdata.order}`;
+      const limit = forDownload ? "" : `&limit=${formdata.limit}`;
+      const nameFilter = filterValue ? `&name=${filterValue}` : "";
+      const dateFilter =
+        startDate && endDate
+          ? `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
+          : "";
+      const sort = sortColumn ? `&sortColumn=${sortColumn}&sortOrder=${sortOrder}` : "";
 
-        // Add name filter if filterType is 'name'
-        const nameFilter = filterType === "name" ? `&name=${filterValue}` : "";
-        const dateFilter = startDate && endDate ? `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}` : "";
-        const response: any = await AttendanceHistory(url + nameFilter + dateFilter);
+      const response: any = await AttendanceHistory(baseUrl + limit + nameFilter + dateFilter + sort);
 
-        // Parse totalHours to number
-        const dataWithParsedTotalHours = response.data.data.map((entry: any) => ({
-          ...entry,
-          totalHours: parseFloat(entry.totalHours),
-        }));
+      const dataWithParsedTotalHours = response.data.data.map((entry: any) => ({
+        ...entry,
+        totalHours: parseFloat(entry.totalHours),
+      }));
+
+      if (forDownload) {
+        setDownloadData(dataWithParsedTotalHours);
+      } else {
         setAttendance(dataWithParsedTotalHours);
-        // setCurrentPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
         setTotalCount(response.data.totalCount);
-        // setTotalRecords(response.data.totalRecords);
-      } catch (error: any) {
-        console.error("Error fetching user details:", error.message);
       }
-    };
+    } catch (error: any) {
+      console.error("Error fetching attendance history:", error.message);
+    }
+  };
 
+  useEffect(() => {
     fetchAttendanceHistory(currentPage);
-  }, [currentPage, filterValue, filterType, formdata.limit, formdata.order,startDate, endDate]);
+  }, [currentPage, filterValue, formdata.limit, formdata.order, startDate, endDate, sortColumn, sortOrder]);
 
-
-  const handleFilterChange = (
-    type: "name" | "date",
-    value: string | [string, string]
-  ) => {
+  const handleFilterChange = (type: "name" | "date", value: string | [string, string]) => {
     setFilterType(type);
     setFilterValue(value);
   };
 
+  const handleSort = (column: string) => {
+    const order = sortOrder === "asc" ? "desc" : "asc";
+    setSortOrder(order);
+    setSortColumn(column);
+  };
+
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  function getColorForStatus(status: string) {
-    switch (status) {
-      case "Active":
-        return "text-green-500";
-      case "Absent":
-        return "text-red-500"; // Red for Absent
-      case "Leave":
-        return "text-orange-500"; // Orange for Leave
-      case "Leave (Half Day)":
-        return "text-lightcoral"; // Lighter orange for Half Day Leave
-      case "Short Leave":
-        return "text-violet-500"; // Violet for Short Leave
-      case "Full Day":
-        return "text-yellow-500"; // yellow for Present
-      case "Present(forget dayout)":
-        return "text-yellow-300"; // Lighter green for Present (Extra Hours)
-      default:
-        return ""; // No color for unknown status
-    }
-  }
+  const fetchAllRecords = async () => {
+    fetchAttendanceHistory(1, true);
+  };
 
   return (
     <>
       <ReportsTemplate
         attendance={attendance}
+        reports={reports}
         filterName={filterType === "name" ? (filterValue as string) : ""}
         setFilterName={(value: any) => setFilterValue(value)}
         handleFilterChange={handleFilterChange}
+        downloadData={downloadData}
+        fetchAllRecords={fetchAllRecords}
         allUsers={allUsers}
         currentPage={currentPage}
         paginate={paginate}
         totalPages={totalPages}
-        getColorForStatus={getColorForStatus}
         totalRecords={totalRecords}
         totalCount={totalCount}
         OnchangeData={OnchangeData}
-        formdata={formdata} 
+        formdata={formdata}
         startDate={startDate}
         endDate={endDate}
         setStartDate={setStartDate}
         setEndDate={setEndDate}
-        />
+        handleSort={handleSort}
+        sortOrder={sortOrder}
+        sortColumn={sortColumn}
+      />
     </>
   );
 };

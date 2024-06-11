@@ -1,0 +1,149 @@
+// import React, { useMemo, useState } from "react";
+// import Pagination from "@/components/Pagination";
+// import { createRoot } from "react-dom/client";
+// import { AgGridReact } from "ag-grid-react";
+// import "ag-grid-community/styles/ag-grid.css";
+// import "ag-grid-community/styles/ag-theme-quartz.css";
+// import { ColDef } from "ag-grid-community";
+
+
+// interface Column {
+//   key: string;
+//   label: string;
+// }
+
+// interface FormData {
+//   limit: number;
+//   order: string;
+// }
+
+// interface Props {
+//   data: any[];
+//   columns: Column[];
+//   currentPage: number;
+//   totalPages: number;
+//   paginate: (pageNumber: number) => void;
+//   totalCount: number;
+//   OnchangeData: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+//   formdata: FormData;
+// }
+
+// const TableComponent: React.FC<Props> = ({
+//   data,
+//   columns,
+//   currentPage,
+//   totalPages,
+//   paginate,
+//   totalCount,
+//   OnchangeData,
+//   formdata,
+// }) => {
+//   const [columnDefs, setColumnDefs] = useState<ColDef[]>([columns])
+//   const defaultColDef = useMemo(() => {
+//     return {
+//       filter: "agTextColumnFilter",
+//       floatingFilter: true,
+//     };
+//   }, []);
+//   return (
+//     <div className="ag-theme-quartz" style={{ height: 500 }}>
+//       <AgGridReact
+//         rowData={data}
+//         columnDefs={columns}
+//         defaultColDef={defaultColDef}
+//         rowSelection="multiple"
+//         suppressRowClickSelection={true}
+//         pagination={true}
+//         paginationPageSize={paginate}
+//         paginationPageSizeSelector={[10, 25, 50]}
+//       />
+//     </div>
+//     // <div>
+//     //   <div className="overflow-x-auto">
+//     //     <table className="table-auto w-full">
+//     //       <thead className="text-lg font-semibold uppercase text-gray-800 bg-gray-50 text-left">
+//     //         <tr>
+//     //           {columns.map((column) => (
+//     //             <th key={column.key} className="p-2 whitespace-nowrap">
+//     //               <div className="font-semibold">{column.label}</div>
+//     //             </th>
+//     //           ))}
+//     //         </tr>
+//     //       </thead>
+//     //       <tbody className="text-lg divide-y divide-gray-100">
+//     //         {data.map((item, index) => (
+//     //           <tr key={index} className="text-lg text-gray-600">
+//     //             {columns.map((column) => (
+//     //               <td key={column.key} className="p-2 whitespace-nowrap">
+//     //                 <div>{item[column.key]}</div>
+//     //               </td>
+//     //             ))}
+//     //           </tr>
+//     //         ))}
+//     //       </tbody>
+//     //     </table>
+//     //   </div>
+//     //   {/* Pagination */}
+//     //   <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+//     //     <div>
+//     //       <label htmlFor="limit" className="mr-2">
+//     //         Items per page:
+//     //       </label>
+//     //       <select
+//     //         name="limit"
+//     //         id="limit"
+//     //         value={formdata.limit}
+//     //         onChange={OnchangeData}
+//     //         className="border border-gray-300 rounded-md p-1 text-sm"
+//     //       >
+//     //         <option aria-placeholder="12">12</option>
+//     //         <option value="20">20</option>
+//     //         <option value="30">30</option>
+//     //         <option value="40">40</option>
+//     //         <option value="50">50</option>
+//     //       </select>
+//     //     </div>
+//     //     <div>
+//     //       <p className="text-sm text-gray-700">
+//     //         Showing{" "}
+//     //         <span className="font-medium">
+//     //           {currentPage === 1
+//     //             ? 1
+//     //             : (currentPage - 1) * formdata.limit + 1}
+//     //         </span>{" "}
+//     //         to{" "}
+//     //         <span className="font-medium">
+//     //           {currentPage === totalPages
+//     //             ? (currentPage - 1) * formdata.limit + data.length
+//     //             : currentPage * formdata.limit}
+//     //         </span>{" "}
+//     //         of <span className="font-medium">{totalCount}</span> results
+//     //       </p>
+//     //     </div>
+//     //     <div>
+//     //       <select
+//     //         id="order"
+//     //         name="order"
+//     //         value={formdata.order}
+//     //         onChange={OnchangeData}
+//     //         className="border border-gray-300 rounded-md p-1 text-sm"
+//     //       >
+//     //         <option value="">Select sorting</option>
+//     //         <option value="asc">Ascending</option>
+//     //         <option value="desc">Descending</option>
+//     //       </select>
+//     //     </div>
+//     //     <div>
+//     //       <Pagination
+//     //         currentPage={currentPage}
+//     //         totalPages={totalPages}
+//     //         paginate={paginate}
+//     //       />
+//     //     </div>
+//     //   </div>
+//     // </div>
+//   );
+// };
+
+// export default TableComponent;
+ 

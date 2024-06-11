@@ -12,8 +12,11 @@ const OptionsComponent: React.FC = () => {
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState<boolean>(false);
   const [selectedLeaveId, setSelectedLeaveId] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
 
-  const [currentYear, setCurrentYear] = useState(1);
   const [leaveTypes, setLeaveTypes] = useState<
     {
       leave_type_id: number;
@@ -26,18 +29,23 @@ const OptionsComponent: React.FC = () => {
 
   const [formdata, setFormdata] = useState({
     year: "",
+    limit: "12",
+    order: "",
+    status: "any",
   });
 
   useEffect(() => {
-    fetchLeaveTypes();
-  }, [formdata.year]);
+    fetchLeaveTypes(currentPage);
+  }, [currentPage,formdata.year, formdata.limit, formdata.order]);
 
-  const fetchLeaveTypes = async () => {
+  const fetchLeaveTypes = async (page: number) => {
     try {
-      const url = `leavetypes?year=${formdata.year}`;
+      const url = `leavetypes?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}`;
       const response: any = await LeaveTypes(url);
       // console.log(response.data);
-      setLeaveTypes(response.data);
+      setLeaveTypes(response.data.data);
+      setTotalPages(response.data.totalPages);
+      setTotalCount(response.data.totalCount);
     } catch (error) {
       console.error("Error fetching leaveTypes:", error);
     }
@@ -63,7 +71,7 @@ const OptionsComponent: React.FC = () => {
   const confirmDeleteLeave = async () => {
     try {
       await deleteLeave(`leavetypes/${selectedLeaveId}`);
-      fetchLeaveTypes();
+      fetchLeaveTypes(currentPage);
       toast.success("leave deleted successfully!");
     } catch (error) {
       console.error("Error deleting leave:", error);
@@ -78,9 +86,11 @@ const OptionsComponent: React.FC = () => {
   };
 
   const handleEditLeaveUpdate = () => {
-    fetchLeaveTypes();
+    fetchLeaveTypes(currentPage);
     setModal(false);
   };
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   return (
     <>
       <LeaveFormComponent
@@ -99,6 +109,11 @@ const OptionsComponent: React.FC = () => {
         isDeleteConfirmationVisible={isDeleteConfirmationVisible}
         OnchangeData={OnchangeData}
         formdata={formdata}
+        currentPage={currentPage}
+        paginate={paginate}
+        totalPages={totalPages}
+        totalRecords={totalRecords}
+        totalCount={totalCount}
       />
     </>
   );
