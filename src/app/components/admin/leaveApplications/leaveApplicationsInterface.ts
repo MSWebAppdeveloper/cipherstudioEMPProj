@@ -37,4 +37,7 @@ export interface leaveApplicationsInterface {
     type: "status",
     value: string | [string, string]
   ) => void;
+  handleSort: (column: string) => void;
+  sortOrder: "asc" | "desc";
+  sortColumn: string;
 }

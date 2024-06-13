@@ -30,12 +30,14 @@ const UserTableComponent: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortColumn, setSortColumn] = useState<string>("name");
 
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
     getAllUsers(currentPage);
-  }, [isModal, formdata.limit, formdata.order]);
+  }, [isModal, formdata.limit, formdata.order, sortColumn, sortOrder]);
 
   const OnchangeData = (e: any) => {
     setFormdata({
@@ -46,7 +48,7 @@ const UserTableComponent: React.FC = () => {
 
   const getAllUsers = async (page: number) => {
     try {
-      const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}`;
+      const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
       const response: any = await UserDetails(url);
       setAllUsers(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -98,7 +100,7 @@ const UserTableComponent: React.FC = () => {
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(`
-      http://192.168.1.2:8082/api/employee/users/${userId}/status`, { isActive });
+      http://192.168.1.2:8080/api/employee/users/${userId}/status`, { isActive });
       getAllUsers(currentPage); // Refresh the user list after updating status
       toast.success(`User ${isActive ? 'enabled' : 'disabled'} successfully!`);
     } catch (error) {
@@ -109,7 +111,11 @@ const UserTableComponent: React.FC = () => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-
+  const handleSort = (column: string) => {
+    const order = sortOrder === "asc" ? "desc" : "asc";
+    setSortOrder(order);
+    setSortColumn(column);
+  };
   return (
     <>
       <UserFormComponent
@@ -135,6 +141,9 @@ const UserTableComponent: React.FC = () => {
         totalRecords={totalRecords}
         totalCount={totalCount}
         OnchangeData={OnchangeData}
+        handleSort={handleSort}
+        sortOrder={sortOrder}
+        sortColumn={sortColumn}
 
       />
     </>

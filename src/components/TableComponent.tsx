@@ -1,4 +1,6 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import React from "react";
+import Pagination from "./Pagination";
 
 interface TableComponentProps {
   columns: any[];
@@ -7,9 +9,7 @@ interface TableComponentProps {
   totalPages: number;
   paginate: (pageNumber: number) => void;
   totalCount: number;
-  nameOptions: string[];
-  filterName: string;
-  setFilterName: (value: any) => void;
+
   OnchangeData: (e: any) => void;
   formdata: any;
   handleSort: (column: string) => void;
@@ -24,27 +24,40 @@ const TableComponent: React.FC<TableComponentProps> = ({
   totalPages,
   paginate,
   totalCount,
-  nameOptions,
-  filterName,
-  setFilterName,
+ 
   OnchangeData,
   formdata,
-  handleSort, 
-  sortOrder, 
+  handleSort,
+  sortOrder,
   sortColumn,
 
 }) => {
+  const pageNumbers: number[] = [];
+
+  const maxVisiblePages = 5; // Change this value as needed
+
+  // Calculate the range of pages to display
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+  // Adjust startPage and endPage if needed
+  if (totalPages - endPage < Math.floor(maxVisiblePages / 2)) {
+    startPage = Math.max(1, totalPages - maxVisiblePages + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white">
+      <table className="min-w-full bg-white text-left">
         <thead>
           <tr>
             {columns.map((column) => (
               <th
                 key={column.key}
-                className={`py-2 px-4 border-b ${
-                  column.sortable ? "cursor-pointer" : ""
-                }`}
+                className={`py-2 px-4 border-b ${column.sortable ? "cursor-pointer" : ""
+                  }`}
                 onClick={() => column.sortable && handleSort(column.key)}
               >
                 {column.label}
@@ -71,31 +84,15 @@ const TableComponent: React.FC<TableComponentProps> = ({
         </tbody>
       </table>
 
-      <div className="flex justify-between items-center mt-4">
-        <button
-          onClick={() => paginate(currentPage - 1)}
-          disabled={currentPage === 1}
-          className={`px-4 py-2 rounded-md ${
-            currentPage === 1 ? "bg-gray-200 cursor-not-allowed" : "bg-blue-500 text-white"
-          }`}
-        >
-          Previous
-        </button>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        paginate={paginate}
+        formdata={formdata}
+        OnchangeData={OnchangeData}
+        totalCount={totalCount}
+        data={data} />
 
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-
-        <button
-          onClick={() => paginate(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className={`px-4 py-2 rounded-md ${
-            currentPage === totalPages ? "bg-gray-200 cursor-not-allowed" : "bg-blue-500 text-white"
-          }`}
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 };

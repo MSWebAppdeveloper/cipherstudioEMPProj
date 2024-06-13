@@ -24,8 +24,10 @@ const Reports: React.FC = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [downloadData, setDownloadData] = useState<ReportEntry[]>([]);
 
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [sortColumn, setSortColumn] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [sortColumn, setSortColumn] = useState<string>("date");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDataFetched, setIsDataFetched] = useState(false);
 
   const OnchangeData = (e: any) => {
     setFormdata({
@@ -42,7 +44,7 @@ const Reports: React.FC = () => {
     try {
       const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}`;
       const response: any = await UserDetails(url);
-      setAllUsers(response.data.data.filter((user: any) => user.status === "IsActive"));
+      setAllUsers(response.data.data.filter((user: any) => user.isActive === true));
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -54,6 +56,7 @@ const Reports: React.FC = () => {
 
   const fetchAttendanceHistory = async (page: number, forDownload = false) => {
     try {
+      
       const baseUrl = `employee/attendance?page=${page}&order=${formdata.order}`;
       const limit = forDownload ? "" : `&limit=${formdata.limit}`;
       const nameFilter = filterValue ? `&name=${filterValue}` : "";
@@ -62,17 +65,21 @@ const Reports: React.FC = () => {
           ? `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
           : "";
       const sort = sortColumn ? `&sortColumn=${sortColumn}&sortOrder=${sortOrder}` : "";
+      const downloadFlag = forDownload ? "&forDownload=true" : "";
 
-      const response: any = await AttendanceHistory(baseUrl + limit + nameFilter + dateFilter + sort);
+      const response: any = await AttendanceHistory(baseUrl + limit + nameFilter + dateFilter + sort + downloadFlag);
 
-      const dataWithParsedTotalHours = response.data.data.map((entry: any) => ({
-        ...entry,
-        totalHours: parseFloat(entry.totalHours),
-      }));
+
 
       if (forDownload) {
-        setDownloadData(dataWithParsedTotalHours);
+        // console.log("report", response.data)
+        setDownloadData(response.data);
+        setIsLoading(false);  
       } else {
+        const dataWithParsedTotalHours = response.data.data.map((entry: any) => ({
+          ...entry,
+          totalHours: parseFloat(entry.totalHours),
+        }));
         setAttendance(dataWithParsedTotalHours);
         setTotalPages(response.data.totalPages);
         setTotalCount(response.data.totalCount);
@@ -100,7 +107,8 @@ const Reports: React.FC = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const fetchAllRecords = async () => {
-    fetchAttendanceHistory(1, true);
+    setIsLoading(true);
+    await fetchAttendanceHistory(1, true);
   };
 
   return (
@@ -128,6 +136,10 @@ const Reports: React.FC = () => {
         handleSort={handleSort}
         sortOrder={sortOrder}
         sortColumn={sortColumn}
+        isLoading={isLoading}
+          isDataFetched={isDataFetched}
+        setIsDataFetched={setIsDataFetched}
+
       />
     </>
   );

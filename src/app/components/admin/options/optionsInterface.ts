@@ -24,4 +24,7 @@ export interface OptionsProps {
   totalRecords: any;
   paginate: any;
   totalCount: any;
+  handleSort: (column: string) => void;
+  sortOrder: "asc" | "desc";
+  sortColumn: string;
 }

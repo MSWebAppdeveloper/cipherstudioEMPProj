@@ -31,4 +31,7 @@ export interface UserTableProps {
   totalCount: any;
   // limit: any;
   OnchangeData: (e: any) => void;
+  handleSort: (column: string) => void;
+  sortOrder: "asc" | "desc";
+  sortColumn: string;
 }

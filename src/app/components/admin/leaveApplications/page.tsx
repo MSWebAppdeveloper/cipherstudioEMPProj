@@ -24,6 +24,9 @@ const LeaveApplications: React.FC = () => {
             status: "",
         }
     )
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+    const [sortColumn, setSortColumn] = useState<string>("createdAt");
+
     const OnchangeData = (e: any) => {
         setFormdata({
             ...formdata,
@@ -36,7 +39,7 @@ const LeaveApplications: React.FC = () => {
         try {
 
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch('http://192.168.1.2:8082/api/employee/user/details', {
+            const response = await fetch('http://192.168.1.2:8080/api/employee/user/details', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -69,7 +72,7 @@ const LeaveApplications: React.FC = () => {
 
     const fetchLeaveHistory = async (page: number) => {
         try {
-            const url = `leave-requests?page=${page}&limit=${formdata.limit}&order=${formdata.order}`;
+            const url = `leave-requests?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
 
             const response: any = await HistoryLeave(url);
 
@@ -124,7 +127,7 @@ const LeaveApplications: React.FC = () => {
         };
 
         fetchData();
-    }, [currentPage, formdata.limit, formdata.order]);
+    }, [currentPage, formdata.limit, formdata.order, sortColumn, sortOrder]);
 
     const handleFilterChange = (
         type: "status",
@@ -132,6 +135,12 @@ const LeaveApplications: React.FC = () => {
     ) => {
         setFilterType(type);
         setFilterValue(value);
+    };
+
+    const handleSort = (column: string) => {
+        const order = sortOrder === "asc" ? "desc" : "asc";
+        setSortOrder(order);
+        setSortColumn(column);
     };
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -158,7 +167,11 @@ const LeaveApplications: React.FC = () => {
                 OnchangeData={OnchangeData}
                 formdata={formdata}
                 handleFilterChange={handleFilterChange}
-                total_days={0} />
+                total_days={0}
+                handleSort={handleSort}
+                sortOrder={sortOrder}
+                sortColumn={sortColumn}
+            />
         </>
     );
 }

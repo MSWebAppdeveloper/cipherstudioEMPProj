@@ -51,4 +51,7 @@ export interface RequestInterface {
     pendingLeaves:number;
     assign_year:string;
   }[];
+  handleSort: (column: string) => void;
+  sortOrder: "asc" | "desc";
+  sortColumn: string;
 }

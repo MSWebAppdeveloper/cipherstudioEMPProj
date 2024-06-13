@@ -33,14 +33,18 @@ const OptionsComponent: React.FC = () => {
     order: "",
     status: "any",
   });
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortColumn, setSortColumn] = useState<string>("leave_type_name");
+
+
 
   useEffect(() => {
     fetchLeaveTypes(currentPage);
-  }, [currentPage,formdata.year, formdata.limit, formdata.order]);
+  }, [currentPage,formdata.year, formdata.limit, formdata.order, sortColumn, sortOrder]);
 
   const fetchLeaveTypes = async (page: number) => {
     try {
-      const url = `leavetypes?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}`;
+      const url = `leavetypes?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
       const response: any = await LeaveTypes(url);
       // console.log(response.data);
       setLeaveTypes(response.data.data);
@@ -91,6 +95,12 @@ const OptionsComponent: React.FC = () => {
   };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  
+  const handleSort = (column: string) => {
+    const order = sortOrder === "asc" ? "desc" : "asc";
+    setSortOrder(order);
+    setSortColumn(column);
+  };
   return (
     <>
       <LeaveFormComponent
@@ -114,6 +124,9 @@ const OptionsComponent: React.FC = () => {
         totalPages={totalPages}
         totalRecords={totalRecords}
         totalCount={totalCount}
+        handleSort={handleSort}
+        sortOrder={sortOrder}
+        sortColumn={sortColumn}
       />
     </>
   );

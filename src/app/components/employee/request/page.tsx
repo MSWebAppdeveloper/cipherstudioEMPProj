@@ -7,6 +7,8 @@ import LeaveRequestComponent from "../leaverequest/page";
 import { RequestInterface } from "./RequestInterface";
 import { LeaveTypes, deleteUser } from "@/services/api";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 const RequestComponent: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -16,7 +18,7 @@ const RequestComponent: React.FC = () => {
     limit: "12",
     order: "",
     year: "",
-    status:"",
+    status: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -27,12 +29,15 @@ const RequestComponent: React.FC = () => {
     useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<number>();
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [sortColumn, setSortColumn] = useState<string>("createdAt");
+  const router = useRouter();
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
 
     fetchLeaveHistory(currentPage);
-  }, [isModal, currentPage, formdata.limit, formdata.order, formdata.year]);
+  }, [isModal, currentPage, formdata.limit, formdata.order, formdata.year, sortColumn, sortOrder]);
 
 
   const OnchangeData = (e: any) => {
@@ -40,6 +45,25 @@ const RequestComponent: React.FC = () => {
       ...formdata,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const refreshToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    const response = await fetch("http://192.168.1.2:8080/api/employee/refresh", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (response.ok) {
+      const { accessToken: newAccessToken } = await response.json();
+      localStorage.setItem("accessToken", newAccessToken);
+      return newAccessToken;
+    } else {
+      throw new Error("Failed to refresh token");
+    }
   };
 
   const fetchLeaveHistory = async (page: number) => {
@@ -52,7 +76,7 @@ const RequestComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://192.168.1.2:8082/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}`,
+        `http://192.168.1.2:8080/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`,
         {
           method: "GET",
           headers: {
@@ -63,7 +87,7 @@ const RequestComponent: React.FC = () => {
       );
       if (response.ok) {
         const userDetails = await response.json();
-        console.log(userDetails)
+        // console.log(userDetails)
         const userLeaveRequests = userDetails[0].leaveRequests;
         const userLeaveBalance = userDetails[0].leaveBalance;
         // const { leaveRequests, totalPages, totalCount } = userDetails.data;
@@ -72,24 +96,26 @@ const RequestComponent: React.FC = () => {
         setTotalCount(userLeaveRequests.totalCount);
         setLeaveTypes(userLeaveBalance);
       } else if (response.status === 401) {
-        // Token expired, try refreshing the token
-        const refreshResponse = await fetch(
-          "http://192.168.1.2:8082/api/refresh",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
 
-        if (refreshResponse.ok) {
-          const { accessToken: newAccessToken } = await refreshResponse.json();
-          localStorage.setItem("accessToken", newAccessToken);
-          // Retry fetching user details with the new access token
-          fetchLeaveHistory(currentPage);
-        } else {
+        try {
+          const newAccessToken = await refreshToken();
+          if (newAccessToken) {
+            fetchLeaveHistory(page); // Retry fetching with the new token
+          }
+        } catch (error) {
           console.error("Failed to refresh token. Redirect to login page.");
+          await signOut({
+            callbackUrl: "/login",
+            redirect: false,
+          });
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("UserId");
+          localStorage.removeItem("name");
+          localStorage.removeItem("token");
+          localStorage.removeItem("userRole");
+          toast.success("Login Again");
+          router.push("/login");
         }
       } else {
         console.error("Failed to fetch user details");
@@ -141,6 +167,11 @@ const RequestComponent: React.FC = () => {
   const cancelDeleteUser = () => {
     setDeleteConfirmationVisible(false);
   };
+  const handleSort = (column: string) => {
+    const order = sortOrder === "asc" ? "desc" : "asc";
+    setSortOrder(order);
+    setSortColumn(column);
+  };
   return (
     <>
       <LeaveRequestComponent
@@ -166,7 +197,7 @@ const RequestComponent: React.FC = () => {
         cancelDeleteUser={cancelDeleteUser}
         selectedUserId={selectedUserId}
         isDeleteConfirmationVisible={isDeleteConfirmationVisible}
-     
+
         currentPage={currentPage}
         paginate={paginate}
         totalPages={totalPages}
@@ -179,6 +210,9 @@ const RequestComponent: React.FC = () => {
         createdAt={undefined}
 
         selectedYear={selectedYear}
+        handleSort={handleSort}
+        sortOrder={sortOrder}
+        sortColumn={sortColumn}
       />
     </>
   );

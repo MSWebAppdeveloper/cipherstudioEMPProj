@@ -19,7 +19,10 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
   paginate,
   totalCount,
   OnchangeData,
-  formdata
+  formdata,
+  handleSort,
+  sortOrder,
+  sortColumn,
 }) => {
   const [currentTab, setCurrentTab] = useState("Active");
   const [selectedRole, setSelectedRole] = useState("ALL");
@@ -55,12 +58,13 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
     {
       key: "index",
       label: "S NO.",
-      render: (item: any, index: number) => <span>{index + 1}</span>
+      render: (item: any, index: number) => <span>{index + 1}</span>,
+      sortable: false,
     },
-    { key: "name", label: "NAME" },
-    { key: "email", label: "EMAIL" },
-    { key: "userRole", label: "ACCOUNT TYPE" },
-    { key: "department", label: "DEPARTMENT" },
+    { key: "name", label: "NAME", sortable: true },
+    { key: "email", label: "EMAIL", sortable: true },
+    { key: "userRole", label: "ACCOUNT TYPE", sortable: true, },
+    { key: "department", label: "DEPARTMENT", sortable: true },
     {
       key: "actions",
       label: "ACTIONS",
@@ -74,6 +78,7 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
           </button>
         </div>
       ),
+      sortable: false,
     },
     {
       key: "active",
@@ -91,16 +96,12 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
           />
         </label>
       ),
+      sortable: false,
     },
   ];
   return (
     <>
       <div>
-        <div>
-          <h2 className="lg:py-8 md:py-8 sm:py-8 py-8 text-2xl font-medium">
-            Users
-          </h2>
-        </div>
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
           <div className="flex justify-between items-center mt-5 mb-12">
             <div>
@@ -118,10 +119,7 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
                 >
                   Inactive Users
                 </button>
-              </div>
-            </div>
-            <div>
-              {/* Dropdown menu start */}
+                 {/* Dropdown menu start */}
               <form className="max-w-52">
                 <select
                   id="roleFilter"
@@ -136,6 +134,10 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
                   ))}
                 </select>
               </form>
+              </div>
+            </div>
+            <div>
+             
             </div>
             <div>
               <button
@@ -157,6 +159,9 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
             totalCount={totalCount}
             OnchangeData={OnchangeData}
             formdata={formdata}
+            handleSort={handleSort}
+            sortOrder={sortOrder}
+            sortColumn={sortColumn}
           />
           {isDeleteAlertVisible && (
             <div className="fixed z-10 inset-0 overflow-y-auto">

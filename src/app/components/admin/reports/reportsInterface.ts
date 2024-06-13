@@ -52,4 +52,8 @@ export interface ReportsInterface {
   handleSort: (column: string) => void;
   sortOrder: "asc" | "desc";
   sortColumn: string;
+  isLoading:boolean;
+  isDataFetched:boolean;
+  setIsDataFetched:any;
+
 }

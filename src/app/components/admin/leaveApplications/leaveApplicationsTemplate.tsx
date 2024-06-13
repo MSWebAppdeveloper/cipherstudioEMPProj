@@ -14,6 +14,9 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
   totalCount,
   OnchangeData,
   formdata,
+  handleSort,
+  sortOrder,
+  sortColumn,
 }) => {
   const [currentStatus, setCurrentStatus] = useState("ALL");
 
@@ -32,15 +35,16 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
     {
       key: "index",
       label: "S NO.",
-      render: (item: any, index: number) => <span>{index + 1}</span>
+      render: (item: any, index: number) => <span>{index + 1}</span>,
+      sortable: false
     },
-    { key: "userName", label: "NAME" },
-    { key: "leaveType", label: "LEAVE TYPE" },
-    { key: "createdAt", label: "Submitted Date&Time" },
-    { key: "startDate", label: "START DATE" },
-    { key: "endDate", label: "END DATE" },
-    { key: "total_days", label: "Total Days" },
-    { key: "reason", label: "REASON" },
+    { key: "userName", label: "NAME", sortable: true },
+    { key: "leaveType", label: "LEAVE TYPE", sortable: true },
+    { key: "createdAt", label: "Submitted Date&Time", sortable: true },
+    { key: "startDate", label: "START DATE", sortable: true },
+    { key: "endDate", label: "END DATE", sortable: false },
+    { key: "total_days", label: "Total Days", sortable: true },
+    { key: "reason", label: "REASON", sortable: false },
     {
       key: "status",
       label: "STATUS",
@@ -60,7 +64,8 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
             colorClass = "bg-gray-500";
         }
         return <span className={`px-2 py-1 rounded text-white ${colorClass}`} > {item.status}</ span>;
-      }
+      },
+      sortable: false
     },
     {
       key: "actions",
@@ -92,17 +97,13 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
             </div>
           </div>
         ) : null
-      )
+      ),
+      sortable: false
     }
   ];
   return (
     <>
       <div>
-        <div>
-          <h2 className="lg:py-8 md:py-8 sm:py-8 py-8 text-2xl font-medium">
-            Leave Status
-          </h2>
-        </div>
         <div className="box-shadow py-12 px-4 rounded-md mt-4">
           {/*-dropdown*/}
           <div className="px-2">
@@ -123,23 +124,27 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
             </form>
           </div>
           {/*table*/}
-          <div className="overflow-x-auto">
-            {filteredUsers.length > 0 ? (
-              <TableComponent
-                data={filteredUsers}
-                columns={columns}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                paginate={paginate}
-                totalCount={totalCount}
-                OnchangeData={OnchangeData}
-                formdata={formdata} />
+
+          {filteredUsers.length > 0 ? (
+            <TableComponent
+              data={filteredUsers}
+              columns={columns}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              paginate={paginate}
+              totalCount={totalCount}
+              OnchangeData={OnchangeData}
+              formdata={formdata}
+              handleSort={handleSort}
+              sortOrder={sortOrder}
+              sortColumn={sortColumn}
+            />
 
 
-            ) : (
-              <p>No Leave Applications data available.</p>
-            )}
-          </div>
+          ) : (
+            <p>No Leave Applications data available.</p>
+          )}
+
 
         </div>
       </div>

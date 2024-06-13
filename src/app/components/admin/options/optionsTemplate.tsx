@@ -18,6 +18,9 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
   totalRecords,
   paginate,
   totalCount,
+  handleSort,
+  sortOrder,
+  sortColumn,
 }) => {
 
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
@@ -34,12 +37,12 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
     {
       key: "index",
       label: "S NO.",
-      render: (item: any, index: number) => <span>{index + 1}</span>
+      render: (item: any, index: number) => <span>{index + 1}</span>, sortable: false
     },
-    { key: "leave_type_name", label: "Leave Type" },
-    { key: "assign_year", label: "Assign Year" },
-    { key: "allowed_leaves", label: "Allowed Days" },
-    { key: "leave_description", label: "Description" },
+    { key: "leave_type_name", label: "Leave Type", sortable: true, },
+    { key: "assign_year", label: "Assign Year", sortable: false },
+    { key: "allowed_leaves", label: "Allowed Days" , sortable: false },
+    { key: "leave_description", label: "Description", sortable: false  },
     {
       key: "actions",
       label: "ACTIONS",
@@ -53,17 +56,13 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
           </button>
         </div>
       ),
+      sortable: false 
     },
 
   ];
   return (
     <>
       <div>
-        <div>
-          <h2 className="lg:py-8 md:py-8 sm:py-8 py-8 text-2xl font-medium">
-            Options
-          </h2>
-        </div>
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
           <div>
 
@@ -108,6 +107,9 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
                 totalCount={totalCount}
                 OnchangeData={OnchangeData}
                 formdata={formdata}
+                handleSort={handleSort}
+            sortOrder={sortOrder}
+            sortColumn={sortColumn}
               />
 
             </div>

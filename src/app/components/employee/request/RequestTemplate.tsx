@@ -19,6 +19,9 @@ const RequestTemplate: React.FC<RequestInterface> = ({
     leaveTypes,
     confirmDeleteUser,
     cancelDeleteUser,
+    handleSort,
+    sortOrder,
+    sortColumn,
 }) => {
     const [currentStatus, setCurrentStatus] = useState("ALL");
 
@@ -36,65 +39,79 @@ const RequestTemplate: React.FC<RequestInterface> = ({
     const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
     const columns = [
         {
-          key: "index",
-          label: "S NO.",
-          render: (item: any, index: number) => <span>{index + 1}</span>
+            key: "index",
+            label: "S NO.",
+            render: (item: any, index: number) => <span>{index + 1}</span>, sortable: false
         },
-        { key: "userName", label: "NAME" },
-        { key: "leaveType", label: "LEAVE TYPE" },
-        { key: "createdAt", label: "Submitted Date&Time" },
-        { key: "startDate", label: "START DATE" },
-        { key: "endDate", label: "END DATE" },
-        { key: "total_days", label: "Total Days" },
-        { key: "reason", label: "REASON" },
+        { key: "leaveType", label: "LEAVE TYPE", sortable: true },
+        { key: "createdAt", label: "Submitted Date&Time", sortable: true },
+        { key: "startDate", label: "START DATE", sortable: true },
+        { key: "endDate", label: "END DATE", sortable: false },
+        { key: "total_days", label: "Total Days", sortable: true },
+        { key: "reason", label: "REASON", sortable: false },
         {
-          key: "status",
-          label: "STATUS",
-          render: (item: { status: any }) => {
-            let colorClass = "";
-            switch (item.status) {
-              case "Pending":
-                colorClass = "bg-yellow-500";
-                break;
-              case "Approved":
-                colorClass = "bg-green-500";
-                break;
-              case "Rejected":
-                colorClass = "bg-red-500";
-                break;
-              default:
-                colorClass = "bg-gray-500";
-            }
-            return <span className={`px-2 py-1 rounded text-white ${colorClass}`} > {item.status}</ span>;
-          }
+            key: "status",
+            label: "STATUS",
+            render: (item: { status: any }) => {
+                let colorClass = "";
+                switch (item.status) {
+                    case "Pending":
+                        colorClass = "bg-yellow-500";
+                        break;
+                    case "Approved":
+                        colorClass = "bg-green-500";
+                        break;
+                    case "Rejected":
+                        colorClass = "bg-red-500";
+                        break;
+                    default:
+                        colorClass = "bg-gray-500";
+                }
+                return <span className={`px-2 py-1 rounded text-white ${colorClass}`} > {item.status}</ span>;
+            }, sortable: false
         },
         {
-          key: "actions",
-          label: "ACTIONS",
-          render: (leave: { id: any, status: string }) => (
-            leave.status === "Pending" ? (
-                <div className="text-lg text-center">
-                <button
-                    className="px-3 py-1 bg-red-500 text-white text-md rounded-md hover:bg-red-600"
-                    onClick={() => deleteSelected(leave.id)}
-                >
-                    Delete
-                </button>
-            </div>
-            ) : null
-          )
+            key: "actions",
+            label: "ACTIONS",
+            render: (leave: { id: any, status: string }) => (
+                leave.status === "Pending" ? (
+                    <div className="text-lg text-center">
+                        <button
+                            className="px-3 py-1 bg-red-500 text-white text-md rounded-md hover:bg-red-600"
+                            onClick={() => deleteSelected(leave.id)}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                ) : null
+            ),
+            sortable: false
         }
-      ];
+    ];
+    function getBackgroundColor(leaveType: any) {
+        switch (leaveType) {
+            case "Casual Leave":
+                return "blue-500"; // Example color for sick leave
+            case "Earned Leave":
+                return "gray-500"; // Example color for vacation leave
+            case "Medical Leave":
+                return "gray-500"; // Example color for personal leave
+            case "Half-Day Leave":
+                return "green-500"; // Example color for personal leave
+            case "Short Leave":
+                return "indigo-600"; // Example color for personal leave
+            // Add more cases as needed
+            default:
+                return "gray-500"; // Default color
+        }
+    }
     return (
         <>
             {/*right--sec-start*/}
 
             <div className="leave-sec">
-                <div className="flex justify-between items-center lg:py-8 md:py-4 btn-sec">
-                    <div>
-                        <h2 className="text-2xl font-medium">Leave Reports</h2>
-                    </div>
-                    <div>
+                <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5">
+                    <div className="text-end pb-5 pt-2">
                         <button
                             data-modal-target="authentication-modal"
                             data-modal-toggle="authentication-modal"
@@ -104,8 +121,6 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                             Request Leave
                         </button>
                     </div>
-                </div>
-                <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5">
                     <div className="flex justify-between items-center">
                         <h3 className="text-2xl font-medium px-2 py-4">Leave Overview</h3>
                         <div className="flex items-center">
@@ -124,33 +139,44 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                             </select>
                         </div>
                     </div>
-                    <div className="flex flex-wrap -m-1 mt-6">
+                    <div className="flex flex-wrap -m-1 mt-3">
                         {/*-card*/}
                         {leaveTypes.map((leaveType, id) => (
-                            <div key={id} className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3">
-                                <div className="bg-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col border border-gray-200">
-                                    <div className="px-10 py-6 flex-1 flex flex-col">
-                                        <h3 className="mb-4 text-2xl py-3 border-b text-size">
-                                            {leaveType.leaveType}
-                                        </h3>
-                                        <div className="mb-4 mt-4 text-grey-darker text-sm flex-1">
-                                            <ul className="space-y-4">
-                                                <li className="text-lg flex justify-between">
-                                                    Allowed Leaves : {leaveType.allowedLeaves}
-                                                </li>
-                                                <li className="text-lg flex justify-between">
-                                                    Taken Leaves : {leaveType.totalTakenLeave}
-                                                </li>
-                                                <li className="text-lg flex justify-between">
-                                                    Left Leaves : {leaveType.leavesLeft}
-                                                </li>
-                                                <li className="text-lg flex justify-between">
-                                                    Extra Taken Leaves : {leaveType.extraTakenLeaves}
-                                                </li>
-                                                <li className="text-lg flex justify-between">
-                                                    Pending Leaves : {leaveType.pendingLeaves}
-                                                </li>
-                                            </ul>
+                            <div
+                                key={id}
+                                className="w-full sm:w-1/2 lg:w-1/3 md:w-1/2 flex flex-col p-3"
+                            >
+                                <div
+                                    className={`bg-${getBackgroundColor(
+                                        leaveType.leaveType
+                                    )} opacity-75 text-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col`}
+                                >
+                                    <div className="px-3 py-3 flex-1 flex flex-col">
+                                        <div className="flex justify-between">
+                                            <div className="px-3">
+                                                <h3 className="mb-4 text-2xl py-2 border-b text-size">
+                                                    {leaveType.leaveType}
+                                                </h3>
+                                            </div>
+                                            <div className="mb-3 mt-1 text-grey-darker text-sm flex-1 px-6">
+                                                <ul className="space-y-2">
+                                                    <li className="text-lg flex justify-between">
+                                                        Allowed Leaves : {leaveType.allowedLeaves}
+                                                    </li>
+                                                    <li className="text-lg flex justify-between">
+                                                        Taken Leaves : {leaveType.totalTakenLeave}
+                                                    </li>
+                                                    <li className="text-lg flex justify-between">
+                                                        Left Leaves : {leaveType.leavesLeft}
+                                                    </li>
+                                                    <li className="text-lg flex justify-between">
+                                                        Extra Taken Leaves : {leaveType.extraTakenLeaves}
+                                                    </li>
+                                                    <li className="text-lg flex justify-between">
+                                                        Pending Leaves : {leaveType.pendingLeaves}
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -181,16 +207,20 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     <div className="overflow-x-auto">
                         {filteredUsers.length > 0 ? (
                             <TableComponent
-                            data={filteredUsers}
-                            columns={columns}
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            paginate={paginate}
-                            totalCount={totalCount}
-                            OnchangeData={OnchangeData}
-                            formdata={formdata} />
-            
-            
+                                data={filteredUsers}
+                                columns={columns}
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                paginate={paginate}
+                                totalCount={totalCount}
+                                OnchangeData={OnchangeData}
+                                formdata={formdata}
+                                handleSort={handleSort}
+                                sortOrder={sortOrder}
+                                sortColumn={sortColumn}
+                            />
+
+
                         ) : (
                             <p>No Leave Applications data available.</p>
                         )}
@@ -220,7 +250,7 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                             </div>
                         )}
                     </div>
-                 
+
                 </div>
             </div>
         </>
