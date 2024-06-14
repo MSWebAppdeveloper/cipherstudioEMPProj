@@ -19,12 +19,12 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     icon: <Icon icon="lucide:user" width="24" height="24"  style={{color: "#1565e5"}} />,
   },
   {
-    title: "Leaves",
+    title: "Leave Application",
     path: "/admin/leaveApplications",
     icon: <Icon icon="cil:applications" width="24" height="24"  style={{color: "#1565e5"}} />,
   },
   {
-    title: "Options",
+    title: "Leave Types",
     path: "/admin/options",
     icon: <Icon icon="cil:options" width="24" height="24"  style={{color: "#1565e5"}} />,
   },

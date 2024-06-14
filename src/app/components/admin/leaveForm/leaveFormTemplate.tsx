@@ -50,7 +50,7 @@ const LeaveFormTemplate: React.FC<LeaveFormProps> = ({
                   name="leave_type_name"
                   onChange={handleChange}
                   value={formData.leave_type_name}
-                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Leave Name"
                   required
                 />
@@ -71,7 +71,7 @@ const LeaveFormTemplate: React.FC<LeaveFormProps> = ({
                   name="assign_year"
                   onChange={handleChange}
                   value={formData.assign_year}
-                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Leave Name"
                   required
                 />
@@ -92,7 +92,7 @@ const LeaveFormTemplate: React.FC<LeaveFormProps> = ({
                   name="allowed_leaves"
                   onChange={handleChange}
                   value={formData.allowed_leaves}
-                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Leave Name"
                   required
                 />
@@ -114,7 +114,7 @@ const LeaveFormTemplate: React.FC<LeaveFormProps> = ({
                   name="leave_description"
                   onChange={handleChange}
                   value={formData.leave_description}
-                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Leave Name"
                   required
                 />
@@ -123,7 +123,7 @@ const LeaveFormTemplate: React.FC<LeaveFormProps> = ({
 
               <button
                 type="submit"
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isModal && "sm:w-full"
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isModal && "sm:w-full"
                   }`}
                 disabled={loading}
               >

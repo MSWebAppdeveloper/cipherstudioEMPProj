@@ -49,7 +49,7 @@ const RequestComponent: React.FC = () => {
 
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
-    const response = await fetch("http://192.168.1.2:8080/api/employee/refresh", {
+    const response = await fetch("http://192.168.1.2:8082/api/employee/refresh", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -76,7 +76,7 @@ const RequestComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://192.168.1.2:8080/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`,
+        `http://192.168.1.2:8082/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`,
         {
           method: "GET",
           headers: {

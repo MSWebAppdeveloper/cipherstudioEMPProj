@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { OptionsProps } from './optionsInterface'
-import { Icon } from '@iconify/react/dist/iconify.js'
-import TableComponent from '@/components/TableComponent';
+import React, { useState } from "react";
+import { OptionsProps } from "./optionsInterface";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import TableComponent from "@/components/TableComponent";
 
 const OptionsTemplate: React.FC<OptionsProps> = ({
   setModal,
@@ -22,10 +22,8 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
   sortOrder,
   sortColumn,
 }) => {
-
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [selectedLeaveId, setSelectedLeaveId] = useState("");
-
 
   const softDeleteLeave = (leaveId: string) => {
     setDeleteAlertVisible(false); // Hide delete alert
@@ -37,61 +35,70 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
     {
       key: "index",
       label: "S NO.",
-      render: (item: any, index: number) => <span>{index + 1}</span>, sortable: false
+      render: (item: any, index: number) => <span>{index + 1}</span>,
+      sortable: false,
     },
-    { key: "leave_type_name", label: "Leave Type", sortable: true, },
+    { key: "leave_type_name", label: "Leave Type", sortable: true },
     { key: "assign_year", label: "Assign Year", sortable: false },
-    { key: "allowed_leaves", label: "Allowed Days" , sortable: false },
-    { key: "leave_description", label: "Description", sortable: false  },
+    { key: "allowed_leaves", label: "Allowed Days", sortable: false },
+    { key: "leave_description", label: "Description", sortable: false },
     {
       key: "actions",
       label: "ACTIONS",
-      render: (user: { id: any; }) => (
+      render: (leave: { leave_type_id: any; leave: any }) => (
         <div className="flex">
-          <button className="btn-1 mr-3 shadow-xl" onClick={() => openEditPopup(user)}>
-            <Icon icon="flowbite:edit-outline" width="1.2em" height="1.2em" style={{ color: "#ffffff" }} />
+          <button className="btn-1 mr-3" onClick={() => openEditPopup(leave)}>
+            <Icon
+              icon="flowbite:edit-outline"
+              width="1.2em"
+              height="1.2em"
+              style={{ color: "#323232" }}
+            />{" "}
           </button>
-          <button className="btn-2 btn-1 shadow-xl" onClick={() => deleteSelected(user.id)}>
-            <Icon icon="mi:delete" width="1.2em" height="1.2em" style={{ color: "#ffffff" }} />
+          <button
+            className="btn-2 btn-1"
+            onClick={() => deleteSelected(leave.leave_type_id)}
+          >
+            <Icon
+              icon="mi:delete"
+              width="1.2em"
+              height="1.2em"
+              style={{ color: "#323232" }}
+            />{" "}
           </button>
         </div>
       ),
-      sortable: false 
+      sortable: false,
     },
-
   ];
   return (
     <>
       <div>
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-          <div>
-
-            <div className="flex justify-between items-center">
-
-              <div className="flex items-center">
-                <span className="mr-4 text-lg font-medium">Year:</span>
-                <select
-                  value={formdata.year}
-                  name="year"
-                  onChange={OnchangeData}
-                  className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                >
-                  <option value="">Select year</option>
-                  <option value="2022">2022</option>
-                  <option value="2023">2023</option>
-                  <option value="2024">2024</option>
-                  <option value="2025">2025</option>
-                </select>
-              </div>
-              <div>
-                <button
-                  className="block text-white bg-green-500 hover:bg-green-400 rounded-md lg:text-lg lg:px-8 lg:py-2 md:py-3 md:px-8 sm:py-2 sm:px-6 text-center"
-                  type="button"
-                  onClick={() => setModal((prev) => !prev)}
-                >
-                  Add Leave Type
-                </button>
-              </div>
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <span className="mr-4 text-lg font-medium">Year:</span>
+              <select
+                value={formdata.year}
+                name="year"
+                onChange={OnchangeData}
+                className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
+              >
+                <option value="">Select year</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+              </select>
+            </div>
+            <div>
+              <button
+                className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                type="button"
+                onClick={() => setModal((prev) => !prev)}
+              >
+                Add Leave Type
+              </button>
             </div>
           </div>
 
@@ -108,10 +115,9 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
                 OnchangeData={OnchangeData}
                 formdata={formdata}
                 handleSort={handleSort}
-            sortOrder={sortOrder}
-            sortColumn={sortColumn}
+                sortOrder={sortOrder}
+                sortColumn={sortColumn}
               />
-
             </div>
             {/* Delete alert */}
             {isDeleteAlertVisible && (
@@ -214,66 +220,11 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
                 </div>
               </div>
             )}
-            {/*pagination*/}
-            {/* <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-            <div>
-              <label htmlFor="limit" className="mr-2">
-                Items per page:
-              </label>
-              <input
-                id="limit"
-                type="number"
-                min="1"
-                value={formdata.limit}
-                onChange={OnchangeData}
-                className="border border-gray-300 rounded-md p-1 text-sm"
-                name="limit"
-              />
-            </div>
-            <div>
-              <p className="text-sm text-gray-700">
-                Showing{" "}
-                <span className="font-medium">
-                  {currentPage === 1
-                    ? 1
-                    : (currentPage - 1) * formdata.limit + 1}
-                </span>{" "}
-                to{" "}
-                <span className="font-medium">
-                  {currentPage === totalPages
-                    ? (currentPage - 1) * formdata.limit +
-                    filteredUsers.length
-                    : currentPage * formdata.limit}
-                </span>{" "}
-                of <span className="font-medium">{totalCount}</span> results
-              </p>
-            </div>
-            <div>
-              <select
-                id="order"
-                name="order"
-                value={formdata.order}
-                onChange={OnchangeData}
-                className="border border-gray-300 rounded-md p-1 text-sm"
-              >
-                <option value="">Select sorting</option>
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-            </div>
-            <div>
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                paginate={paginate}
-              />
-            </div>
-          </div> */}
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default OptionsTemplate
+export default OptionsTemplate;

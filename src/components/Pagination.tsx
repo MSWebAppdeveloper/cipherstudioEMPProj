@@ -1,44 +1,51 @@
 import React from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 
 interface PaginationProps {
-    currentPage: number;
-    totalPages: number;
-    paginate: (pageNumber: number) => void;
-    formdata: FormData;
-    OnchangeData: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-    totalCount: number;
-    data: any[];
+  currentPage: number;
+  totalPages: number;
+  paginate: (pageNumber: number) => void;
+  formdata: FormData;
+  OnchangeData: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  totalCount: number;
+  data: any[];
 }
-
 
 interface FormData {
-    limit: number;
-    order: string;
-    status: any;
+  limit: number;
+  order: string;
+  status: any;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, paginate, formdata, OnchangeData, totalCount, data }) => {
-    const pageNumbers: number[] = [];
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  totalPages,
+  paginate,
+  formdata,
+  OnchangeData,
+  totalCount,
+  data,
+}) => {
+  const pageNumbers: number[] = [];
 
-    const maxVisiblePages = 5; // Change this value as needed
+  const maxVisiblePages = 5; // Change this value as needed
 
-    // Calculate the range of pages to display
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+  // Calculate the range of pages to display
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-    // Adjust startPage and endPage if needed
-    if (totalPages - endPage < Math.floor(maxVisiblePages / 2)) {
-        startPage = Math.max(1, totalPages - maxVisiblePages + 1);
-    }
+  // Adjust startPage and endPage if needed
+  if (totalPages - endPage < Math.floor(maxVisiblePages / 2)) {
+    startPage = Math.max(1, totalPages - maxVisiblePages + 1);
+  }
 
-    for (let i = startPage; i <= endPage; i++) {
-        pageNumbers.push(i);
-    }
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
 
-    return (
-        <>
-             <div className="flex justify-between items-center mt-4">
+  return (
+    <>
+      <div className="flex justify-between items-center mt-4">
         <div>
           <label htmlFor="limit" className="mr-2">
             Items per page:
@@ -58,13 +65,10 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, pagina
           </select>
         </div>
         <span>
-          {/* Page {currentPage} of {totalPages} */}
-
+          {/* Page {currentPage} of {totalPages}  */}
           Showing{" "}
           <span className="font-medium">
-            {currentPage === 1
-              ? 1
-              : (currentPage - 1) * formdata.limit + 1}
+            {currentPage === 1 ? 1 : (currentPage - 1) * formdata.limit + 1}
           </span>{" "}
           to{" "}
           <span className="font-medium">
@@ -73,16 +77,21 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, pagina
               : currentPage * formdata.limit}
           </span>{" "}
           of <span className="font-medium">{totalCount}</span> results
-
         </span>
 
         <div>
-          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+          <nav
+            className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+            aria-label="Pagination"
+          >
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
               className={`relative inline-flex items-center rounded-l-md px-2 py-2 
-                 ${currentPage === 1 ? "bg-gray-200 cursor-not-allowed" : "bg-gray-500 text-black"}
+                 ${currentPage === 1
+                  ? "bg-gray-200 cursor-not-allowed"
+                  : "bg-gray-500 text-black"
+                }
              text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-400 focus:z-20 focus:outline-offset-0`}
             >
               <span className="sr-only">Previous</span>
@@ -103,7 +112,9 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, pagina
             <button
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className={`relative inline-flex items-center rounded-r-md px-2 py-2 ${currentPage === totalPages ? "bg-gray-200 cursor-not-allowed" : "bg-gray-500 text-black"
+              className={`relative inline-flex items-center rounded-r-md px-2 py-2 ${currentPage === totalPages
+                ? "bg-gray-200 cursor-not-allowed"
+                : "bg-gray-500 text-black"
                 } text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-400  focus:z-20 focus:outline-offset-0`}
             >
               <span className="sr-only">Next</span>
@@ -112,8 +123,8 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, pagina
           </nav>
         </div>
       </div>
-        </>
-    );
+    </>
+  );
 };
 
 export default Pagination;

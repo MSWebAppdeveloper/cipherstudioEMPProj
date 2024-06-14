@@ -57,7 +57,7 @@ const LeaveRequestComponent: React.FC<LeaveRequestComponentProps> = ({
         try {
 
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch('http://192.168.1.2:8080/api/users/user/details', {
+            const response = await fetch('http://192.168.1.2:8082/api/users/user/details', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,

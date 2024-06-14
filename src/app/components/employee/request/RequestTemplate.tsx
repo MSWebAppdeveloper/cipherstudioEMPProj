@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import React, { useEffect, useState } from "react";
 import { RequestInterface } from "./RequestInterface";
 
@@ -36,12 +35,16 @@ const RequestTemplate: React.FC<RequestInterface> = ({
             ? leaveHistory
             : leaveHistory?.filter((user) => user.status === currentStatus);
 
-    const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
+    const years = Array.from(
+        { length: 10 },
+        (_, i) => new Date().getFullYear() - i
+    );
     const columns = [
         {
             key: "index",
             label: "S NO.",
-            render: (item: any, index: number) => <span>{index + 1}</span>, sortable: false
+            render: (item: any, index: number) => <span>{index + 1}</span>,
+            sortable: false,
         },
         { key: "leaveType", label: "LEAVE TYPE", sortable: true },
         { key: "createdAt", label: "Submitted Date&Time", sortable: true },
@@ -67,13 +70,19 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     default:
                         colorClass = "bg-gray-500";
                 }
-                return <span className={`px-2 py-1 rounded text-white ${colorClass}`} > {item.status}</ span>;
-            }, sortable: false
+                return (
+                    <span className={`px-2 py-1 rounded text-white ${colorClass}`}>
+                        {" "}
+                        {item.status}
+                    </span>
+                );
+            },
+            sortable: false,
         },
         {
             key: "actions",
             label: "ACTIONS",
-            render: (leave: { id: any, status: string }) => (
+            render: (leave: { id: any; status: string }) =>
                 leave.status === "Pending" ? (
                     <div className="text-lg text-center">
                         <button
@@ -83,10 +92,9 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                             Delete
                         </button>
                     </div>
-                ) : null
-            ),
-            sortable: false
-        }
+                ) : null,
+            sortable: false,
+        },
     ];
     function getBackgroundColor(leaveType: any) {
         switch (leaveType) {
@@ -107,16 +115,14 @@ const RequestTemplate: React.FC<RequestInterface> = ({
     }
     return (
         <>
-            {/*right--sec-start*/}
-
-            <div className="leave-sec">
+            <div>
                 <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5">
                     <div className="text-end pb-5 pt-2">
                         <button
                             data-modal-target="authentication-modal"
                             data-modal-toggle="authentication-modal"
                             onClick={() => setModal((prev) => !prev)}
-                            className="rounded-md bg-green-500 lg:px-8 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white hover:bg-green-400 lg:text-lg focus:outline-0"
+                            className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
                         >
                             Request Leave
                         </button>
@@ -185,14 +191,15 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     </div>
                 </div>
                 {/*table*/}
-                <div className="lg:px-6 lg:pb-10 lg:pt-4 md:py-5 md:px-5 sm:px-4 sm:py-5 rounded-lg box-shadow lg:mt-12 md:mt-4 sm:mt-6 attendance-table mb-8">
+                <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
+                    {" "}
                     <h3 className="text-2xl font-medium py-5">Leave History</h3>
-                    <div className="px-2">
-                        <form className="max-w-52">
-                            <label className="text-lg font-medium">Sort by</label>
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center">
+                            <span className="mr-4 text-lg font-medium">Sort by :</span>
                             <select
                                 id="response"
-                                className="border border-gray-300 text-gray-800 text-md rounded-md block w-full lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50 mt-2 mb-4"
+                                className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
                                 value={currentStatus}
                                 onChange={(e) => handleFilterChange(e.target.value)}
                             >
@@ -202,55 +209,55 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                                     </option>
                                 ))}
                             </select>
-                        </form>
+                        </div>
                     </div>
-                    <div className="overflow-x-auto">
-                        {filteredUsers.length > 0 ? (
-                            <TableComponent
-                                data={filteredUsers}
-                                columns={columns}
-                                currentPage={currentPage}
-                                totalPages={totalPages}
-                                paginate={paginate}
-                                totalCount={totalCount}
-                                OnchangeData={OnchangeData}
-                                formdata={formdata}
-                                handleSort={handleSort}
-                                sortOrder={sortOrder}
-                                sortColumn={sortColumn}
-                            />
-
-
-                        ) : (
-                            <p>No Leave Applications data available.</p>
-                        )}
-                        {isDeleteConfirmationVisible && (
-                            <div className="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center">
-                                <div className="absolute inset-0 bg-black opacity-50"></div>
-                                <div className="relative bg-white rounded-lg p-8">
-                                    <p className="text-lg font-semibold mb-4">
-                                        Are you sure you want to delete this LeaveApplication?
-                                    </p>
-                                    <div className="flex justify-end">
-                                        <button
-                                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
-                                            // onClick={confirmDeleteUser}
-                                            onClick={() => confirmDeleteUser(selectedUserId)}
-                                        >
-                                            Yes
-                                        </button>
-                                        <button
-                                            className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
-                                            onClick={cancelDeleteUser}
-                                        >
-                                            No
-                                        </button>
+                    {/*table*/}
+                    <div className="mt-10">
+                        <div className="overflow-x-auto">
+                            {filteredUsers.length > 0 ? (
+                                <TableComponent
+                                    data={filteredUsers}
+                                    columns={columns}
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    paginate={paginate}
+                                    totalCount={totalCount}
+                                    OnchangeData={OnchangeData}
+                                    formdata={formdata}
+                                    handleSort={handleSort}
+                                    sortOrder={sortOrder}
+                                    sortColumn={sortColumn}
+                                />
+                            ) : (
+                                <p>No Leave Applications data available.</p>
+                            )}
+                            {isDeleteConfirmationVisible && (
+                                <div className="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center">
+                                    <div className="absolute inset-0 bg-black opacity-50"></div>
+                                    <div className="relative bg-white rounded-lg p-8">
+                                        <p className="text-lg font-semibold mb-4">
+                                            Are you sure you want to delete this LeaveApplication?
+                                        </p>
+                                        <div className="flex justify-end">
+                                            <button
+                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+                                                // onClick={confirmDeleteUser}
+                                                onClick={() => confirmDeleteUser(selectedUserId)}
+                                            >
+                                                Yes
+                                            </button>
+                                            <button
+                                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+                                                onClick={cancelDeleteUser}
+                                            >
+                                                No
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
-
                 </div>
             </div>
         </>

@@ -36,7 +36,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
       key: "index",
       label: "S NO.",
       render: (item: any, index: number) => <span>{index + 1}</span>,
-      sortable: false
+      sortable: false,
     },
     { key: "userName", label: "NAME", sortable: true },
     { key: "leaveType", label: "LEAVE TYPE", sortable: true },
@@ -63,14 +63,19 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
           default:
             colorClass = "bg-gray-500";
         }
-        return <span className={`px-2 py-1 rounded text-white ${colorClass}`} > {item.status}</ span>;
+        return (
+          <span className={`px-2 py-1 rounded text-white ${colorClass}`}>
+            {" "}
+            {item.status}
+          </span>
+        );
       },
-      sortable: false
+      sortable: false,
     },
     {
       key: "actions",
       label: "ACTIONS",
-      render: (leave: { id: any, status: string }) => (
+      render: (leave: { id: any; status: string }) =>
         leave.status === "Pending" ? (
           <div className="flex">
             <div>
@@ -78,10 +83,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
                 className="rounded-full bg-green-500 text-white text-md hover:bg-green-600 shadow-xl mr-3 p-2"
                 onClick={() => approveApplication(leave.id)}
               >
-                <Icon
-                  icon="material-symbols:check"
-                  width={22}
-                  height={22} />
+                <Icon icon="material-symbols:check" width={22} height={22} />
               </button>
             </div>
             <div>
@@ -89,29 +91,25 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
                 className="rounded-full bg-red-500 text-white text-md hover:bg-red-600 shadow-xl p-2"
                 onClick={() => rejectApplication(leave.id)}
               >
-                <Icon
-                  icon="iconoir:xmark"
-                  width={22}
-                  height={22} />
+                <Icon icon="iconoir:xmark" width={22} height={22} />
               </button>
             </div>
           </div>
-        ) : null
-      ),
-      sortable: false
-    }
+        ) : null,
+      sortable: false,
+    },
   ];
   return (
     <>
       <div>
-        <div className="box-shadow py-12 px-4 rounded-md mt-4">
-          {/*-dropdown*/}
-          <div className="px-2">
-            <form className="max-w-52">
-              <label className="text-lg font-medium">Sort by</label>
+        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
+          <div className="flex justify-between items-center">
+            {/*-dropdown*/}
+            <div className="flex items-center">
+              <span className="mr-4 text-lg font-medium">Sort by :</span>
               <select
                 id="response"
-                className="border border-gray-300 text-gray-800 text-md rounded-md block w-full lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50 mt-2 mb-4"
+                className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
                 value={currentStatus}
                 onChange={(e) => handleFilterChange(e.target.value)}
               >
@@ -121,31 +119,30 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
                   </option>
                 ))}
               </select>
-            </form>
+            </div>
           </div>
           {/*table*/}
-
-          {filteredUsers.length > 0 ? (
-            <TableComponent
-              data={filteredUsers}
-              columns={columns}
-              currentPage={currentPage}
-              totalPages={totalPages}
-              paginate={paginate}
-              totalCount={totalCount}
-              OnchangeData={OnchangeData}
-              formdata={formdata}
-              handleSort={handleSort}
-              sortOrder={sortOrder}
-              sortColumn={sortColumn}
-            />
-
-
-          ) : (
-            <p>No Leave Applications data available.</p>
-          )}
-
-
+          <div className="mt-10">
+            <div className="overflow-x-auto">
+              {filteredUsers.length > 0 ? (
+                <TableComponent
+                  data={filteredUsers}
+                  columns={columns}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  paginate={paginate}
+                  totalCount={totalCount}
+                  OnchangeData={OnchangeData}
+                  formdata={formdata}
+                  handleSort={handleSort}
+                  sortOrder={sortOrder}
+                  sortColumn={sortColumn}
+                />
+              ) : (
+                <p>No Leave Applications data available.</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>

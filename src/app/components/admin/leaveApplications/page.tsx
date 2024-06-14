@@ -39,7 +39,7 @@ const LeaveApplications: React.FC = () => {
         try {
 
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch('http://192.168.1.2:8080/api/employee/user/details', {
+            const response = await fetch('http://192.168.1.2:8082/api/employee/user/details', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,

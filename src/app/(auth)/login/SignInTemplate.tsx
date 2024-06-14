@@ -43,7 +43,7 @@ const SignInTemplate: React.FC<SignInInterface> = ({
                 onSubmit={onLogin}
                 className="mt-3 lg:pb-12 pt-5 sm:pb-9 login-form"
               >
-                <h1 className="text-4xl mb-20 mt-5 text-center text-color pb-2 relative">
+                <h1 className="text-4xl mb-20 mt-5 text-center text-color pb-2 text-blue-500 focus:ring-blue-500">
                   Login
                 </h1>
                 <div className="col-span-6 input-sec relative mb-10">
@@ -111,7 +111,7 @@ const SignInTemplate: React.FC<SignInInterface> = ({
                 <div className="col-span-6 sm:flex sm:items-center sm:gap-4 justify-center lg:mt-14 md:mt-14 sm:mt-6 flex login-button">
                   <button
                     type="submit"
-                    className="inline-block shrink-0 rounded-full text-xl text-white transition hover:bg-blue-500 focus:outline-none focus:ring active:text-blue-500 lg:mb-16 md:mb-16 sm:mb-8"
+                    className="inline-block shrink-0 rounded-full text-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 lg:mb-16 md:mb-16 sm:mb-8 shadow-lg"
                   >
                     {loading ? "Processing" : "Sign-In"}
                   </button>

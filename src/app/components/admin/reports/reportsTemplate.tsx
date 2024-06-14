@@ -66,7 +66,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   useEffect(() => {
     if (isDataFetched && csvLinkRef.current) {
       (csvLinkRef.current as any).link.click();
-      setIsDataFetched(false);  // Reset after triggering the download
+      setIsDataFetched(false); // Reset after triggering the download
     }
   }, [isDataFetched]);
   const columns = [
@@ -81,13 +81,13 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
     {
       key: "timeIn",
       label: "TIME-IN",
-      
+
       sortable: true,
     },
     {
       key: "timeOut",
       label: "TIME-OUT",
-      
+
       sortable: false,
     },
     { key: "totalHours", label: "TOTAL-HRS", sortable: true },
@@ -130,14 +130,14 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   return (
     <>
       <div>
-        <div className="filter-sec lg:px-8 lg:py-5 md:py-5 md:px-5 rounded-md box-shadow lg:mt-5 md:mt-3 items-center">
-          <div className="flex justify-between">
+        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
+          <div className="flex justify-between items-center  ">
             <div className="flex">
               <div className="max-w-52 grow mr-4">
                 <form className="max-w-52">
                   <select
                     id="name"
-                    className="border border-gray-300 text-gray-900 text-md rounded-md block w-full lg:py-2.5 lg:px-3 md:p-2 sm:p-2 dark:placeholder-gray-400 dark:text-white focus:outline-0"
+                    className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
                     value={filterName}
                     onChange={(e) => handleFilterChange("name", e.target.value)}
                   >
@@ -156,7 +156,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
                     name="Select Date Range"
                     id="dateofbirth"
                     defaultValue="Select Date Range"
-                    className="border-gray-300 border rounded-md lg:py-2.5 md:py-2 sm:py-2 px-3 py-2.5"
+                    className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
                     onClick={handleToggleFilterModal}
                   >
                     {startDate && endDate
@@ -205,7 +205,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
             </div>
 
             <div>
-                <button
+              <button
                 className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
                 onClick={handleFetchAndDownload}
                 disabled={isLoading}
@@ -227,21 +227,25 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
               />
             </div>
           </div>
-          <TableComponent
-          columns={columns}
-          data={filteredAttendance}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          paginate={paginate}
-          totalCount={totalCount}
-          OnchangeData={OnchangeData}
-          formdata={formdata}
-          handleSort={handleSort}
-          sortOrder={sortOrder}
-          sortColumn={sortColumn}
-        />
+
+          <div className="mt-10">
+            <div className="overflow-x-auto">
+              <TableComponent
+                columns={columns}
+                data={filteredAttendance}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                paginate={paginate}
+                totalCount={totalCount}
+                OnchangeData={OnchangeData}
+                formdata={formdata}
+                handleSort={handleSort}
+                sortOrder={sortOrder}
+                sortColumn={sortColumn}
+              />
+            </div>
+          </div>
         </div>
-        
       </div>
     </>
   );
