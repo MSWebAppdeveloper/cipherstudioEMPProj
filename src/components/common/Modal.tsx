@@ -20,7 +20,7 @@ export const customStyles: Modal.Styles = {
   },
   overlay: {
     background: "rgba(0, 0, 0, 0.6)", // Adjust opacity here (0.6 in this example)
-    zIndex: "1",
+    zIndex: "900",
   },
 };
 

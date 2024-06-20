@@ -57,7 +57,7 @@ const Pagination: React.FC<PaginationProps> = ({
             onChange={OnchangeData}
             className="border border-gray-300 rounded-md p-1 "
           >
-            <option aria-placeholder="12">12</option>
+            <option aria-placeholder="10">10</option>
             <option value="20">20</option>
             <option value="30">30</option>
             <option value="40">40</option>

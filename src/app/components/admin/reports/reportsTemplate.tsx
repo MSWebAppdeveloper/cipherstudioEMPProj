@@ -51,9 +51,9 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   const filteredAttendance = attendance?.filter((record) => {
     const matchName = !filterName || record.userName === filterName;
     const matchDate =
-      !startDate ||
-      !endDate ||
-      (new Date(record.date) >= startDate && new Date(record.date) <= endDate);
+      (!startDate && !endDate) ||
+      (new Date(record.date) >= new Date(startDate) &&
+        new Date(record.date) <= new Date(endDate));
     return matchName && matchDate;
   });
 
@@ -66,9 +66,10 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   useEffect(() => {
     if (isDataFetched && csvLinkRef.current) {
       (csvLinkRef.current as any).link.click();
-      setIsDataFetched(false); // Reset after triggering the download
+      setIsDataFetched(false);
     }
   }, [isDataFetched]);
+
   const columns = [
     {
       key: "index",
@@ -81,13 +82,11 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
     {
       key: "timeIn",
       label: "TIME-IN",
-
       sortable: true,
     },
     {
       key: "timeOut",
       label: "TIME-OUT",
-
       sortable: false,
     },
     { key: "totalHours", label: "TOTAL-HRS", sortable: true },
@@ -131,7 +130,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
     <>
       <div>
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-          <div className="flex justify-between items-center  ">
+          <div className="flex justify-between items-center">
             <div className="flex">
               <div className="max-w-52 grow mr-4">
                 <form className="max-w-52">
@@ -167,11 +166,11 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
               </div>
               <div className="flex-none">
                 {showFilterModal && (
-                  <div className="absolute top-0 left-0 h-full w-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                  <div className="absolute top-0 left-0 h-full w-full  flex justify-center items-center" style={{zIndex:"900", background:"rgba(0, 0, 0, 0.6)"}}>
                     <div>
-                      <div className="bg-white p-4 rounded-md shadow-md ">
-                        <div className="grid gap-4  mb-4">
-                          <div className=" border border-black">
+                      <div className="bg-white p-4 rounded-md shadow-md">
+                        <div className="grid gap-4 mb-4">
+                          <div className="border border-black">
                             <DateRangePickerComp
                               onChange={(range: {
                                 startDate: Date | null;

@@ -16,7 +16,7 @@ const Reports: React.FC = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [formdata, setFormdata] = useState({
-    limit: "12",
+    limit: "10",
     order: "",
     status: "",
   });
@@ -56,7 +56,7 @@ const Reports: React.FC = () => {
 
   const fetchAttendanceHistory = async (page: number, forDownload = false) => {
     try {
-      
+
       const baseUrl = `employee/attendance?page=${page}&order=${formdata.order}`;
       const limit = forDownload ? "" : `&limit=${formdata.limit}`;
       const nameFilter = filterValue ? `&name=${filterValue}` : "";
@@ -74,7 +74,7 @@ const Reports: React.FC = () => {
       if (forDownload) {
         // console.log("report", response.data)
         setDownloadData(response.data);
-        setIsLoading(false);  
+        setIsLoading(false);
       } else {
         const dataWithParsedTotalHours = response.data.data.map((entry: any) => ({
           ...entry,
@@ -137,7 +137,7 @@ const Reports: React.FC = () => {
         sortOrder={sortOrder}
         sortColumn={sortColumn}
         isLoading={isLoading}
-          isDataFetched={isDataFetched}
+        isDataFetched={isDataFetched}
         setIsDataFetched={setIsDataFetched}
 
       />

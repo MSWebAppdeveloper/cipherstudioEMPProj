@@ -15,7 +15,7 @@ const RequestComponent: React.FC = () => {
   const [isModal, setModal] = useState<boolean>(false);
   const [leaveHistory, setLeaveHistory] = useState<RequestInterface[]>([]);
   const [formdata, setFormdata] = useState({
-    limit: "12",
+    limit: "10",
     order: "",
     year: "",
     status: "",

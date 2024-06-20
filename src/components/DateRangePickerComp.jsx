@@ -4,7 +4,6 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 const DateRangePickerComp = ({ onChange }) => {
-
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -12,19 +11,24 @@ const DateRangePickerComp = ({ onChange }) => {
   });
 
   const handleSelect = (ranges) => {
-    setSelectionRange(ranges.selection);
-    onChange && onChange(ranges.selection);
+    const { selection } = ranges;
+    setSelectionRange(selection);
+    if (onChange) {
+      onChange({
+        startDate: new Date(selection.startDate.setHours(0, 0, 0, 0)),
+        endDate: new Date(selection.endDate.setHours(23, 59, 59, 999)),
+      });
+    }
   };
 
-  
   return (
     <div className="calendarElement">
-      <DateRangePicker 
-      ranges={[selectionRange]}
-      onChange={handleSelect}
-      moveRangeOnFirstSelection={false} // Disable auto-selection of date range on first click
-      editableDateInputs={true} // Allow manual input of dates
-      showDateDisplay={false} // Hide the date display below the calendar
+      <DateRangePicker
+        ranges={[selectionRange]}
+        onChange={handleSelect}
+        moveRangeOnFirstSelection={false}
+        editableDateInputs={true}
+        showDateDisplay={false}
       />
     </div>
   );

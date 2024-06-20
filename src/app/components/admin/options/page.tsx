@@ -29,7 +29,7 @@ const OptionsComponent: React.FC = () => {
 
   const [formdata, setFormdata] = useState({
     year: "",
-    limit: "12",
+    limit: "10",
     order: "",
     status: "any",
   });
@@ -40,7 +40,7 @@ const OptionsComponent: React.FC = () => {
 
   useEffect(() => {
     fetchLeaveTypes(currentPage);
-  }, [currentPage,formdata.year, formdata.limit, formdata.order, sortColumn, sortOrder]);
+  }, [currentPage, formdata.year, formdata.limit, formdata.order, sortColumn, sortOrder]);
 
   const fetchLeaveTypes = async (page: number) => {
     try {
@@ -95,7 +95,7 @@ const OptionsComponent: React.FC = () => {
   };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-  
+
   const handleSort = (column: string) => {
     const order = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(order);

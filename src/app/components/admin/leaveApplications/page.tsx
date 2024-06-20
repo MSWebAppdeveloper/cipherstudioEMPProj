@@ -19,7 +19,7 @@ const LeaveApplications: React.FC = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [formdata, setFormdata] = useState(
         {
-            limit: "12",
+            limit: "10",
             order: "",
             status: "",
         }

@@ -1,9 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { leaveApplicationsInterface } from "./leaveApplicationsInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
+
 import TableComponent from "@/components/TableComponent";
+interface TruncatedTextProps {
+  text: string;
+}
+
+const isTextTruncated = (element: { scrollWidth: number; clientWidth: number; }) => {
+  return element.scrollWidth > element.clientWidth;
+};
+
+const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isTruncated, setIsTruncated] = useState(false);
+
+  useEffect(() => {
+    if (textRef.current) {
+      setIsTruncated(isTextTruncated(textRef.current));
+    }
+  }, [text]);
+
+  return (
+    <div className="center">
+      <div ref={textRef} className={`text ${isTruncated ? 'truncated' : ''}`}>
+        {text}
+      </div>
+      {isTruncated && (
+        <div className="text-tooltip">
+          {text}
+        </div>
+      )}
+    </div>
+  );
+};
 const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
   leaveHistory,
   approveApplication,
@@ -44,18 +76,26 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
     { key: "startDate", label: "START DATE", sortable: true },
     { key: "endDate", label: "END DATE", sortable: false },
     { key: "total_days", label: "Total Days", sortable: true },
-    { key: "reason", label: "REASON",
-      render: (item: { reason: any }) => {
-        
-        
-        return (
-          <span  className="truncate"
-                      data-full-text={item.reason}>
-            {" "}
-            {item.reason}
-          </span>
-        );
-      }, sortable: false },
+    // {
+    //   key: "reason", label: "REASON",
+    //   render: (item: { reason: any }) => {
+
+
+    //     return (
+    //       <span className="truncate"
+    //         data-full-text={item.reason}>
+    //         {" "}
+    //         {item.reason}
+    //       </span>
+    //     );
+    //   }, sortable: false
+    // },
+    {
+      key: "reason",
+      label: "REASON",
+      render: (item: { reason: any; }) => <TruncatedText text={item.reason} />,
+      sortable: false,
+    },
     {
       key: "status",
       label: "STATUS",
@@ -134,7 +174,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
           </div>
           {/*table*/}
           <div className="mt-10">
-            <div className="overflow-x-auto">
+            <div className="">
               {filteredUsers.length > 0 ? (
                 <TableComponent
                   data={filteredUsers}

@@ -13,7 +13,7 @@ const initialFormValues = {
   department: "",
   userRole: "",
   isActive: true,
-  limit: "12",
+  limit: "10",
   order: "",
   status: "",
 };

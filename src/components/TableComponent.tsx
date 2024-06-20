@@ -1,6 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import React from "react";
 import Pagination from "./Pagination";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface TableComponentProps {
   columns: any[];
@@ -24,7 +25,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   totalPages,
   paginate,
   totalCount,
- 
+
   OnchangeData,
   formdata,
   handleSort,
@@ -49,22 +50,23 @@ const TableComponent: React.FC<TableComponentProps> = ({
     pageNumbers.push(i);
   }
   return (
-    <div className="overflow-x-auto">
+    <div className="">
       <table className="min-w-full bg-white text-left">
         <thead>
           <tr>
             {columns.map((column) => (
               <th
                 key={column.key}
-                className={`py-2 px-4 border-b ${column.sortable ? "cursor-pointer" : ""
+                className={`py-2 px-4 border-b ${column.sortable ? "cursor-pointer sortable-column" : ""
                   }`}
                 onClick={() => column.sortable && handleSort(column.key)}
               >
                 {column.label}
                 {column.sortable && (
-                  <span>
-                    {sortColumn === column.key && sortOrder === "asc" ? " 🔼" : ""}
-                    {sortColumn === column.key && sortOrder === "desc" ? " 🔽" : ""}
+                  <span className="sort-icon">
+                    {sortColumn === column.key && sortOrder === "asc" ? (<Icon icon="grommet-icons:ascending" width="20" height="20"   />)
+                      :
+                      (<Icon icon="grommet-icons:descending" width="20" height="20" />)}
                   </span>
                 )}
               </th>
