@@ -1,23 +1,25 @@
+"use client"
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import OptionsComponent from '@/app/components/admin/options/page';
 import EmployeeNavbar from '@/components/EmployeeNavbar'
 import Sidebar from '@/components/Sidebar'
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import React from 'react'
+import React, { useState } from 'react'
 
-const Options = async () => {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      redirect("/login");
-    }
+const Options =  () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
   return (
-    <div className="Wrapper">
-        <EmployeeNavbar />
-        <div className="flex w-100 second-sec">
-          <Sidebar />
-          <div className="right-sec-2 lg:px-8 md:px-4 sm:px-4">
-            <OptionsComponent />
+    <div>
+    <EmployeeNavbar toggleSidebar={toggleSidebar} />
+    <div className="flex w-100" id="body-row">
+      <Sidebar isCollapsed={isCollapsed} />
+      <div className={`right-sec lg:px-8 md:px-4 sm:px-4 ${isCollapsed ? 'collapsed' : ''}`}>
+       <OptionsComponent />
           </div>
         </div>
       </div>

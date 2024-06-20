@@ -1,29 +1,26 @@
-import React from "react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../api/auth/[...nextauth]/options";
-import { redirect } from "next/navigation";
-import HeaderMobile from "@/components/header-mobile";
+"use client"
+import React, { useState } from "react";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
 import RequestComponent from "@/app/components/employee/request/page";
 import Sidebar from "@/components/Sidebar";
 
-const leaveRequest = async () => {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/login");
-  }
+const LeaveRequest = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
   return (
-    <div className="Wrapper">
-      <EmployeeNavbar />
-      <div className="flex w-100 second-sec">
-        <Sidebar />
-        <div className="right-sec-2 lg:px-8 md:px-4 sm:px-4">
+    <div>
+      <EmployeeNavbar toggleSidebar={toggleSidebar} />
+      <div className="flex w-100" id="body-row">
+        <Sidebar isCollapsed={isCollapsed} />
+        <div className={`right-sec lg:px-8 md:px-4 sm:px-4 ${isCollapsed ? 'collapsed' : ''}`}>
           <RequestComponent />
         </div>
       </div>
     </div>
-
   );
 };
 
-export default leaveRequest;
+export default LeaveRequest;

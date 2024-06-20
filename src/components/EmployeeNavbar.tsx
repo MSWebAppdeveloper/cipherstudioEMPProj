@@ -5,11 +5,16 @@ import Link from "next/link";
 
 import SignoutButton from "./SignOutButton";
 import Image from "next/image";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
-const EmployeeNavbar = () => {
+interface NavbarProps {
+  toggleSidebar: () => void;
+}
+const EmployeeNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   return (
     <div className="bg-slate-50 w-100 px-4 py-2 border-b border-slate-300 h-20 flex justify-between items-center header sticky">
-      <div className="logo">
+      <div className="logo flex">
+
         <Link href="/employee/dashboard">
           <Image
             width="192"
@@ -21,6 +26,13 @@ const EmployeeNavbar = () => {
             quality={100}
           />
         </Link>
+        <button
+          id="toggle-sidebar"
+          className="text-gray-500 hover:text-gray-700 focus:outline-none ml-4"
+          onClick={toggleSidebar}
+        >
+          <Icon id="collapse-icon" icon="fa:bars" width="20" height="20" />
+        </button>
       </div>
       <div className="flex justify-between items-center">
         <button className=" bg-gray-200 rounded-md hover:bg-gray-300">

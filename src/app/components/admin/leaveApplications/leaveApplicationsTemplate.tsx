@@ -44,7 +44,18 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
     { key: "startDate", label: "START DATE", sortable: true },
     { key: "endDate", label: "END DATE", sortable: false },
     { key: "total_days", label: "Total Days", sortable: true },
-    { key: "reason", label: "REASON", sortable: false },
+    { key: "reason", label: "REASON",
+      render: (item: { reason: any }) => {
+        
+        
+        return (
+          <span  className="truncate"
+                      data-full-text={item.reason}>
+            {" "}
+            {item.reason}
+          </span>
+        );
+      }, sortable: false },
     {
       key: "status",
       label: "STATUS",
