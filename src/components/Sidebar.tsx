@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { SIDENAV_ITEMS } from "@/constants";
 import { SideNavItem } from "@/types";
 import { Icon } from "@iconify/react";
-import SignoutButton from "./SignOutButton";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -41,13 +40,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
             <MenuItem key={idx} item={item} isCollapsed={isCollapsed} />
           ))}
         </div>
-        <div>
-            <ul>
-              <li className="relative no-underline menu-collapsed">
-             <SignoutButton/>
-              </li>
-            </ul>
-          </div>
       </div>
     </div>
   );

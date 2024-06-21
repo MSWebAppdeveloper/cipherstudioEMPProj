@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios"; // Import Axios for making HTTP requests
 
-import LeaveRequestTemplate from "./leaveRequestTemplate";
+import LeaveRequestTemplate from "./LeaveRequestTemplate";
 import LeaveRequestFormComponent from "../leaveRequestForm/page";
 import { LeaveRequestInterface } from "./leaveRequestInterface";
 import { LeaveTypes, deleteUser } from "@/services/api";

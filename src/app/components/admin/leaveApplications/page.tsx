@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { ApproveLeave, HistoryLeave, RejectLeave } from '@/services/api';
 import { LeaveApplicationsInterface } from './leaveApplicationsInterface';
 import LeaveApplicationsTemplate from './leaveApplicationsTemplate';
+import { signOut } from 'next-auth/react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 // ... (previous imports)
 
@@ -26,6 +29,7 @@ const LeaveApplications: React.FC = () => {
     )
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
     const [sortColumn, setSortColumn] = useState<string>("createdAt");
+    const router = useRouter();
 
     const OnchangeData = (e: any) => {
         setFormdata({
@@ -34,6 +38,25 @@ const LeaveApplications: React.FC = () => {
         });
     };
 
+
+    const refreshToken = async () => {
+        const refreshToken = localStorage.getItem("refreshToken");
+        const response = await fetch("http://192.168.1.2:8080/api/employee/refresh", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ refreshToken }),
+        });
+
+        if (response.ok) {
+            const { accessToken: newAccessToken } = await response.json();
+            localStorage.setItem("accessToken", newAccessToken);
+            return newAccessToken;
+        } else {
+            throw new Error("Failed to refresh token");
+        }
+    };
 
     const ApproverId = async () => {
         try {
@@ -46,7 +69,29 @@ const LeaveApplications: React.FC = () => {
                     'Content-Type': 'application/json',
                 },
             });
+            if (response.status === 401) {
 
+                try {
+                    const newAccessToken = await refreshToken();
+                    if (newAccessToken) {
+                        fetchLeaveHistory(currentPage); // Retry fetching with the new token
+                    }
+                } catch (error) {
+                    console.error("Failed to refresh token. Redirect to login page.");
+                    await signOut({
+                        callbackUrl: "/login",
+                        redirect: false,
+                    });
+                    localStorage.removeItem("accessToken");
+                    localStorage.removeItem("refreshToken");
+                    localStorage.removeItem("UserId");
+                    localStorage.removeItem("name");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("userRole");
+                    toast.success("Login Again");
+                    router.push("/login");
+                }
+            }
             const user = await response.json();
             if (user.length > 0) {
                 return user[0].id; // Replace 'UserId' with the actual property name
