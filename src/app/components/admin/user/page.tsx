@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios"; // Import Axios for making HTTP requests
 
-import UserTableTemplate from "./TableTemplate";
-import UserFormComponent from "../form/page";
+import UserFormComponent from "../userForm/page";
 import { UserDetails, deleteUser } from "@/services/api";
+import UserTemplate from "./UserTemplate";
 
 const initialFormValues = {
   name: "",
@@ -18,7 +18,7 @@ const initialFormValues = {
   status: "",
 };
 
-const UserTableComponent: React.FC = () => {
+const UserComponent: React.FC = () => {
   const [formdata, setFormdata] = useState(initialFormValues);
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -100,7 +100,7 @@ const UserTableComponent: React.FC = () => {
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(`
-      http://192.168.1.2:8080/api/employee/users/${userId}/status`, { isActive });
+      http://192.168.1.2:8082/api/employee/users/${userId}/status`, { isActive });
       getAllUsers(currentPage); // Refresh the user list after updating status
       toast.success(`User ${isActive ? 'enabled' : 'disabled'} successfully!`);
     } catch (error) {
@@ -125,7 +125,7 @@ const UserTableComponent: React.FC = () => {
         onUpdate={handleEditUserUpdate}
 
       />
-      <UserTableTemplate
+      <UserTemplate
         formdata={formdata}
         allUsers={allUsers}
         deleteSelected={deleteUserHandler}
@@ -150,4 +150,4 @@ const UserTableComponent: React.FC = () => {
   );
 };
 
-export default UserTableComponent;
+export default UserComponent;

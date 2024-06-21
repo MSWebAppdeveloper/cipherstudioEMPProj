@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { OptionsProps } from "./optionsInterface";
+import { LeaveTypeProps } from "./leaveTypeInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import TableComponent from "@/components/TableComponent";
 
-const OptionsTemplate: React.FC<OptionsProps> = ({
+const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
   setModal,
   deleteSelected,
   openEditPopup,
@@ -227,4 +227,4 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
   );
 };
 
-export default OptionsTemplate;
+export default LeaveTypeTemplate;

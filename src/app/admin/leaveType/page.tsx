@@ -1,13 +1,13 @@
 "use client"
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
-import OptionsComponent from '@/app/components/admin/options/page';
+import LeaveTypeComponent from '@/app/components/admin/leaveType/page';
 import EmployeeNavbar from '@/components/EmployeeNavbar'
 import Sidebar from '@/components/Sidebar'
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import React, { useState } from 'react'
 
-const Options =  () => {
+const LeaveType =  () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -19,11 +19,11 @@ const Options =  () => {
     <div className="flex w-100" id="body-row">
       <Sidebar isCollapsed={isCollapsed} />
       <div className={`right-sec lg:px-8 md:px-4 sm:px-4 ${isCollapsed ? 'collapsed' : ''}`}>
-       <OptionsComponent />
+       <LeaveTypeComponent />
           </div>
         </div>
       </div>
   )
 }
 
-export default Options
+export default LeaveType

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { SIDENAV_ITEMS } from "@/constants";
 import { SideNavItem } from "@/types";
 import { Icon } from "@iconify/react";
+import SignoutButton from "./SignOutButton";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -34,12 +35,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
       className={`px-2 py-5 fixed border border-r leave-cards shadow-lg  ${isCollapsed ? "sidebar-collapsed" : "sidebar-expanded"
         }`}
     >
-      <div className="flex flex-col space-y-6 w-full sidebar-menu">
+      <div className="flex flex-col justify-between space-y-6 w-full sidebar-menu">
         <div className="flex flex-col space-y-2 md:px-1 lg:px-2 sm:px-0 menu-collapsed">
           {filteredItems.map((item, idx) => (
             <MenuItem key={idx} item={item} isCollapsed={isCollapsed} />
           ))}
         </div>
+        <div>
+            <ul>
+              <li className="relative no-underline menu-collapsed">
+             <SignoutButton/>
+              </li>
+            </ul>
+          </div>
       </div>
     </div>
   );

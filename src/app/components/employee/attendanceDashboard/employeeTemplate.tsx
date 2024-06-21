@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { employeeAttendanceInterface } from "./employeeAttendanceInterface";
+import { EmployeeAttendanceInterface } from "./employeeAttendanceInterface";
 
-const EmployeeTemplate: React.FC<employeeAttendanceInterface> = ({
+const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
   handleSignIn,
   handleSignOut,
 

@@ -1,4 +1,4 @@
-export interface leaveApplicationsInterface {
+export interface LeaveApplicationsInterface {
   leaveHistory: {
     id: string;
     leaveType: string;

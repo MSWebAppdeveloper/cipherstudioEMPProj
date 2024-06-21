@@ -1,4 +1,4 @@
-export interface UserTableProps {
+export interface UserProps {
   formdata: {
     name: string;
     email: string;

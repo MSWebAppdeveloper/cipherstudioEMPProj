@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { leaveApplicationsInterface } from "./leaveApplicationsInterface";
+import { LeaveApplicationsInterface } from "./leaveApplicationsInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 
@@ -36,7 +36,7 @@ const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
     </div>
   );
 };
-const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
+const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   leaveHistory,
   approveApplication,
   rejectApplication,

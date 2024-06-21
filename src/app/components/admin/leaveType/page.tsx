@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import OptionsTemplate from "./optionsTemplate";
+import LeaveTypeTemplate from "./leaveTypeTemplate";
 import { LeaveTypes, deleteLeave } from "@/services/api";
 import LeaveFormComponent from "../leaveForm/page";
 import toast from "react-hot-toast";
 
-const OptionsComponent: React.FC = () => {
+const LeaveTypeComponent: React.FC = () => {
   const [isModal, setModal] = useState<boolean>(false);
   const [allTypes, setAllTypes] = useState<any[]>([]);
   const [selectedLeave, setSelectedLeave] = useState<any>(null);
@@ -109,7 +109,7 @@ const OptionsComponent: React.FC = () => {
         leave={selectedLeave}
         onUpdate={handleEditLeaveUpdate}
       />
-      <OptionsTemplate
+      <LeaveTypeTemplate
         setModal={setModal}
         leaveTypes={leaveTypes}
         deleteSelected={deleteLeaveHandler}
@@ -132,4 +132,4 @@ const OptionsComponent: React.FC = () => {
   );
 };
 
-export default OptionsComponent;
+export default LeaveTypeComponent;

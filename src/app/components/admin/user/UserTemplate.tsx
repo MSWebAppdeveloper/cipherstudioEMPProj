@@ -1,11 +1,11 @@
 
 import React, { useEffect, useState } from "react";
-import { UserTableProps } from "./TableInterface";
+import { UserProps } from "./UserInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Pagination from "@/components/Pagination";
 import TableComponent from "@/components/TableComponent";
 
-const UserTableTemplate: React.FC<UserTableProps> = ({
+const UserTemplate: React.FC<UserProps> = ({
   allUsers,
   deleteSelected,
   openEditPopup,
@@ -292,4 +292,4 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
   );
 };
 
-export default UserTableTemplate;
+export default UserTemplate;

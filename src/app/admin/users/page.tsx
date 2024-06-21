@@ -1,8 +1,8 @@
 "use client";
-import UserTableComponent from "@/app/components/admin/table/page";
 import React, { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
+import UserComponent from "@/app/components/admin/user/page";
 const Users =  () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -16,7 +16,7 @@ const Users =  () => {
         <div className="flex w-100" id="body-row">
           <Sidebar isCollapsed={isCollapsed} />
           <div className={`right-sec lg:px-8 md:px-4 sm:px-4 ${isCollapsed ? 'collapsed' : ''}`}>
-            <UserTableComponent />
+            <UserComponent />
           </div>
         </div>
       </div>

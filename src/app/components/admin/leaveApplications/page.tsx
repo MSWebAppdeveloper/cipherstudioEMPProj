@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { ApproveLeave, HistoryLeave, RejectLeave } from '@/services/api';
-import { leaveApplicationsInterface } from './leaveApplicationsInterface';
+import { LeaveApplicationsInterface } from './leaveApplicationsInterface';
 import LeaveApplicationsTemplate from './leaveApplicationsTemplate';
 
 // ... (previous imports)
@@ -10,7 +10,7 @@ const LeaveApplications: React.FC = () => {
 
 
     const [approverId, setApproverId] = useState<number | null>(null);
-    const [leaveHistory, setLeaveHistory] = useState<leaveApplicationsInterface[]>([]);
+    const [leaveHistory, setLeaveHistory] = useState<LeaveApplicationsInterface[]>([]);
     const [filterType, setFilterType] = useState<"status">("status");
     const [filterValue, setFilterValue] = useState<string | [string, string]>("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -39,7 +39,7 @@ const LeaveApplications: React.FC = () => {
         try {
 
             const accessToken = localStorage.getItem('accessToken');
-            const response = await fetch('http://192.168.1.2:8080/api/employee/user/details', {
+            const response = await fetch('http://192.168.1.2:8082/api/employee/user/details', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
