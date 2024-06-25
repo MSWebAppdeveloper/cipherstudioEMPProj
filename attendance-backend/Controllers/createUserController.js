@@ -162,6 +162,11 @@ const UserController = {
         { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT }
       );
 
+      const additionalDetails = await sequelize.query(`
+        SELECT * FROM public."CreateUsers" c
+        JOIN public."Profiles" p ON c.id = p."UserId" WHERE c.id = :userId;
+    `, { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT });
+
       // Fetch leave request details
       const leaveRequestDetails = await db.leaveRequest.findAndCountAll({
         where: { UserId },
@@ -220,6 +225,7 @@ const UserController = {
 
       const mergedDetails = {
         ...user.toJSON(),
+        ...additionalDetails[0],
         attendance: attendanceDetails,
         leaveRequests: {
           data: formattedData,
@@ -293,6 +299,25 @@ const UserController = {
     }
   },
 
+   updateUserDetails :async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await db.CreateUser.findByPk(userId);
+        if (!user) return res.status(404).send("User not found");
+        const { designation, phoneNumber, country, state, city, address } = req.body;
+        user.designation = designation;
+        user.phoneNumber = phoneNumber;
+        user.country = country;
+        user.state = state;
+        user.city = city;
+        user.address = address;
+        await db.CreateUser.save();
+        return res.status(200).send(user);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Internal Server Error");
+    }
+},
   updateUserStatus: async (req, res) => {
     try {
       const userId = req.params.id;

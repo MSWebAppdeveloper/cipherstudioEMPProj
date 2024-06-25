@@ -16,7 +16,7 @@ router.get("/user/details", authenticateToken, UserController.getUserDetails);
 // Update user
 router.put("/users/:id", UserController.updateUser);
 router.put("/users/:id/status", UserController.updateUserStatus);
-
+router.put("/user/update", authenticateToken, UserController.updateUserDetails);
 router.post("/refresh", UserController.refreshToken);
 
 // Delete user

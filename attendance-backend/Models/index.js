@@ -28,10 +28,12 @@ db.leavetypes = require("./leaveTypesModel")(sequelize, DataTypes);
 db.approvalHistory = require("./approvalHistory")(sequelize, DataTypes);
 db.leaveRequest = require("./leaveRequest")(sequelize, DataTypes);
 db.notificationLog = require("./notificationLogModel")(sequelize, DataTypes);
-
+db.Profile = require("./profileModel")(sequelize, DataTypes);
 // Define associations
 
 db.CreateUser.hasOne(db.Attendance, { foreignKey: "UserId", as: "Attendance" });
+db.CreateUser.hasOne(db.Profile, { foreignKey: "UserId", as: "Profile" });
+db.Profile.belongsTo(db.CreateUser, { foreignKey: "UserId" });
 db.CreateUser.hasMany(db.leaveRequest, {
   foreignKey: "UserId",
   as: "LeaveRequest",
