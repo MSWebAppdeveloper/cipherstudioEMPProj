@@ -1,27 +1,17 @@
-"use client";
-import React, { useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import EmployeeNavbar from "@/components/EmployeeNavbar";
-import UserComponent from "@/app/components/admin/user/page";
-const Users =  () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+import React from "react";
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+import UserComponent from "@/app/components/admin/user/page";
+import { Metadata } from "next";
+const Users = () => {
   return (
     <>
-      <div>
-        <EmployeeNavbar toggleSidebar={toggleSidebar} />
-        <div className="flex w-100" id="body-row">
-          <Sidebar isCollapsed={isCollapsed} />
-          <div className={`right-sec lg:px-8 md:px-4 sm:px-4 ${isCollapsed ? 'collapsed' : ''}`}>
-            <UserComponent />
-          </div>
-        </div>
-      </div>
+      <UserComponent />
     </>
   );
 };
 
 export default Users;
+
+export const metadata: Metadata = {
+  title: "Users",
+};

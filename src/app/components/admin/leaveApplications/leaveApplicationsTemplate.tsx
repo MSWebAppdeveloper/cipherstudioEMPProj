@@ -2,14 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { LeaveApplicationsInterface } from "./leaveApplicationsInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
-
+import EmployeeNavbar from "@/components/EmployeeNavbar";
+import Sidebar from "@/components/Sidebar";
 
 import TableComponent from "@/components/TableComponent";
 interface TruncatedTextProps {
   text: string;
 }
 
-const isTextTruncated = (element: { scrollWidth: number; clientWidth: number; }) => {
+const isTextTruncated = (element: {
+  scrollWidth: number;
+  clientWidth: number;
+}) => {
   return element.scrollWidth > element.clientWidth;
 };
 
@@ -25,14 +29,10 @@ const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
 
   return (
     <div className="center">
-      <div ref={textRef} className={`text ${isTruncated ? 'truncated' : ''}`}>
+      <div ref={textRef} className={`text ${isTruncated ? "truncated" : ""}`}>
         {text}
       </div>
-      {isTruncated && (
-        <div className="text-tooltip">
-          {text}
-        </div>
-      )}
+      {isTruncated && <div className="text-tooltip">{text}</div>}
     </div>
   );
 };
@@ -51,6 +51,11 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   sortColumn,
 }) => {
   const [currentStatus, setCurrentStatus] = useState("ALL");
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
 
   const handleFilterChange = (value: string) => {
     setCurrentStatus(value);
@@ -80,7 +85,6 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
     //   key: "reason", label: "REASON",
     //   render: (item: { reason: any }) => {
 
-
     //     return (
     //       <span className="truncate"
     //         data-full-text={item.reason}>
@@ -93,7 +97,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
     {
       key: "reason",
       label: "REASON",
-      render: (item: { reason: any; }) => <TruncatedText text={item.reason} />,
+      render: (item: { reason: any }) => <TruncatedText text={item.reason} />,
       sortable: false,
     },
     {
@@ -153,45 +157,57 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   return (
     <>
       <div>
-        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-          <div className="flex justify-between items-center">
-            {/*-dropdown*/}
-            <div className="flex items-center">
-              <span className="mr-4 text-lg font-medium">Sort by :</span>
-              <select
-                id="response"
-                className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                value={currentStatus}
-                onChange={(e) => handleFilterChange(e.target.value)}
-              >
-                {filterOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          {/*table*/}
-          <div className="mt-10">
-            <div className="">
-              {filteredUsers.length > 0 ? (
-                <TableComponent
-                  data={filteredUsers}
-                  columns={columns}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  paginate={paginate}
-                  totalCount={totalCount}
-                  OnchangeData={OnchangeData}
-                  formdata={formdata}
-                  handleSort={handleSort}
-                  sortOrder={sortOrder}
-                  sortColumn={sortColumn}
-                />
-              ) : (
-                <p>No Leave Applications data available.</p>
-              )}
+        <EmployeeNavbar toggleSidebar={toggleSidebar} />
+        <div className="flex w-100" id="body-row">
+          <Sidebar isCollapsed={isCollapsed} />
+          <div
+            className={`right-sec lg:px-8 md:px-4 sm:px-4 ${
+              isCollapsed ? "collapsed" : ""
+            }`}
+          >
+            <div>
+              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
+                <div className="flex justify-between items-center">
+                  {/*-dropdown*/}
+                  <div className="flex items-center">
+                    <span className="mr-4 text-lg font-medium">Sort by :</span>
+                    <select
+                      id="response"
+                      className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
+                      value={currentStatus}
+                      onChange={(e) => handleFilterChange(e.target.value)}
+                    >
+                      {filterOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                {/*table*/}
+                <div className="mt-10">
+                  <div className="">
+                    {filteredUsers.length > 0 ? (
+                      <TableComponent
+                        data={filteredUsers}
+                        columns={columns}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        paginate={paginate}
+                        totalCount={totalCount}
+                        OnchangeData={OnchangeData}
+                        formdata={formdata}
+                        handleSort={handleSort}
+                        sortOrder={sortOrder}
+                        sortColumn={sortColumn}
+                      />
+                    ) : (
+                      <p>No Leave Applications data available.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

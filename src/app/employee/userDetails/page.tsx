@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import React from 'react'
 
 const UserDetails = () => {
@@ -9,3 +10,7 @@ const UserDetails = () => {
 }
 
 export default UserDetails
+
+export const metadata: Metadata = {
+  title: "Details",
+};

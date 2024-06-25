@@ -1,27 +1,16 @@
-"use client"
-import React, { useState } from "react";
+import React from "react";
 import EmployeePage from "../../components/employee/attendanceDashboard/page";
-import EmployeeNavbar from "@/components/EmployeeNavbar";
-import Sidebar from "@/components/Sidebar";
+import { Metadata } from "next";
 
-const Employee =  () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+const Employee = () => {
   return (
-  <div>
-    <EmployeeNavbar toggleSidebar={toggleSidebar} />
-    <div className="flex w-100" id="body-row">
-      <Sidebar isCollapsed={isCollapsed} />
-      <div className={`right-sec lg:px-8 md:px-4 sm:px-4 ${isCollapsed ? 'collapsed' : ''}`}>
-        <EmployeePage />
-        </div>
-      </div>
-    </div>
-
+    <>
+      <EmployeePage />
+    </>
   );
 };
 
 export default Employee;
+export const metadata: Metadata = {
+  title: "Dashboard",
+};

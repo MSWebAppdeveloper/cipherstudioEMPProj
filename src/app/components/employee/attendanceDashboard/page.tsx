@@ -70,15 +70,13 @@ const EmployeePage: React.FC = () => {
           startTimeRef.current = new Date().getTime();
         }
       } catch (error) {
-        toast.error
+        toast.error;
       }
     };
     checkAttendanceStatus();
 
     const intervalId = setInterval(updateClock, 1000);
     return () => clearInterval(intervalId);
-
-
   }, [currentDate]);
 
   useEffect(() => {
@@ -161,12 +159,11 @@ const EmployeePage: React.FC = () => {
       // Reset total record time
 
       // Reset total record time
-      setElapsedTime(0)
+      setElapsedTime(0);
     } catch (error: any) {
-      toast.error
+      toast.error;
     }
   };
-
 
   // Function to convert time strings to seconds since midnight
   const timeToSeconds = (timeString: string) => {
@@ -191,8 +188,6 @@ const EmployeePage: React.FC = () => {
   // Calculate the difference in seconds
   const timeDifferenceInSeconds = currentTimeInSeconds - timerInSeconds;
 
-
-
   useEffect(() => {
     if (timerActive) {
       setElapsedTime(Math.abs(timeDifferenceInSeconds));
@@ -202,7 +197,6 @@ const EmployeePage: React.FC = () => {
       return () => clearInterval(interval);
     }
   }, [timeDifferenceInSeconds, timerActive]);
-
 
   const secondsToTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -217,7 +211,6 @@ const EmployeePage: React.FC = () => {
 
   // Convert the difference in seconds to a formatted time string
   const formattedElapsedTime = secondsToTime(elapsedTime);
-
 
   return (
     <EmployeeTemplate
