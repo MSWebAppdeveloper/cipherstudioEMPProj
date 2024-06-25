@@ -76,8 +76,8 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
       <div>
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
           <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <span className="mr-4 text-lg font-medium">Year:</span>
+            <div className="">
+              <p className="pb-2 font-medium">Year:</p>
               <select
                 value={formdata.year}
                 name="year"
@@ -93,7 +93,7 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
             </div>
             <div>
               <button
-                className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white focus:outline-0"
                 type="button"
                 onClick={() => setModal((prev) => !prev)}
               >

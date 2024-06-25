@@ -10,7 +10,6 @@ interface TableComponentProps {
   totalPages: number;
   paginate: (pageNumber: number) => void;
   totalCount: number;
-
   OnchangeData: (e: any) => void;
   formdata: any;
   handleSort: (column: string) => void;
@@ -25,13 +24,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
   totalPages,
   paginate,
   totalCount,
-
   OnchangeData,
   formdata,
   handleSort,
   sortOrder,
   sortColumn,
-
 }) => {
   const pageNumbers: number[] = [];
 
@@ -49,26 +46,48 @@ const TableComponent: React.FC<TableComponentProps> = ({
   for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
   }
+
   return (
     <div className="">
       <table className="min-w-full bg-white text-left">
         <thead>
           <tr>
             {columns.map((column) => (
-              <th
+              <th 
+
                 key={column.key}
-                className={`py-2 px-4 border-b ${column.sortable ? "cursor-pointer sortable-column" : ""
-                  }`}
+                className={`py-2 px-4 border-b  cursor-pointer sortable-column ${
+                  column.sortable ? "cursor-pointer sortable-column " : ""
+                }`}
                 onClick={() => column.sortable && handleSort(column.key)}
               >
+                <div className="flex">
                 {column.label}
                 {column.sortable && (
-                  <span className="sort-icon">
-                    {sortColumn === column.key && sortOrder === "asc" ? (<Icon icon="grommet-icons:ascending" width="20" height="20"   />)
-                      :
-                      (<Icon icon="grommet-icons:descending" width="20" height="20" />)}
+                  <span className="sort-icons flex items-center ml-3">
+                    <Icon
+                      icon="grommet-icons:ascending"
+                      width="20"
+                      height="20"
+                      className={`${
+                        sortColumn === column.key && sortOrder === "asc"
+                          ? "text-blue-500"
+                          : "text-gray-400"
+                      }`}
+                    />
+                    <Icon
+                      icon="grommet-icons:descending"
+                      width="20"
+                      height="20"
+                      className={`${
+                        sortColumn === column.key && sortOrder === "desc"
+                          ? "text-blue-500"
+                          : "text-gray-400"
+                      }`}
+                    />
                   </span>
                 )}
+                </div>
               </th>
             ))}
           </tr>
@@ -78,7 +97,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
             <tr key={index}>
               {columns.map((column) => (
                 <td key={column.key} className="py-2 px-4 border-b">
-                  {column.render ? column.render(item, index) : item[column.key]}
+                  {column.render
+                    ? column.render(item, index)
+                    : item[column.key]}
                 </td>
               ))}
             </tr>
@@ -93,8 +114,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
         formdata={formdata}
         OnchangeData={OnchangeData}
         totalCount={totalCount}
-        data={data} />
-
+        data={data}
+      />
     </div>
   );
 };

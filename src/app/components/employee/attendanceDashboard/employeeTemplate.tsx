@@ -35,7 +35,7 @@ const EmployeeTemplate: React.FC<employeeAttendanceInterface> = ({
         </div>
         <div className="flex justify-between items-center py-8 border-gray-200 border-t">
           <div>
-            <button className={`bg-blue-500 text-white text-lg py-2 px-5 font-medium rounded-md hover:bg-blue-600 ${isDayInActive ? "" : "opacity-50 cursor-not-allowed"
+            <button className={`bg-blue-500 text-white text-md py-2 px-5 font-medium rounded-md hover:bg-blue-600 ${isDayInActive ? "" : "opacity-50 cursor-not-allowed"
               }`}
               onClick={(e) => {
                 handleSignIn(e);
@@ -46,7 +46,7 @@ const EmployeeTemplate: React.FC<employeeAttendanceInterface> = ({
             </button>
           </div>
           <div>
-            <button className={`bg-red-500 text-white text-lg py-2 px-5 font-medium rounded-md hover:bg-red-600 ${isDayOutActive ? "" : "opacity-50 cursor-not-allowed"
+            <button className={`bg-red-500 text-white text-md py-2 px-5 font-medium rounded-md hover:bg-red-600 ${isDayOutActive ? "" : "opacity-50 cursor-not-allowed"
               }`}
               onClick={(e) => {
                 handleSignOut(e);

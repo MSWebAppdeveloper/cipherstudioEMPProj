@@ -28,7 +28,9 @@ const RequestComponent: React.FC = () => {
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<number>();
-  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState<number>(
+    new Date().getFullYear()
+  );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [sortColumn, setSortColumn] = useState<string>("createdAt");
   const router = useRouter();
@@ -37,8 +39,15 @@ const RequestComponent: React.FC = () => {
     // Fetch all users from the server when the component mounts
 
     fetchLeaveHistory(currentPage);
-  }, [isModal, currentPage, formdata.limit, formdata.order, formdata.year, sortColumn, sortOrder]);
-
+  }, [
+    isModal,
+    currentPage,
+    formdata.limit,
+    formdata.order,
+    formdata.year,
+    sortColumn,
+    sortOrder,
+  ]);
 
   const OnchangeData = (e: any) => {
     setFormdata({
@@ -49,13 +58,16 @@ const RequestComponent: React.FC = () => {
 
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
-    const response = await fetch("http://192.168.1.2:8080/api/employee/refresh", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
+    const response = await fetch(
+      "http://192.168.1.2:8080/api/employee/refresh",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refreshToken }),
+      }
+    );
 
     if (response.ok) {
       const { accessToken: newAccessToken } = await response.json();
@@ -96,7 +108,6 @@ const RequestComponent: React.FC = () => {
         setTotalCount(userLeaveRequests.totalCount);
         setLeaveTypes(userLeaveBalance);
       } else if (response.status === 401) {
-
         try {
           const newAccessToken = await refreshToken();
           if (newAccessToken) {
@@ -156,8 +167,6 @@ const RequestComponent: React.FC = () => {
     }
   };
 
-
-
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const deleteUserHandler = async (userId: number) => {
@@ -197,7 +206,6 @@ const RequestComponent: React.FC = () => {
         cancelDeleteUser={cancelDeleteUser}
         selectedUserId={selectedUserId}
         isDeleteConfirmationVisible={isDeleteConfirmationVisible}
-
         currentPage={currentPage}
         paginate={paginate}
         totalPages={totalPages}
@@ -208,7 +216,6 @@ const RequestComponent: React.FC = () => {
         leaveTypes={leaveTypes}
         total_days={0}
         createdAt={undefined}
-
         selectedYear={selectedYear}
         handleSort={handleSort}
         sortOrder={sortOrder}

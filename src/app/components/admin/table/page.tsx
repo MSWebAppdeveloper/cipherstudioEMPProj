@@ -23,7 +23,8 @@ const UserTableComponent: React.FC = () => {
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isModal, setModal] = useState<boolean>(false);
-  const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] = useState<boolean>(false);
+  const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
+    useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [filterValue, setFilterValue] = useState<string | [string, string]>("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +34,6 @@ const UserTableComponent: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortColumn, setSortColumn] = useState<string>("name");
 
-
   useEffect(() => {
     // Fetch all users from the server when the component mounts
     getAllUsers(currentPage);
@@ -42,7 +42,7 @@ const UserTableComponent: React.FC = () => {
   const OnchangeData = (e: any) => {
     setFormdata({
       ...formdata,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -62,7 +62,6 @@ const UserTableComponent: React.FC = () => {
     // When the filter value changes, reset the current page to 1
     setCurrentPage(1);
   }, [filterValue, formdata.limit, formdata.order]);
-
 
   const deleteUserHandler = async (userId: string) => {
     setSelectedUserId(userId);
@@ -86,7 +85,6 @@ const UserTableComponent: React.FC = () => {
     setDeleteConfirmationVisible(false);
   };
 
-
   const openEditPopup = (user: any) => {
     setSelectedUser(user);
     setModal(true);
@@ -99,10 +97,13 @@ const UserTableComponent: React.FC = () => {
 
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
-      await axios.put(`
-      http://192.168.1.2:8080/api/employee/users/${userId}/status`, { isActive });
+      await axios.put(
+        `
+      http://192.168.1.2:8080/api/employee/users/${userId}/status`,
+        { isActive }
+      );
       getAllUsers(currentPage); // Refresh the user list after updating status
-      toast.success(`User ${isActive ? 'enabled' : 'disabled'} successfully!`);
+      toast.success(`User ${isActive ? "enabled" : "disabled"} successfully!`);
     } catch (error) {
       console.error("Error toggling user status:", error);
       toast.error("Failed to toggle user status!");
@@ -123,7 +124,6 @@ const UserTableComponent: React.FC = () => {
         handleClose={() => setModal(false)}
         user={selectedUser}
         onUpdate={handleEditUserUpdate}
-
       />
       <UserTableTemplate
         formdata={formdata}
@@ -144,7 +144,6 @@ const UserTableComponent: React.FC = () => {
         handleSort={handleSort}
         sortOrder={sortOrder}
         sortColumn={sortColumn}
-
       />
     </>
   );

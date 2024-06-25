@@ -45,7 +45,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <>
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex justify-between items-center mt-4 pagination-tbl">
         <div>
           <label htmlFor="limit" className="mr-2">
             Items per page:

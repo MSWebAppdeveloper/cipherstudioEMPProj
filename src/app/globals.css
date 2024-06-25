@@ -38,12 +38,17 @@ h1 {
   font-size: 16px;
   font-family: "Inter", sans-serif;
 }
+
+.right .input-sec .form-icon-2{
+  position: relative;
+}
+
 .right .input-sec .form-icon {
   position: absolute;
-  font-size: 18px;
+  font-size: 18px; 
   color: #000;
   transform: translateY(-50%);
-  top: 68%;
+  top: 50%;
   left: 18px;
   color: #5eaadd;
 }
@@ -85,15 +90,12 @@ input:focus-visible {
 }
 
 table .btn-1 {
-  background-color: #ddd;
-
   padding: 11px 11px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  color: #323232;
 }
 
 ul,
@@ -129,7 +131,9 @@ summary::marker {
   visibility: visible;
   opacity: 1;
 }
-
+.img-sec img {
+  width: 70%!important;
+}
 .popup_modal {
   position: relative;
   margin: 0px auto;
@@ -163,6 +167,12 @@ dialog {
 }
 [type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
+}
+
+.form-sec {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
 }
 
 /*tooglee switch */
@@ -235,7 +245,9 @@ input:checked + .slider:before {
 .box-radius {
   border: 1px solid #c7d154;
 }
-
+.login-form {
+  padding: 30px 0px 80px;
+}
 .leftbar {
   width: 15%;
   height: 100vh;
@@ -269,8 +281,20 @@ input:checked + .slider:before {
   .left-sidebar ul li a {
     font-size: 16px;
   }
+  .pagination-tbl span {
+    font-size: 12px!important;
+  }
+  .pagination-tbl label {
+    font-size: 12px!important;
+  }
+  .pagination-tbl nav button {
+    padding: 4px 6px !important;
+  }
   .Wrapper-main .leave-cards ul li a {
     padding: 5px 0px !important;
+  }
+  .form-sec {
+    margin-top: 60px;
   }
 }
 
@@ -297,6 +321,15 @@ input:checked + .slider:before {
   }
   .filter-sec input[type="date"] {
     padding: 8px 10px !important;
+  }
+  .pagination-tbl span {
+    font-size: 12px!important;
+  }
+  .pagination-tbl label {
+    font-size: 12px!important;
+  }
+  .pagination-tbl nav button {
+    padding: 0px 6px !important;
   }
   .left-sidebar {
     width: 17%;
@@ -331,6 +364,9 @@ input:checked + .slider:before {
   .Wrapper-main .left-sidebar ul li a span {
     margin-left: 6px;
   }
+  .form-sec{
+    margin-top: 60px;
+  }
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767.98px) {
@@ -344,6 +380,15 @@ input:checked + .slider:before {
     display: flex;
     justify-content: center;
   }
+  .menu-item .icon {
+    margin-right: 0px!important;
+  }
+  .right-sec button, select {
+    font-size: 14px!important;
+  }
+  .sidebar-collapsed {
+    width: 45px!important;
+  }
   table .btn-1 {
     padding: 10px 10px !important;
     font-size: 14px !important;
@@ -351,9 +396,15 @@ input:checked + .slider:before {
   table .btn-2 {
     padding: 5px 11px !important;
   }
-  .Table-sec {
+  /* .Table-sec {
     overflow-x: auto;
-  }
+  } */
+   table {
+    font-size: 14px;
+   }
+   table th {
+    
+   }
   .right .login-button {
     margin: 50px 0px 0px 0px;
   }
@@ -363,6 +414,15 @@ input:checked + .slider:before {
   .right-sec {
     width: 90%;
   }
+  .pagination-tbl span {
+    font-size: 12px!important;
+  }
+  .pagination-tbl label {
+    font-size: 12px!important;
+  }
+  .pagination-tbl nav button {
+    padding: 0px 6px !important;
+  }
   .left-sidebar a span,
   a span {
     display: none;
@@ -370,7 +430,6 @@ input:checked + .slider:before {
   .left-sidebar a,
   a {
     display: block;
-    justify-content: center;
     display: flex;
   }
   .right-sec-2 {
@@ -411,6 +470,24 @@ input:checked + .slider:before {
   .leave-sec {
     padding: 10px 10px;
   }
+  .img-sec{
+    display: none;
+  }
+  .right {
+    height: 100vh;
+  }
+  .login-form {
+    padding: 50px 0px 60px;
+  }
+  .form-sec {
+    margin-top: 65px;
+  }
+  .input-sec {
+    margin-bottom: 30px;
+  }
+  .input-sec input {
+    padding: 11px 42px;
+  }
 }
 
 @media only screen and (max-width: 800px) {
@@ -435,7 +512,7 @@ input:checked + .slider:before {
     margin: 0 auto;
   }
   .form-sec {
-    margin-top: 40px;
+    margin-top: 45px;
   }
   .right img {
     margin-bottom: 40px;
@@ -529,7 +606,7 @@ input:checked + .slider:before {
     left: 14px;
   }
   .right .input-sec {
-    margin-bottom: 40px !important;
+    margin-bottom: 25px !important;
   }
   .right .input-sec input::placeholder {
     font-size: 14px;
@@ -645,6 +722,24 @@ input:checked + .slider:before {
   .filter-sec input[type="date"] {
     padding: 4px 10px !important;
   }
+  .login-form [class='px-10 pt-10'] {
+    padding: 15px 27px !important;
+  }
+  .login-form {
+    padding: 40px 0px 35px;
+  }
+  .login-form h1 {
+    font-size: 30px!important;
+  }
+  .login-form label {
+    font-size: 14px;
+  }
+  .form-spacing {
+    padding: 0 10px!important;
+  }
+  .form-button {
+    font-size: 20px!important;
+  }
 }
 
 /*media-query-for-iphone-screen*/
@@ -656,13 +751,11 @@ input:checked + .slider:before {
   }
   .form-sec {
     margin-top: 45px;
-    padding: 15px 25px !important;
   }
   .right img {
     margin-bottom: 40px;
   }
   form h1 {
-    margin-bottom: 35px !important;
     font-size: 28px !important;
     margin-top: 5px !important;
   }
@@ -730,6 +823,9 @@ input:checked + .slider:before {
     height: 22px;
     width: 22px;
   }
+  .form-spacing {
+    padding: 0 10px!important;
+  }
 }
 
 
@@ -738,6 +834,7 @@ input:checked + .slider:before {
   position: relative;
   display: inline-block;
   max-width: 250px; /* Adjust as needed */
+  overflow-x: hidden;
 }
 
 .text {
@@ -768,6 +865,7 @@ input:checked + .slider:before {
 .text.truncated:hover + .text-tooltip {
   visibility: visible;
   opacity: 1;
+  
  
 }
 

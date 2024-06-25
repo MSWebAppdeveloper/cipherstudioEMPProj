@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { UserTableProps } from "./TableInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -77,7 +76,7 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
               icon="flowbite:edit-outline"
               width="1.2em"
               height="1.2em"
-              style={{ color: "#323232" }}
+              style={{ color: "#3b82f6" }}
             />
           </button>
           <button
@@ -88,7 +87,7 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
               icon="mi:delete"
               width="1.2em"
               height="1.2em"
-              style={{ color: "#323232" }}
+              style={{ color: "#ef4444" }}
             />{" "}
           </button>
         </div>
@@ -107,8 +106,9 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
             className="sr-only peer"
           />
           <div
-            className={`relative w-11 h-6 ${user.isActive ? "bg-green-500" : "bg-gray-200"
-              } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600`}
+            className={`relative w-11 h-6 ${
+              user.isActive ? "bg-green-500" : "bg-gray-200"
+            } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600`}
           />
         </label>
       ),
@@ -119,30 +119,12 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
     <>
       <div>
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-          <div className="flex justify-between items-center ">
+          <div className="flex justify-between items-end">
             <div>
               {/* Tab buttons */}
-              <div className="flex space-x-4">
-                <button
-                  className={`px-4   rounded ${currentTab === "Active"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-gray-700"
-                    }`}
-                  onClick={() => handleTabChange("Active")}
-                >
-                  Active Users
-                </button>
-                <button
-                  className={` rounded-md lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2  focus:outline-0 ${currentTab === "Inactive"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-gray-700"
-                    }`}
-                  onClick={() => handleTabChange("Inactive")}
-                >
-                  Inactive Users
-                </button>
-                {/* Dropdown menu start */}
+              <div className="flex space-x-4 items-end">
                 <form className="max-w-52">
+                  <p className="pb-2 font-medium">Filter by :</p>
                   <select
                     id="roleFilter"
                     className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
@@ -156,11 +138,33 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
                     ))}
                   </select>
                 </form>
+
+                <button
+                  className={`px-4 py-2 rounded ${
+                    currentTab === "Active"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  }`}
+                  onClick={() => handleTabChange("Active")}
+                >
+                  Active Users
+                </button>
+                <button
+                  className={` rounded-md lg:px-5 lg:py-2 border border-gray-300 md:px-5 md:py-2 sm:px-3 sm:py-2  focus:outline-0 ${
+                    currentTab === "Inactive"
+                      ? "bg-blue-500 text-white"
+                      : "bg-slate-50 text-gray-700"
+                  }`}
+                  onClick={() => handleTabChange("Inactive")}
+                >
+                  Inactive Users
+                </button>
+                {/* Dropdown menu start */}
               </div>
             </div>
             <div>
               <button
-                className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                className="rounded bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white focus:outline-0"
                 type="button"
                 onClick={() => setModal((prev) => !prev)}
               >

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { SIDENAV_ITEMS } from "@/constants";
 import { SideNavItem } from "@/types";
 import { Icon } from "@iconify/react";
+import SignoutButton from "./SignOutButton";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -29,19 +30,25 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
   }, []);
 
   return (
-    <div
-      id="sidebar-container"
-      className={`px-2 py-5 fixed border border-r leave-cards shadow-lg  ${isCollapsed ? "sidebar-collapsed" : "sidebar-expanded"
+    <>
+      <div
+        id="sidebar-container"
+        className={`px-2 py-5 fixed border-r leave-cards shadow-lg flex flex-col justify-between ${
+          isCollapsed ? "sidebar-collapsed" : "sidebar-expanded"
         }`}
-    >
-      <div className="flex flex-col space-y-6 w-full sidebar-menu">
-        <div className="flex flex-col space-y-2 md:px-1 lg:px-2 sm:px-0 menu-collapsed">
-          {filteredItems.map((item, idx) => (
-            <MenuItem key={idx} item={item} isCollapsed={isCollapsed} />
-          ))}
+      >
+        <div className="flex flex-col space-y-6 w-full sidebar-menu">
+          <div className="flex flex-col space-y-2 md:px-1 lg:px-2 sm:px-0 menu-collapsed">
+            {filteredItems.map((item, idx) => (
+              <MenuItem key={idx} item={item} isCollapsed={isCollapsed} />
+            ))}
+          </div>
+        </div>
+        <div>
+          <SignoutButton />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -64,16 +71,15 @@ const MenuItem = ({
         <>
           <button
             onClick={toggleSubMenu}
-            className={`menu-item ${isCollapsed ? "collapsed" : ""}  flex flex-row items-center p-2 rounded-lg hover-bg-zinc-100 w-full justify-between hover:bg-zinc-100 ${pathname.includes(item.path) ? "" : ""
-              }`}
+            className={`menu-item ${
+              isCollapsed ? "collapsed" : ""
+            }  flex flex-row items-center p-2 rounded-lg hover-bg-zinc-100 w-full justify-between hover:bg-zinc-100 ${
+              pathname.includes(item.path) ? "" : ""
+            }`}
           >
             <div className="flex flex-row space-x-4 items-center">
-              {item.icon && (
-                <div className="icon">{item.icon}</div>
-              )}
-              <span
-                className={`font-semibold text-xl flex `}
-              >
+              {item.icon && <div className="icon">{item.icon}</div>}
+              <span className={`font-semibold text-xl flex `}>
                 {item.title}
               </span>
             </div>
@@ -100,22 +106,18 @@ const MenuItem = ({
       ) : (
         <Link
           href={item.path}
-          className={`menu-item ${isCollapsed ? "collapsed" : ""} flex flex-row space-x-2 items-center p-2 rounded-lg hover:bg-zinc-100 ${item.path === pathname ? "" : ""
-            }`}
+          className={`menu-item ${
+            isCollapsed ? "collapsed" : ""
+          } flex flex-row space-x-2 items-center p-2 rounded-lg hover:bg-zinc-100 ${
+            item.path === pathname ? "" : ""
+          }`}
         >
-          {item.icon && (
-            <div className="icon">{item.icon}</div>
-          )}
-          <span
-            className={`font-medium text-sm flex `}
-          >
-            {item.title}
-          </span>
+          {item.icon && <div className="icon">{item.icon}</div>}
+          <span className={`font-medium text-sm flex `}>{item.title}</span>
         </Link>
       )}
     </div>
   );
 };
-
 
 export default Sidebar;

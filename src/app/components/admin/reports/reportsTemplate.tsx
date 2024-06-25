@@ -130,9 +130,10 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
     <>
       <div>
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-          <div className="flex justify-between items-center">
-            <div className="flex">
-              <div className="max-w-52 grow mr-4">
+          <div className="flex justify-between items-end">
+            <div className="flex items-end">
+              <div className="grow mr-4">
+                <p className="pb-2 font-medium">Filter by :</p>
                 <form className="max-w-52">
                   <select
                     id="name"
@@ -166,7 +167,10 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
               </div>
               <div className="flex-none">
                 {showFilterModal && (
-                  <div className="absolute top-0 left-0 h-full w-full  flex justify-center items-center" style={{zIndex:"900", background:"rgba(0, 0, 0, 0.6)"}}>
+                  <div
+                    className="absolute top-0 left-0 h-full w-full  flex justify-center items-center"
+                    style={{ zIndex: "900", background: "rgba(0, 0, 0, 0.6)" }}
+                  >
                     <div>
                       <div className="bg-white p-4 rounded-md shadow-md">
                         <div className="grid gap-4 mb-4">
@@ -205,7 +209,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
 
             <div>
               <button
-                className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                className="rounded bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white focus:outline-0"
                 onClick={handleFetchAndDownload}
                 disabled={isLoading}
               >

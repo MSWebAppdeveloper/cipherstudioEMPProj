@@ -3,13 +3,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { leaveApplicationsInterface } from "./leaveApplicationsInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-
 import TableComponent from "@/components/TableComponent";
 interface TruncatedTextProps {
   text: string;
 }
 
-const isTextTruncated = (element: { scrollWidth: number; clientWidth: number; }) => {
+const isTextTruncated = (element: {
+  scrollWidth: number;
+  clientWidth: number;
+}) => {
   return element.scrollWidth > element.clientWidth;
 };
 
@@ -25,14 +27,10 @@ const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
 
   return (
     <div className="center">
-      <div ref={textRef} className={`text ${isTruncated ? 'truncated' : ''}`}>
+      <div ref={textRef} className={`text ${isTruncated ? "truncated" : ""}`}>
         {text}
       </div>
-      {isTruncated && (
-        <div className="text-tooltip">
-          {text}
-        </div>
-      )}
+      {isTruncated && <div className="text-tooltip">{text}</div>}
     </div>
   );
 };
@@ -80,7 +78,6 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
     //   key: "reason", label: "REASON",
     //   render: (item: { reason: any }) => {
 
-
     //     return (
     //       <span className="truncate"
     //         data-full-text={item.reason}>
@@ -93,7 +90,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
     {
       key: "reason",
       label: "REASON",
-      render: (item: { reason: any; }) => <TruncatedText text={item.reason} />,
+      render: (item: { reason: any }) => <TruncatedText text={item.reason} />,
       sortable: false,
     },
     {
@@ -156,8 +153,8 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
           <div className="flex justify-between items-center">
             {/*-dropdown*/}
-            <div className="flex items-center">
-              <span className="mr-4 text-lg font-medium">Sort by :</span>
+            <div className="">
+              <p className="font-medium pb-2">Filter by :</p>
               <select
                 id="response"
                 className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
@@ -174,7 +171,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
           </div>
           {/*table*/}
           <div className="mt-10">
-            <div className="">
+            <div className="overflow-x-auto">
               {filteredUsers.length > 0 ? (
                 <TableComponent
                   data={filteredUsers}
