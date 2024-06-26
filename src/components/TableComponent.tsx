@@ -49,63 +49,67 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   return (
     <div className="">
-      <table className="min-w-full bg-white text-left">
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column.key}
-                className={`py-2 px-4 border-b  cursor-pointer sortable-column ${
-                  column.sortable ? "cursor-pointer sortable-column " : ""
-                }`}
-                onClick={() => column.sortable && handleSort(column.key)}
-              >
-                <div className="flex">
-                  {column.label}
-                  {column.sortable && (
-                    <span className="sort-icons flex items-center ml-3">
-                      <Icon
-                        icon="grommet-icons:ascending"
-                        width="20"
-                        height="20"
-                        className={`${
-                          sortColumn === column.key && sortOrder === "asc"
-                            ? "text-blue-500"
-                            : "text-gray-400"
-                        }`}
-                      />
-                      <Icon
-                        icon="grommet-icons:descending"
-                        width="20"
-                        height="20"
-                        className={`${
-                          sortColumn === column.key && sortOrder === "desc"
-                            ? "text-blue-500"
-                            : "text-gray-400"
-                        }`}
-                      />
-                    </span>
-                  )}
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={index}>
+      <div className=" overflow-x-auto">
+        <table className="min-w-full bg-white text-left">
+          <thead>
+            <tr>
               {columns.map((column) => (
-                <td key={column.key} className="py-2 px-4 border-b">
-                  {column.render
-                    ? column.render(item, index)
-                    : item[column.key]}
-                </td>
+                <th
+                  key={column.key}
+                  className={`py-1 whitespace-nowrap px-1 border-b  cursor-pointer sortable-column ${
+                    column.sortable ? "cursor-pointer sortable-column " : ""
+                  }`}
+                  onClick={() => column.sortable && handleSort(column.key)}
+                >
+                  <div className="flex">
+                    {column.label}
+                    {column.sortable && (
+                      <span className="sort-icons flex items-center ml-1">
+                        <Icon
+                          icon="grommet-icons:ascending"
+                          width="20"
+                          height="20"
+                          className={`${
+                            sortColumn === column.key && sortOrder === "asc"
+                              ? "text-blue-500"
+                              : "text-gray-400"
+                          }`}
+                        />
+                        <Icon
+                          icon="grommet-icons:descending"
+                          width="20"
+                          height="20"
+                          className={`${
+                            sortColumn === column.key && sortOrder === "desc"
+                              ? "text-blue-500"
+                              : "text-gray-400"
+                          }`}
+                        />
+                      </span>
+                    )}
+                  </div>
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index}>
+                {columns.map((column) => (
+                  <td
+                    key={column.key}
+                    className="py-1 px-1 border-b whitespace-nowrap"
+                  >
+                    {column.render
+                      ? column.render(item, index)
+                      : item[column.key]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

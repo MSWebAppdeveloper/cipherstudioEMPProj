@@ -302,3 +302,4 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
 };
 
 export default ReportsTemplate;
+

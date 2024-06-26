@@ -237,12 +237,16 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
                 <h3 className="text-2xl font-medium py-5">Leave History</h3>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
-                    <span className="mr-4 text-lg font-medium">Filter by :</span>
+                    <span className="mr-4 text-lg font-medium">
+                      Filter by :
+                    </span>
                     <select
                       id="response"
                       className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                      value={  filterName}
-                      onChange={(e) => handleFilterChange("status",e.target.value)}
+                      value={filterName}
+                      onChange={(e) =>
+                        handleFilterChange("status", e.target.value)
+                      }
                     >
                       <option value="">All</option>
                       {filterOptions.map((option) => (
@@ -274,7 +278,7 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
                       <p>No Leave Applications data available.</p>
                     )}
                     {isDeleteConfirmationVisible && (
-                      <div className="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center">
+                      <div className="fixed inset-0 deletePopup overflow-y-auto flex justify-center items-center">
                         <div className="absolute inset-0 bg-black opacity-50"></div>
                         <div className="relative bg-white rounded-lg p-8">
                           <p className="text-lg font-semibold mb-4">

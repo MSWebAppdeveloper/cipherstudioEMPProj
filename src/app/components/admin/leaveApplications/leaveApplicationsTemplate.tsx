@@ -85,7 +85,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   //   setCurrentStatus(value);
   // };
 
-  const filterOptions = [ "Pending", "Approved", "Rejected"];
+  const filterOptions = ["Pending", "Approved", "Rejected"];
   // Filter users based on the current tab
   const filteredUsers: any =
     currentStatus === "ALL"
@@ -130,7 +130,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
             colorClass = "bg-gray-500";
         }
         return (
-          <span className={`px-2 py-1 rounded text-white ${colorClass}`}>
+          <span className={`px-2 py-1 rounded ${colorClass}`}>
             {" "}
             {item.status}
           </span>
@@ -146,18 +146,28 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
           <div className="flex">
             <div>
               <button
-                className="rounded-full bg-green-500 text-white text-md hover:bg-green-600 shadow-xl mr-3 p-2"
+                className="text-md hover:text-green-800 mr-3 p-2"
                 onClick={() => approveApplication(leave.id)}
               >
-                <Icon icon="material-symbols:check" width={22} height={22} />
+                <Icon
+                  icon="material-symbols:check"
+                  width={22}
+                  height={22}
+                  style={{ color: "#22c55e" }}
+                />
               </button>
             </div>
             <div>
               <button
-                className="rounded-full bg-red-500 text-white text-md hover:bg-red-600 shadow-xl p-2"
+                className="text-md hover:text-red-800 p-2"
                 onClick={() => rejectApplication(leave.id)}
               >
-                <Icon icon="iconoir:xmark" width={22} height={22} />
+                <Icon
+                  icon="iconoir:xmark"
+                  width={22}
+                  height={22}
+                  style={{ color: "#ef4444" }}
+                />
               </button>
             </div>
           </div>
@@ -177,16 +187,18 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
             }`}
           >
             <div>
-              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
+              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
                 <div className="flex justify-between items-center">
                   {/*-dropdown*/}
-                  <div className="flex items-center">
-                    <span className="mr-4 text-lg font-medium">Filter by :</span>
+                  <div className="">
+                    <p className="font-medium pb-2">Filter by :</p>
                     <select
                       id="response"
                       className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                      value={  filterName}
-                      onChange={(e) => handleFilterChange("status",e.target.value)}
+                      value={filterName}
+                      onChange={(e) =>
+                        handleFilterChange("status", e.target.value)
+                      }
                     >
                       <option value="">All</option>
                       {filterOptions.map((option) => (
@@ -199,7 +211,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
                 </div>
                 {/*table*/}
                 <div className="mt-10">
-                  <div className="">
+                  <div className="overflow-x-auto">
                     {filteredUsers.length > 0 ? (
                       <TableComponent
                         data={filteredUsers}

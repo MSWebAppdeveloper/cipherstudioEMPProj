@@ -2,8 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-
-import SignoutButton from "./SignOutButton";
 import Image from "next/image";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
@@ -14,7 +12,6 @@ const EmployeeNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   return (
     <div className="bg-slate-50 w-100 px-4 py-2 border-b border-slate-300 h-20 flex justify-between items-center header sticky">
       <div className="logo flex">
-
         <Link href="/employee/dashboard">
           <Image
             width="192"
@@ -34,9 +31,7 @@ const EmployeeNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
           <Icon id="collapse-icon" icon="fa:bars" width="20" height="20" />
         </button>
       </div>
-     
     </div>
-    // </div>
   );
 };
 

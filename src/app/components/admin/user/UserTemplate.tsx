@@ -141,26 +141,26 @@ const UserTemplate: React.FC<UserProps> = ({
       sortable: false,
     },
   ];
-  let tabs = [
-    {
-      id: "photos",
-      label: "Photos",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    },
-    {
-      id: "music",
-      label: "Music",
-      content:
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    },
-    {
-      id: "videos",
-      label: "Videos",
-      content:
-        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-  ];
+  // let tabs = [
+  //   {
+  //     id: "photos",
+  //     label: "Photos",
+  //     content:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  //   },
+  //   {
+  //     id: "music",
+  //     label: "Music",
+  //     content:
+  //       "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+  //   },
+  //   {
+  //     id: "videos",
+  //     label: "Videos",
+  //     content:
+  //       "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  //   },
+  // ];
   return (
     <>
       <div>
@@ -173,33 +173,13 @@ const UserTemplate: React.FC<UserProps> = ({
             }`}
           >
             <div>
-              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-                <div className="flex justify-between items-center ">
+              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
+              <div className="flex justify-between items-end flex-wrap gap-2">
                   <div>
                     {/* Tab buttons */}
-                    <div className="flex space-x-4">
-                      <button
-                        className={`px-4   rounded ${
-                          currentTab === "Active"
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-200 text-gray-700"
-                        }`}
-                        onClick={() => handleTabChange("Active")}
-                      >
-                        Active Users
-                      </button>
-                      <button
-                        className={` rounded-md lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2  focus:outline-0 ${
-                          currentTab === "Inactive"
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-200 text-gray-700"
-                        }`}
-                        onClick={() => handleTabChange("Inactive")}
-                      >
-                        Inactive Users
-                      </button>
-                      {/* Dropdown menu start */}
-                      <form className="max-w-52">
+                    <div className="flex space-x-4 items-end">
+                    <form className="max-w-52">
+                      <p className="pb-2 font-medium">Filter by :</p>
                         <select
                           id="roleFilter"
                           className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
@@ -216,11 +196,33 @@ const UserTemplate: React.FC<UserProps> = ({
                           ))}
                         </select>
                       </form>
+                      <button
+                        className={`px-4 py-2  rounded ${
+                          currentTab === "Active"
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
+                        }`}
+                        onClick={() => handleTabChange("Active")}
+                      >
+                        Active Users
+                      </button>
+                      <button
+                        className={` rounded-md lg:px-5 lg:py-2 border border-gray-300 md:px-5 md:py-2 sm:px-3 sm:py-2  focus:outline-0 ${
+                          currentTab === "Inactive"
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 text-gray-700"
+                        }`}
+                        onClick={() => handleTabChange("Inactive")}
+                      >
+                        Inactive Users
+                      </button>
+                      {/* Dropdown menu start */}
+                     
                     </div>
                   </div>
                   <div>
                     <button
-                      className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                      className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white  focus:outline-0"
                       type="button"
                       onClick={() => setModal((prev) => !prev)}
                     >
@@ -260,7 +262,7 @@ const UserTemplate: React.FC<UserProps> = ({
                       <p>No record available.</p>
                     )}
                     {isDeleteAlertVisible && (
-                      <div className="fixed z-10 inset-0 overflow-y-auto">
+                      <div className="fixed deletePopup  inset-0 overflow-y-auto">
                         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                           <div
                             className="fixed inset-0 transition-opacity"
@@ -336,7 +338,7 @@ const UserTemplate: React.FC<UserProps> = ({
                       </div>
                     )}
                     {isDeleteConfirmationVisible && (
-                      <div className="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center">
+                      <div className="fixed inset-0 deletePopup overflow-y-auto flex justify-center items-center">
                         <div className="absolute inset-0 bg-black opacity-50"></div>
                         <div className="relative bg-white rounded-lg p-8">
                           <p className="text-lg font-semibold mb-4">

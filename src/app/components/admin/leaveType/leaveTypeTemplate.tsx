@@ -110,10 +110,10 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
             }`}
           >
             <div>
-              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <span className="mr-4 text-lg font-medium">Year:</span>
+              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
+                <div className="flex justify-between items-end">
+                  <div className="">
+                    <p className="pb-2 font-medium">Year:</p>
                     <select
                       value={formdata.year}
                       name="year"
@@ -129,7 +129,7 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
                   </div>
                   <div>
                     <button
-                      className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                      className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white focus:outline-0"
                       type="button"
                       onClick={() => setModal((prev) => !prev)}
                     >
@@ -140,29 +140,28 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
 
                 {/*table*/}
                 <div className="mt-10">
-              
-                  <div className="overflow-x-auto"> 
-                     {leaveTypes.length > 0 ? (
-                    <TableComponent
-                      data={leaveTypes}
-                      columns={columns}
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      paginate={paginate}
-                      totalCount={totalCount}
-                      OnchangeData={OnchangeData}
-                      formdata={formdata}
-                      handleSort={handleSort}
-                      sortOrder={sortOrder}
-                      sortColumn={sortColumn}
-                    />
+                  <div className="overflow-x-auto">
+                    {leaveTypes.length > 0 ? (
+                      <TableComponent
+                        data={leaveTypes}
+                        columns={columns}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        paginate={paginate}
+                        totalCount={totalCount}
+                        OnchangeData={OnchangeData}
+                        formdata={formdata}
+                        handleSort={handleSort}
+                        sortOrder={sortOrder}
+                        sortColumn={sortColumn}
+                      />
                     ) : (
                       <p>No Leave Available for this year.</p>
                     )}
                   </div>
                   {/* Delete alert */}
                   {isDeleteAlertVisible && (
-                    <div className="fixed z-10 inset-0 overflow-y-auto">
+                    <div className="fixed deletePopup inset-0 overflow-y-auto">
                       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                         <div
                           className="fixed inset-0 transition-opacity"
@@ -238,7 +237,7 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
                     </div>
                   )}
                   {isDeleteConfirmationVisible && (
-                    <div className="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center">
+                    <div className="fixed inset-0 deletePopup overflow-y-auto flex justify-center items-center">
                       <div className="absolute inset-0 bg-black opacity-50"></div>
                       <div className="relative bg-white rounded-lg p-8">
                         <p className="text-lg font-semibold mb-4">
@@ -272,3 +271,4 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
 };
 
 export default LeaveTypeTemplate;
+
