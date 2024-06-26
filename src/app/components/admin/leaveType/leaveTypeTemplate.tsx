@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LeaveTypeProps } from "./leaveTypeInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import TableComponent from "@/components/TableComponent";
@@ -26,6 +26,28 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [selectedLeaveId, setSelectedLeaveId] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Effect to handle screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 991) {
+        setIsCollapsed(true);
+      } else {
+        setIsCollapsed(false);
+      }
+    };
+
+    // Set initial state based on screen size
+    handleResize();
+
+    // Add event listener for resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -118,7 +140,9 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
 
                 {/*table*/}
                 <div className="mt-10">
-                  <div className="overflow-x-auto">
+              
+                  <div className="overflow-x-auto"> 
+                     {leaveTypes.length > 0 ? (
                     <TableComponent
                       data={leaveTypes}
                       columns={columns}
@@ -132,6 +156,9 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
                       sortOrder={sortOrder}
                       sortColumn={sortColumn}
                     />
+                    ) : (
+                      <p>No Leave Available for this year.</p>
+                    )}
                   </div>
                   {/* Delete alert */}
                   {isDeleteAlertVisible && (

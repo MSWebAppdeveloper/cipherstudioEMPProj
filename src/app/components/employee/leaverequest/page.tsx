@@ -20,6 +20,8 @@ const LeaveRequestComponent: React.FC = () => {
     year: "",
     status: "",
   });
+  const [filterType, setFilterType] = useState<"status">("status");
+  const [filterValue, setFilterValue] = useState<string | [string, string]>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -40,6 +42,7 @@ const LeaveRequestComponent: React.FC = () => {
 
     fetchLeaveHistory(currentPage);
   }, [
+    filterValue,
     isModal,
     currentPage,
     formdata.limit,
@@ -81,6 +84,7 @@ const LeaveRequestComponent: React.FC = () => {
   const fetchLeaveHistory = async (page: number) => {
     try {
       let userId = localStorage.getItem("UserId");
+      // const statusFilter = filterValue ? `&status=${filterValue}` : "";
       let accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         console.error("Token not found. Redirect to login page.");
@@ -88,7 +92,7 @@ const LeaveRequestComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://192.168.1.2:8080/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`,
+        `http://192.168.1.2:8080/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&status=${filterValue}`,
         {
           method: "GET",
           headers: {
@@ -181,6 +185,13 @@ const LeaveRequestComponent: React.FC = () => {
     setSortOrder(order);
     setSortColumn(column);
   };
+  const handleFilterChange = (
+    type: "status",
+    value: string | [string, string]
+  ) => {
+    setFilterType(type);
+    setFilterValue(value);
+  };
   return (
     <>
       <LeaveRequestFormComponent
@@ -201,6 +212,9 @@ const LeaveRequestComponent: React.FC = () => {
         reason={""}
         status={""}
         id={""}
+        filterName={filterType === "status" ? (filterValue as string) : ""}
+        setFilterName={(value: any) => setFilterValue(value)}
+        handleFilterChange={handleFilterChange}
         deleteSelected={deleteUserHandler}
         confirmDeleteUser={handleDelete}
         cancelDeleteUser={cancelDeleteUser}

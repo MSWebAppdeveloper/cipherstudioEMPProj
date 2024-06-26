@@ -20,20 +20,44 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
   confirmDeleteUser,
   cancelDeleteUser,
   handleSort,
+  handleFilterChange,
+  filterName,
   sortOrder,
   sortColumn,
 }) => {
   const [currentStatus, setCurrentStatus] = useState("ALL");
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // Effect to handle screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 991) {
+        setIsCollapsed(true);
+      } else {
+        setIsCollapsed(false);
+      }
+    };
+
+    // Set initial state based on screen size
+    handleResize();
+
+    // Add event listener for resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
-  const handleFilterChange = (value: string) => {
-    setCurrentStatus(value);
-  };
+  // const handleFilterChange = (value: string) => {
+  //   setCurrentStatus(value);
+  // };
 
-  const filterOptions = ["ALL", "Pending", "Approved", "Rejected"];
+  const filterOptions = ["Pending", "Approved", "Rejected"];
   // Filter users based on the current tab
   const filteredUsers: any =
     currentStatus === "ALL"
@@ -213,13 +237,14 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
                 <h3 className="text-2xl font-medium py-5">Leave History</h3>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center">
-                    <span className="mr-4 text-lg font-medium">Sort by :</span>
+                    <span className="mr-4 text-lg font-medium">Filter by :</span>
                     <select
                       id="response"
                       className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                      value={currentStatus}
-                      onChange={(e) => handleFilterChange(e.target.value)}
+                      value={  filterName}
+                      onChange={(e) => handleFilterChange("status",e.target.value)}
                     >
+                      <option value="">All</option>
                       {filterOptions.map((option) => (
                         <option key={option} value={option}>
                           {option}

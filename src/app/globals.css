@@ -366,6 +366,9 @@ input:checked + .slider:before {
   .form-sec {
     margin-top: 60px;
   }
+  .sidebar-collapsed {
+    width: 56px !important;
+}
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767.98px) {
@@ -480,6 +483,9 @@ input:checked + .slider:before {
   .input-sec input {
     padding: 11px 42px;
   }
+  .sidebar-collapsed {
+    width: 46px !important;
+}
 }
 
 @media only screen and (max-width: 800px) {
@@ -732,6 +738,9 @@ input:checked + .slider:before {
   .form-button {
     font-size: 20px !important;
   }
+  .sidebar-collapsed {
+    width: 45px !important;
+}
 }
 
 /*media-query-for-iphone-screen*/

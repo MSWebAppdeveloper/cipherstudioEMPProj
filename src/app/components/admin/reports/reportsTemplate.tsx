@@ -36,6 +36,28 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   const csvLinkRef = useRef(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // Effect to handle screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 991) {
+        setIsCollapsed(true);
+      } else {
+        setIsCollapsed(false);
+      }
+    };
+
+    // Set initial state based on screen size
+    handleResize();
+
+    // Add event listener for resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -251,19 +273,23 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
 
                 <div className="mt-10">
                   <div className="overflow-x-auto">
-                    <TableComponent
-                      columns={columns}
-                      data={filteredAttendance}
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      paginate={paginate}
-                      totalCount={totalCount}
-                      OnchangeData={OnchangeData}
-                      formdata={formdata}
-                      handleSort={handleSort}
-                      sortOrder={sortOrder}
-                      sortColumn={sortColumn}
-                    />
+                    {filteredAttendance.length > 0 ? (
+                      <TableComponent
+                        columns={columns}
+                        data={filteredAttendance}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        paginate={paginate}
+                        totalCount={totalCount}
+                        OnchangeData={OnchangeData}
+                        formdata={formdata}
+                        handleSort={handleSort}
+                        sortOrder={sortOrder}
+                        sortColumn={sortColumn}
+                      />
+                    ) : (
+                      <p>No record available.</p>
+                    )}
                   </div>
                 </div>
               </div>

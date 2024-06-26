@@ -40,6 +40,8 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   leaveHistory,
   approveApplication,
   rejectApplication,
+  handleFilterChange,
+  filterName,
   currentPage,
   totalPages,
   paginate,
@@ -53,15 +55,37 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   const [currentStatus, setCurrentStatus] = useState("ALL");
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // Effect to handle screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 991) {
+        setIsCollapsed(true);
+      } else {
+        setIsCollapsed(false);
+      }
+    };
+
+    // Set initial state based on screen size
+    handleResize();
+
+    // Add event listener for resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const handleFilterChange = (value: string) => {
-    setCurrentStatus(value);
-  };
+  // const handleFilterChange = (value: string) => {
+  //   setCurrentStatus(value);
+  // };
 
-  const filterOptions = ["ALL", "Pending", "Approved", "Rejected"];
+  const filterOptions = [ "Pending", "Approved", "Rejected"];
   // Filter users based on the current tab
   const filteredUsers: any =
     currentStatus === "ALL"
@@ -81,19 +105,6 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
     { key: "startDate", label: "START DATE", sortable: true },
     { key: "endDate", label: "END DATE", sortable: false },
     { key: "total_days", label: "Total Days", sortable: true },
-    // {
-    //   key: "reason", label: "REASON",
-    //   render: (item: { reason: any }) => {
-
-    //     return (
-    //       <span className="truncate"
-    //         data-full-text={item.reason}>
-    //         {" "}
-    //         {item.reason}
-    //       </span>
-    //     );
-    //   }, sortable: false
-    // },
     {
       key: "reason",
       label: "REASON",
@@ -170,13 +181,14 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
                 <div className="flex justify-between items-center">
                   {/*-dropdown*/}
                   <div className="flex items-center">
-                    <span className="mr-4 text-lg font-medium">Sort by :</span>
+                    <span className="mr-4 text-lg font-medium">Filter by :</span>
                     <select
                       id="response"
                       className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                      value={currentStatus}
-                      onChange={(e) => handleFilterChange(e.target.value)}
+                      value={  filterName}
+                      onChange={(e) => handleFilterChange("status",e.target.value)}
                     >
+                      <option value="">All</option>
                       {filterOptions.map((option) => (
                         <option key={option} value={option}>
                           {option}

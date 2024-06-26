@@ -13,9 +13,8 @@ const initialFormValues = {
   department: "",
   userRole: "",
   isActive: true,
-  limit: "12",
+  limit: "10",
   order: "",
-  status: "",
 };
 
 const UserComponent: React.FC = () => {
@@ -26,18 +25,29 @@ const UserComponent: React.FC = () => {
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<string>("");
-  const [filterValue, setFilterValue] = useState<string | [string, string]>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortColumn, setSortColumn] = useState<string>("name");
+  const [currentTab, setCurrentTab] = useState("Active");
+  const [filterType, setFilterType] = useState<"userRole">("userRole");
+  const [filterValue, setFilterValue] = useState<string | [string, string]>("");
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
-    getAllUsers(currentPage);
-  }, [isModal, formdata.limit, formdata.order, sortColumn, sortOrder]);
+    getAllUsers(currentPage, currentTab === "Active");
+  }, [
+    filterValue,
+    isModal,
+    currentPage,
+    formdata.limit,
+    formdata.order,
+    sortColumn,
+    sortOrder,
+    currentTab,
+  ]);
 
   const OnchangeData = (e: any) => {
     setFormdata({
@@ -46,9 +56,9 @@ const UserComponent: React.FC = () => {
     });
   };
 
-  const getAllUsers = async (page: number) => {
+  const getAllUsers = async (page: number, isActive: boolean) => {
     try {
-      const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
+      const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&userRole=${filterValue}&isActive=${isActive}`;
       const response: any = await UserDetails(url);
       setAllUsers(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -71,7 +81,7 @@ const UserComponent: React.FC = () => {
   const confirmDeleteUser = async () => {
     try {
       await deleteUser(`employee/users/${selectedUserId}`);
-      getAllUsers(currentPage);
+      getAllUsers(currentPage, currentTab === "Active");
       toast.success("User deleted successfully!");
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -91,18 +101,17 @@ const UserComponent: React.FC = () => {
   };
 
   const handleEditUserUpdate = () => {
-    getAllUsers(currentPage);
+    getAllUsers(currentPage, currentTab === "Active");
     setModal(false);
   };
 
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(
-        `
-      http://192.168.1.2:8080/api/employee/users/${userId}/status`,
+        `http://192.168.1.2:8080/api/employee/users/${userId}/status`,
         { isActive }
       );
-      getAllUsers(currentPage); // Refresh the user list after updating status
+      getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
       toast.success(`User ${isActive ? "enabled" : "disabled"} successfully!`);
     } catch (error) {
       console.error("Error toggling user status:", error);
@@ -117,6 +126,15 @@ const UserComponent: React.FC = () => {
     setSortOrder(order);
     setSortColumn(column);
   };
+
+  const handleFilterChange = (
+    type: "userRole",
+    value: string | [string, string]
+  ) => {
+    setFilterType(type);
+    setFilterValue(value);
+  };
+
   return (
     <>
       <UserFormComponent
@@ -144,6 +162,11 @@ const UserComponent: React.FC = () => {
         handleSort={handleSort}
         sortOrder={sortOrder}
         sortColumn={sortColumn}
+        filterName={filterType === "userRole" ? (filterValue as string) : ""}
+        setFilterName={(value: any) => setFilterValue(value)}
+        handleFilterChange={handleFilterChange}
+        currentTab={currentTab}
+        setCurrentTab={setCurrentTab}
       />
     </>
   );

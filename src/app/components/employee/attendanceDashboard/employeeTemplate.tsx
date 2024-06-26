@@ -18,6 +18,28 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // Effect to handle screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 991) {
+        setIsCollapsed(true);
+      } else {
+        setIsCollapsed(false);
+      }
+    };
+
+    // Set initial state based on screen size
+    handleResize();
+
+    // Add event listener for resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };

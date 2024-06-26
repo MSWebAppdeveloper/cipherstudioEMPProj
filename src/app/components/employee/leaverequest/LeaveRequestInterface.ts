@@ -54,4 +54,11 @@ export interface LeaveRequestInterface {
   handleSort: (column: string) => void;
   sortOrder: "asc" | "desc";
   sortColumn: string;
+  filterName: string;
+  setFilterName: React.Dispatch<React.SetStateAction<string>>;
+
+  handleFilterChange: (
+    type: "status",
+    value: string | [string, string]
+  ) => void;
 }

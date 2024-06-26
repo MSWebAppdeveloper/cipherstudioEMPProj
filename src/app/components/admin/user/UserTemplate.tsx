@@ -4,6 +4,8 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import TableComponent from "@/components/TableComponent";
 import Sidebar from "@/components/Sidebar";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
+import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
+
 const UserTemplate: React.FC<UserProps> = ({
   allUsers,
   deleteSelected,
@@ -22,12 +24,38 @@ const UserTemplate: React.FC<UserProps> = ({
   handleSort,
   sortOrder,
   sortColumn,
+  handleFilterChange,
+  filterName,
+  currentTab,
+  setCurrentTab,
 }) => {
-  const [currentTab, setCurrentTab] = useState("Active");
+  // const [currentTab, setCurrentTab] = useState("Active");
   const [selectedRole, setSelectedRole] = useState("ALL");
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Effect to handle screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 991) {
+        setIsCollapsed(true);
+      } else {
+        setIsCollapsed(false);
+      }
+    };
+
+    // Set initial state based on screen size
+    handleResize();
+
+    // Add event listener for resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -35,23 +63,16 @@ const UserTemplate: React.FC<UserProps> = ({
 
   const handleTabChange = (value: string) => {
     setCurrentTab(value);
+   // Reset to first page when tab changes
   };
-
-  const handleRoleChange = (value: string) => {
-    setSelectedRole(value);
-  };
-
-  // Filter users based on the current tab and role
-  const filteredUsers: any = allUsers?.filter((user) => {
-    const isActiveMatch =
-      currentTab === "Active" ? user.isActive : !user.isActive;
-    const isRoleMatch =
-      selectedRole === "ALL" || user.userRole === selectedRole;
-    return isActiveMatch && isRoleMatch;
-  });
 
   // Dropdown options
-  const filterOptions = ["ALL", "Employee", "Management"];
+  const filterOptions = ["Employee", "Management"];
+  // Filter users based on the current tab and role
+  const filteredUsers: any =
+    selectedRole === "ALL"
+      ? allUsers
+      : allUsers?.filter((user) => user.userRole === selectedRole);
 
   const softDeleteUser = (userId: string) => {
     setDeleteAlertVisible(false); // Hide delete alert
@@ -120,6 +141,26 @@ const UserTemplate: React.FC<UserProps> = ({
       sortable: false,
     },
   ];
+  let tabs = [
+    {
+      id: "photos",
+      label: "Photos",
+      content:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    },
+    {
+      id: "music",
+      label: "Music",
+      content:
+        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    },
+    {
+      id: "videos",
+      label: "Videos",
+      content:
+        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    },
+  ];
   return (
     <>
       <div>
@@ -162,9 +203,12 @@ const UserTemplate: React.FC<UserProps> = ({
                         <select
                           id="roleFilter"
                           className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                          value={selectedRole}
-                          onChange={(e) => handleRoleChange(e.target.value)}
+                          value={filterName}
+                          onChange={(e) =>
+                            handleFilterChange("userRole", e.target.value)
+                          }
                         >
+                          <option value="">All</option>
                           {filterOptions.map((option) => (
                             <option key={option} value={option}>
                               {option}
@@ -184,22 +228,37 @@ const UserTemplate: React.FC<UserProps> = ({
                     </button>
                   </div>
                 </div>
+                {/* <div className="flex w-full flex-col">
+                  <Tabs className=" bg-slate-400" aria-label="Dynamic tabs" items={tabs}>
+                    {(item) => (
+                      <Tab className="bg-white" key={item.id} title={item.label}>
+                        <Card>
+                          <CardBody>{item.content}</CardBody>
+                        </Card>
+                      </Tab>
+                    )}
+                  </Tabs>
+                </div> */}
                 {/*table*/}
                 <div className="mt-10">
                   <div className="overflow-x-auto">
-                    <TableComponent
-                      data={filteredUsers}
-                      columns={columns}
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      paginate={paginate}
-                      totalCount={totalCount}
-                      OnchangeData={OnchangeData}
-                      formdata={formdata}
-                      handleSort={handleSort}
-                      sortOrder={sortOrder}
-                      sortColumn={sortColumn}
-                    />
+                    {filteredUsers.length > 0 ? (
+                      <TableComponent
+                        data={filteredUsers}
+                        columns={columns}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        paginate={paginate}
+                        totalCount={totalCount}
+                        OnchangeData={OnchangeData}
+                        formdata={formdata}
+                        handleSort={handleSort}
+                        sortOrder={sortOrder}
+                        sortColumn={sortColumn}
+                      />
+                    ) : (
+                      <p>No record available.</p>
+                    )}
                     {isDeleteAlertVisible && (
                       <div className="fixed z-10 inset-0 overflow-y-auto">
                         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">

@@ -88,10 +88,11 @@ const Pagination: React.FC<PaginationProps> = ({
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}
               className={`relative inline-flex items-center rounded-l-md px-2 py-2 
-                 ${currentPage === 1
-                  ? "bg-gray-200 cursor-not-allowed"
-                  : "bg-gray-500 text-black"
-                }
+                 ${
+                   currentPage === 1
+                     ? "bg-gray-200 cursor-not-allowed"
+                     : "bg-gray-500 text-black"
+                 }
              text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-400 focus:z-20 focus:outline-offset-0`}
             >
               <span className="sr-only">Previous</span>
@@ -101,10 +102,11 @@ const Pagination: React.FC<PaginationProps> = ({
               <button
                 key={pageNumber}
                 onClick={() => paginate(pageNumber)}
-                className={`relative inline-flex items-center px-4 py-2  font-semibold ${pageNumber === currentPage
-                  ? "bg-blue-500 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
-                  : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  }`}
+                className={`relative inline-flex items-center px-4 py-2  font-semibold ${
+                  pageNumber === currentPage
+                    ? "bg-blue-500 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                    : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                }`}
               >
                 {pageNumber}
               </button>
@@ -112,10 +114,11 @@ const Pagination: React.FC<PaginationProps> = ({
             <button
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className={`relative inline-flex items-center rounded-r-md px-2 py-2 ${currentPage === totalPages
-                ? "bg-gray-200 cursor-not-allowed"
-                : "bg-gray-500 text-black"
-                } text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-400  focus:z-20 focus:outline-offset-0`}
+              className={`relative inline-flex items-center rounded-r-md px-2 py-2 ${
+                currentPage === totalPages
+                  ? "bg-gray-200 cursor-not-allowed"
+                  : "bg-gray-500 text-black"
+              } text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-400  focus:z-20 focus:outline-offset-0`}
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />

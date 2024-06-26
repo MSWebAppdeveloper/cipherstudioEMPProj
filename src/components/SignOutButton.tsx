@@ -27,11 +27,11 @@ export default function SignoutButton({ }: { type?: string }) {
         <>
           
                 <div
-                    className="signout p-2  rounded-md"
+                    className="signout p-2 flex   rounded-md cursor-pointer"
                     onClick={handleSignOut}
                 >
-                    <Icon icon="icon-park:logout" width="2rem" height="2rem" />
-                </div>
+<Icon icon="material-symbols:logout-sharp" width="20" height="20"  style={{color: `#1565e5`}} />    
+             </div>
             
         </>
     );

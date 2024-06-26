@@ -27,6 +27,22 @@ const LeaveApplications: React.FC = () => {
   const [sortColumn, setSortColumn] = useState<string>("createdAt");
   const router = useRouter();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchApproverId();
+      await fetchLeaveHistory(currentPage);
+    };
+
+    fetchData();
+  }, [
+    filterValue,
+    currentPage,
+    formdata.limit,
+    formdata.order,
+    sortColumn,
+    sortOrder,
+  ]);
+
   const OnchangeData = (e: any) => {
     setFormdata({
       ...formdata,
@@ -118,8 +134,9 @@ const LeaveApplications: React.FC = () => {
 
   const fetchLeaveHistory = async (page: number) => {
     try {
+      const statusFilter = filterValue ? `&status=${filterValue}` : "";
       const url = `leave-requests?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
-      const response: any = await HistoryLeave(url);
+      const response: any = await HistoryLeave(url + statusFilter);
       setLeaveHistory(response.data.data);
       setTotalPages(response.data.totalPages);
       setTotalCount(response.data.totalCount);
@@ -173,15 +190,6 @@ const LeaveApplications: React.FC = () => {
       console.error("Error rejecting leave application:", error);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchApproverId();
-      await fetchLeaveHistory(currentPage);
-    };
-
-    fetchData();
-  }, [currentPage, formdata.limit, formdata.order, sortColumn, sortOrder]);
 
   const handleFilterChange = (
     type: "status",
