@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 import React, { useEffect, useState } from "react";
 import LeaveApplications from "@/app/components/admin/leaveApplications/page";
@@ -46,8 +47,25 @@ const Users = () => {
           </div>
         </div>
       </div>
+=======
+import React, { useState } from "react";
+import LeaveApplications from "@/app/components/admin/leaveApplications/page";
+import { Metadata } from "next";
+
+const Users = () => {
+  return (
+    <>
+      <LeaveApplications />
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
     </>
   );
 };
 
 export default Users;
+<<<<<<< HEAD
+=======
+
+export const metadata: Metadata = {
+  title: "Leave Applications",
+};
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625

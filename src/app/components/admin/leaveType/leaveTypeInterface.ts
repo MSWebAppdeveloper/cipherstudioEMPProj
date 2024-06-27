@@ -1,4 +1,4 @@
-export interface OptionsProps {
+export interface LeaveTypeProps {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
   leaveTypes: {
     leave_type_id: number;

@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios"; // Import Axios for making HTTP requests
 
-import UserTableTemplate from "./TableTemplate";
-import UserFormComponent from "../form/page";
+import UserFormComponent from "../userForm/page";
 import { UserDetails, deleteUser } from "@/services/api";
+import UserTemplate from "./UserTemplate";
 
 const initialFormValues = {
   name: "",
@@ -13,12 +13,11 @@ const initialFormValues = {
   department: "",
   userRole: "",
   isActive: true,
-  limit: "12",
+  limit: "10",
   order: "",
-  status: "",
 };
 
-const UserTableComponent: React.FC = () => {
+const UserComponent: React.FC = () => {
   const [formdata, setFormdata] = useState(initialFormValues);
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -26,18 +25,32 @@ const UserTableComponent: React.FC = () => {
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<string>("");
-  const [filterValue, setFilterValue] = useState<string | [string, string]>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortColumn, setSortColumn] = useState<string>("name");
+<<<<<<< HEAD:src/app/components/admin/table/page.tsx
+=======
+  const [currentTab, setCurrentTab] = useState("Active");
+  const [filterType, setFilterType] = useState<"userRole">("userRole");
+  const [filterValue, setFilterValue] = useState<string | [string, string]>("");
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625:src/app/components/admin/user/page.tsx
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
-    getAllUsers(currentPage);
-  }, [isModal, formdata.limit, formdata.order, sortColumn, sortOrder]);
+    getAllUsers(currentPage, currentTab === "Active");
+  }, [
+    filterValue,
+    isModal,
+    currentPage,
+    formdata.limit,
+    formdata.order,
+    sortColumn,
+    sortOrder,
+    currentTab,
+  ]);
 
   const OnchangeData = (e: any) => {
     setFormdata({
@@ -46,9 +59,9 @@ const UserTableComponent: React.FC = () => {
     });
   };
 
-  const getAllUsers = async (page: number) => {
+  const getAllUsers = async (page: number, isActive: boolean) => {
     try {
-      const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
+      const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&userRole=${filterValue}&isActive=${isActive}`;
       const response: any = await UserDetails(url);
       setAllUsers(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -71,7 +84,7 @@ const UserTableComponent: React.FC = () => {
   const confirmDeleteUser = async () => {
     try {
       await deleteUser(`employee/users/${selectedUserId}`);
-      getAllUsers(currentPage);
+      getAllUsers(currentPage, currentTab === "Active");
       toast.success("User deleted successfully!");
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -91,18 +104,25 @@ const UserTableComponent: React.FC = () => {
   };
 
   const handleEditUserUpdate = () => {
-    getAllUsers(currentPage);
+    getAllUsers(currentPage, currentTab === "Active");
     setModal(false);
   };
 
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(
+<<<<<<< HEAD:src/app/components/admin/table/page.tsx
         `
       http://192.168.1.12:8082/api/employee/users/${userId}/status`,
         { isActive }
       );
       getAllUsers(currentPage); // Refresh the user list after updating status
+=======
+        `http://192.168.1.2:8080/api/employee/users/${userId}/status`,
+        { isActive }
+      );
+      getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625:src/app/components/admin/user/page.tsx
       toast.success(`User ${isActive ? "enabled" : "disabled"} successfully!`);
     } catch (error) {
       console.error("Error toggling user status:", error);
@@ -117,6 +137,15 @@ const UserTableComponent: React.FC = () => {
     setSortOrder(order);
     setSortColumn(column);
   };
+
+  const handleFilterChange = (
+    type: "userRole",
+    value: string | [string, string]
+  ) => {
+    setFilterType(type);
+    setFilterValue(value);
+  };
+
   return (
     <>
       <UserFormComponent
@@ -125,7 +154,7 @@ const UserTableComponent: React.FC = () => {
         user={selectedUser}
         onUpdate={handleEditUserUpdate}
       />
-      <UserTableTemplate
+      <UserTemplate
         formdata={formdata}
         allUsers={allUsers}
         deleteSelected={deleteUserHandler}
@@ -144,9 +173,17 @@ const UserTableComponent: React.FC = () => {
         handleSort={handleSort}
         sortOrder={sortOrder}
         sortColumn={sortColumn}
+<<<<<<< HEAD:src/app/components/admin/table/page.tsx
+=======
+        filterName={filterType === "userRole" ? (filterValue as string) : ""}
+        setFilterName={(value: any) => setFilterValue(value)}
+        handleFilterChange={handleFilterChange}
+        currentTab={currentTab}
+        setCurrentTab={setCurrentTab}
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625:src/app/components/admin/user/page.tsx
       />
     </>
   );
 };
 
-export default UserTableComponent;
+export default UserComponent;

@@ -26,7 +26,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   },
   {
     title: "Leave Types",
-    path: "/admin/options",
+    path: "/admin/leaveType",
     icon:<Icon icon="iconoir:plug-type-l"  width="20" height="20" style={{color: "#1565e5"}}/>
     
   },

@@ -1,17 +1,29 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ApproveLeave, HistoryLeave, RejectLeave } from "@/services/api";
+<<<<<<< HEAD
 import { leaveApplicationsInterface } from "./leaveApplicationsInterface";
 import LeaveApplicationsTemplate from "./leaveApplicationsTemplate";
 import toast from "react-hot-toast";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 // ... (previous imports)
+=======
+import { LeaveApplicationsInterface } from "./leaveApplicationsInterface";
+import LeaveApplicationsTemplate from "./leaveApplicationsTemplate";
+import { signOut } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
 
 const LeaveApplications: React.FC = () => {
   const [approverId, setApproverId] = useState<number | null>(null);
   const [leaveHistory, setLeaveHistory] = useState<
+<<<<<<< HEAD
     leaveApplicationsInterface[]
+=======
+    LeaveApplicationsInterface[]
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
   >([]);
   const [filterType, setFilterType] = useState<"status">("status");
   const [filterValue, setFilterValue] = useState<string | [string, string]>("");
@@ -27,16 +39,44 @@ const LeaveApplications: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [sortColumn, setSortColumn] = useState<string>("createdAt");
   const router = useRouter();
+<<<<<<< HEAD
+=======
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchApproverId();
+      await fetchLeaveHistory(currentPage);
+    };
+
+    fetchData();
+  }, [
+    filterValue,
+    currentPage,
+    formdata.limit,
+    formdata.order,
+    sortColumn,
+    sortOrder,
+  ]);
+
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
   const OnchangeData = (e: any) => {
     setFormdata({
       ...formdata,
       [e.target.name]: e.target.value,
     });
   };
+<<<<<<< HEAD
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
     const response = await fetch(
       "http://192.168.1.12:8082/api/employee/refresh",
+=======
+
+  const refreshToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    const response = await fetch(
+      "http://192.168.1.2:8080/api/employee/refresh",
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
       {
         method: "POST",
         headers: {
@@ -57,9 +97,15 @@ const LeaveApplications: React.FC = () => {
 
   const ApproverId = async () => {
     try {
+<<<<<<< HEAD
       const accessToken = localStorage.getItem("accessToken");
       const response = await fetch(
         "http://192.168.1.12:8082/api/employee/user/details",
+=======
+      let accessToken = localStorage.getItem("accessToken");
+      let response = await fetch(
+        "http://192.168.1.2:8080/api/employee/user/details",
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
         {
           method: "GET",
           headers: {
@@ -68,33 +114,61 @@ const LeaveApplications: React.FC = () => {
           },
         }
       );
+<<<<<<< HEAD
       if (response.status === 401) {
         try {
           const newAccessToken = await refreshToken();
           if (newAccessToken) {
             fetchLeaveHistory(currentPage); // Retry fetching with the new token
           }
+=======
+
+      if (response.status === 401) {
+        try {
+          accessToken = await refreshToken();
+          response = await fetch(
+            "http://192.168.1.2:8080/api/employee/user/details",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
         } catch (error) {
           console.error("Failed to refresh token. Redirect to login page.");
           await signOut({
             callbackUrl: "/login",
             redirect: false,
           });
+<<<<<<< HEAD
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("UserId");
           localStorage.removeItem("name");
           localStorage.removeItem("token");
           localStorage.removeItem("userRole");
+=======
+          localStorage.clear();
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
           toast.success("Login Again");
           router.push("/login");
         }
       }
+<<<<<<< HEAD
+=======
+
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
       const user = await response.json();
       if (user.length > 0) {
         return user[0].id; // Replace 'UserId' with the actual property name
       } else {
+<<<<<<< HEAD
         // Handle the case where no user is found
+=======
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
         throw new Error("No user found");
       }
     } catch (error) {
@@ -105,7 +179,10 @@ const LeaveApplications: React.FC = () => {
 
   const fetchApproverId = async () => {
     try {
+<<<<<<< HEAD
       // Replace this with your actual authentication logic
+=======
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
       const loggedInApproverId = await ApproverId();
       setApproverId(loggedInApproverId);
     } catch (error) {
@@ -115,10 +192,16 @@ const LeaveApplications: React.FC = () => {
 
   const fetchLeaveHistory = async (page: number) => {
     try {
+<<<<<<< HEAD
       const url = `leave-requests?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
 
       const response: any = await HistoryLeave(url);
 
+=======
+      const statusFilter = filterValue ? `&status=${filterValue}` : "";
+      const url = `leave-requests?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
+      const response: any = await HistoryLeave(url + statusFilter);
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
       setLeaveHistory(response.data.data);
       setTotalPages(response.data.totalPages);
       setTotalCount(response.data.totalCount);
@@ -137,7 +220,10 @@ const LeaveApplications: React.FC = () => {
         approver_id: approverId,
       });
 
+<<<<<<< HEAD
       // Update the leaveHistory state with the modified data
+=======
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
       setLeaveHistory(
         leaveHistory.map((leave) => {
           if (leave.id === id) {
@@ -161,7 +247,10 @@ const LeaveApplications: React.FC = () => {
         approver_id: approverId,
       });
 
+<<<<<<< HEAD
       // Update the leaveHistory state with the modified data
+=======
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
       setLeaveHistory(
         leaveHistory.map((leave) => {
           if (leave.id === id) {
@@ -175,6 +264,7 @@ const LeaveApplications: React.FC = () => {
     }
   };
 
+<<<<<<< HEAD
   useEffect(() => {
     const fetchData = async () => {
       await fetchApproverId();
@@ -184,6 +274,8 @@ const LeaveApplications: React.FC = () => {
     fetchData();
   }, [currentPage, formdata.limit, formdata.order, sortColumn, sortOrder]);
 
+=======
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
   const handleFilterChange = (
     type: "status",
     value: string | [string, string]
@@ -199,6 +291,10 @@ const LeaveApplications: React.FC = () => {
   };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+<<<<<<< HEAD
+=======
+
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
   return (
     <>
       <LeaveApplicationsTemplate

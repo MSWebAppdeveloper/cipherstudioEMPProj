@@ -1,5 +1,5 @@
-"use client";
 import Reports from "@/app/components/admin/reports/page";
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
 import Sidebar from "@/components/Sidebar";
@@ -47,8 +47,24 @@ const Report = () => {
           </div>
         </div>
       </div>
+=======
+import { Metadata } from "next";
+import React, { useState } from "react";
+
+const Report = () => {
+  return (
+    <>
+      <Reports />
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
     </>
   );
 };
 
 export default Report;
+<<<<<<< HEAD
+=======
+
+export const metadata: Metadata = {
+  title: "Reports",
+};
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625

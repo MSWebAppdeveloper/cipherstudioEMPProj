@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export interface employeeAttendanceInterface {
+export interface EmployeeAttendanceInterface {
   currentTime: string;
   formattedElapsedTime: string;
   handleSignIn: (e: any) => void;

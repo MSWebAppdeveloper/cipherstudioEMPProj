@@ -1,4 +1,4 @@
-export interface UserTableProps {
+export interface UserProps {
   formdata: {
     name: string;
     email: string;
@@ -7,7 +7,6 @@ export interface UserTableProps {
     isActive: boolean;
     limit: any;
     order:any;
-    status: any;
   };
   allUsers?: Array<{
     id: string;
@@ -17,6 +16,15 @@ export interface UserTableProps {
     userRole: string;
     isActive: boolean;
   }>;
+  filterName: string;
+  setFilterName: React.Dispatch<React.SetStateAction<string>>;
+
+  handleFilterChange: (
+    type: "userRole",
+    value: string | [string, string]
+  ) => void;
+  currentTab: string;
+  setCurrentTab: React.Dispatch<React.SetStateAction<string>>;
   deleteSelected: (user: any) => void;
   openEditPopup: (user: any) => void;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;

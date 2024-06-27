@@ -2,6 +2,7 @@ import React from "react";
 import { SignInInterface } from "./SignInInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
+import { Metadata } from "next";
 
 const SignInTemplate: React.FC<SignInInterface> = ({
   onChangeData,
@@ -134,3 +135,7 @@ const SignInTemplate: React.FC<SignInInterface> = ({
 );
 
 export default SignInTemplate;
+
+export const metadata: Metadata = {
+  title: "CS",
+};

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 import UserTableComponent from "@/app/components/admin/table/page";
 import React, { useEffect, useState } from "react";
@@ -46,8 +47,22 @@ const Users = () => {
           </div>
         </div>
       </div>
+=======
+import React from "react";
+
+import UserComponent from "@/app/components/admin/user/page";
+import { Metadata } from "next";
+const Users = () => {
+  return (
+    <>
+      <UserComponent />
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
     </>
   );
 };
 
 export default Users;
+
+export const metadata: Metadata = {
+  title: "Users",
+};

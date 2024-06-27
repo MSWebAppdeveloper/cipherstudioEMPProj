@@ -1,10 +1,14 @@
+<<<<<<< HEAD
 "use client";
 import React, { useState, useEffect } from "react";
+=======
+import React from "react";
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
 import EmployeePage from "../../components/employee/attendanceDashboard/page";
-import EmployeeNavbar from "@/components/EmployeeNavbar";
-import Sidebar from "@/components/Sidebar";
+import { Metadata } from "next";
 
 const Employee = () => {
+<<<<<<< HEAD
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Effect to handle screen size changes
@@ -47,7 +51,16 @@ const Employee = () => {
         </div>
       </div>
     </div>
+=======
+  return (
+    <>
+      <EmployeePage />
+    </>
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
   );
 };
 
 export default Employee;
+export const metadata: Metadata = {
+  title: "Dashboard",
+};

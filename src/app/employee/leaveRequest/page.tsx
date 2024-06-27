@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 import React, { useEffect, useState } from "react";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
@@ -46,7 +47,23 @@ const LeaveRequest = () => {
         </div>
       </div>
     </div>
+=======
+import React, { useState } from "react";
+
+import LeaveRequestComponent from "@/app/components/employee/leaverequest/page";
+import { Metadata } from "next";
+
+const LeaveRequest = () => {
+  return (
+    <>
+      <LeaveRequestComponent />
+    </>
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
   );
 };
 
 export default LeaveRequest;
+
+export const metadata: Metadata = {
+  title: "Leave Request",
+};

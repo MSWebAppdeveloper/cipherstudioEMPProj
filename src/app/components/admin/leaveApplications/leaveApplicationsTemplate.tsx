@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { leaveApplicationsInterface } from "./leaveApplicationsInterface";
+import { LeaveApplicationsInterface } from "./leaveApplicationsInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
+<<<<<<< HEAD
+=======
+import EmployeeNavbar from "@/components/EmployeeNavbar";
+import Sidebar from "@/components/Sidebar";
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
 
 import TableComponent from "@/components/TableComponent";
 interface TruncatedTextProps {
@@ -26,6 +31,7 @@ const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
   }, [text]);
 
   return (
+<<<<<<< HEAD
     <div className="">
       <span className="overflow" style={{ float: "left", width: "50px" }}>
         <span ref={textRef} className={`${isTruncated ? "truncated" : ""}`}>
@@ -33,13 +39,22 @@ const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
         </span>
       </span>
       {isTruncated && <span className="visible-text">{text}</span>}
+=======
+    <div className="center">
+      <div ref={textRef} className={`text ${isTruncated ? "truncated" : ""}`}>
+        {text}
+      </div>
+      {isTruncated && <div className="text-tooltip">{text}</div>}
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
     </div>
   );
 };
-const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
+const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   leaveHistory,
   approveApplication,
   rejectApplication,
+  handleFilterChange,
+  filterName,
   currentPage,
   totalPages,
   paginate,
@@ -51,12 +66,39 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
   sortColumn,
 }) => {
   const [currentStatus, setCurrentStatus] = useState("ALL");
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const handleFilterChange = (value: string) => {
-    setCurrentStatus(value);
+  // Effect to handle screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 991) {
+        setIsCollapsed(true);
+      } else {
+        setIsCollapsed(false);
+      }
+    };
+
+    // Set initial state based on screen size
+    handleResize();
+
+    // Add event listener for resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
   };
 
-  const filterOptions = ["ALL", "Pending", "Approved", "Rejected"];
+  // const handleFilterChange = (value: string) => {
+  //   setCurrentStatus(value);
+  // };
+
+  const filterOptions = ["Pending", "Approved", "Rejected"];
   // Filter users based on the current tab
   const filteredUsers: any =
     currentStatus === "ALL"
@@ -76,6 +118,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
     { key: "startDate", label: "START DATE", sortable: true },
     { key: "endDate", label: "END DATE", sortable: false },
     { key: "total_days", label: "Total Days", sortable: true },
+<<<<<<< HEAD
     // {
     //   key: "reason", label: "REASON",
     //   render: (item: { reason: any }) => {
@@ -89,6 +132,8 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
     //     );
     //   }, sortable: false
     // },
+=======
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
     {
       key: "reason",
       label: "REASON",
@@ -162,6 +207,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
   return (
     <>
       <div>
+<<<<<<< HEAD
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
           <div className="flex justify-between items-center">
             {/*-dropdown*/}
@@ -201,6 +247,62 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
               ) : (
                 <p>No Leave Applications data available.</p>
               )}
+=======
+        <EmployeeNavbar toggleSidebar={toggleSidebar} />
+        <div className="flex w-100" id="body-row">
+          <Sidebar isCollapsed={isCollapsed} />
+          <div
+            className={`right-sec lg:px-8 md:px-4 sm:px-4 ${
+              isCollapsed ? "collapsed" : ""
+            }`}
+          >
+            <div>
+              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
+                <div className="flex justify-between items-center">
+                  {/*-dropdown*/}
+                  <div className="">
+                    <p className="font-medium pb-2">Filter by :</p>
+                    <select
+                      id="response"
+                      className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
+                      value={filterName}
+                      onChange={(e) =>
+                        handleFilterChange("status", e.target.value)
+                      }
+                    >
+                      <option value="">All</option>
+                      {filterOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                {/*table*/}
+                <div className="mt-10">
+                  <div className="overflow-x-auto">
+                    {filteredUsers.length > 0 ? (
+                      <TableComponent
+                        data={filteredUsers}
+                        columns={columns}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        paginate={paginate}
+                        totalCount={totalCount}
+                        OnchangeData={OnchangeData}
+                        formdata={formdata}
+                        handleSort={handleSort}
+                        sortOrder={sortOrder}
+                        sortColumn={sortColumn}
+                      />
+                    ) : (
+                      <p>No Leave Applications data available.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
             </div>
           </div>
         </div>

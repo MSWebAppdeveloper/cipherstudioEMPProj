@@ -337,12 +337,21 @@ input:checked + .slider:before {
 }
 .visible-text {
   display: block;
+<<<<<<< HEAD
   width: 200px!important;
 }
 
 .overflow:hover span {
   position: relative;
   background-color: white;
+=======
+  width: 300px;
+}
+.overflow:hover span {
+  position: relative;
+  background-color: white;
+
+>>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
   box-shadow: 0 0 4px 0 black;
   border-radius: 1px;
 }
@@ -939,7 +948,7 @@ input:checked + .slider:before {
 }
 
 .menu-item .icon {
-  margin-right: 8px; /* Space between icon and text */
+  margin-right: 8px; /** Space between icon and text **/
 }
 
 .sidebar-collapsed:hover .menu-item .menu-text {
