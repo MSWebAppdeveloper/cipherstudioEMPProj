@@ -118,7 +118,7 @@ const UserComponent: React.FC = () => {
       );
       getAllUsers(currentPage); // Refresh the user list after updating status
 =======
-        `http://192.168.1.2:8080/api/employee/users/${userId}/status`,
+        `http://192.168.1.2:8082/api/employee/users/${userId}/status`,
         { isActive }
       );
       getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
