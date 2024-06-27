@@ -31,12 +31,9 @@ const UserComponent: React.FC = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortColumn, setSortColumn] = useState<string>("name");
-<<<<<<< HEAD:src/app/components/admin/table/page.tsx
-=======
   const [currentTab, setCurrentTab] = useState("Active");
   const [filterType, setFilterType] = useState<"userRole">("userRole");
   const [filterValue, setFilterValue] = useState<string | [string, string]>("");
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625:src/app/components/admin/user/page.tsx
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
@@ -111,18 +108,10 @@ const UserComponent: React.FC = () => {
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(
-<<<<<<< HEAD:src/app/components/admin/table/page.tsx
-        `
-      http://192.168.1.12:8082/api/employee/users/${userId}/status`,
-        { isActive }
-      );
-      getAllUsers(currentPage); // Refresh the user list after updating status
-=======
         `http://192.168.1.2:8082/api/employee/users/${userId}/status`,
         { isActive }
       );
       getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625:src/app/components/admin/user/page.tsx
       toast.success(`User ${isActive ? "enabled" : "disabled"} successfully!`);
     } catch (error) {
       console.error("Error toggling user status:", error);
@@ -173,14 +162,11 @@ const UserComponent: React.FC = () => {
         handleSort={handleSort}
         sortOrder={sortOrder}
         sortColumn={sortColumn}
-<<<<<<< HEAD:src/app/components/admin/table/page.tsx
-=======
         filterName={filterType === "userRole" ? (filterValue as string) : ""}
         setFilterName={(value: any) => setFilterValue(value)}
         handleFilterChange={handleFilterChange}
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625:src/app/components/admin/user/page.tsx
       />
     </>
   );

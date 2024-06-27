@@ -2,11 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { LeaveApplicationsInterface } from "./leaveApplicationsInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
-<<<<<<< HEAD
-=======
 import EmployeeNavbar from "@/components/EmployeeNavbar";
 import Sidebar from "@/components/Sidebar";
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
 
 import TableComponent from "@/components/TableComponent";
 interface TruncatedTextProps {
@@ -31,21 +28,11 @@ const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
   }, [text]);
 
   return (
-<<<<<<< HEAD
-    <div className="">
-      <span className="overflow" style={{ float: "left", width: "50px" }}>
-        <span ref={textRef} className={`${isTruncated ? "truncated" : ""}`}>
-          {text}
-        </span>
-      </span>
-      {isTruncated && <span className="visible-text">{text}</span>}
-=======
     <div className="center">
       <div ref={textRef} className={`text ${isTruncated ? "truncated" : ""}`}>
         {text}
       </div>
       {isTruncated && <div className="text-tooltip">{text}</div>}
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
     </div>
   );
 };
@@ -118,22 +105,6 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
     { key: "startDate", label: "START DATE", sortable: true },
     { key: "endDate", label: "END DATE", sortable: false },
     { key: "total_days", label: "Total Days", sortable: true },
-<<<<<<< HEAD
-    // {
-    //   key: "reason", label: "REASON",
-    //   render: (item: { reason: any }) => {
-
-    //     return (
-    //       <span className="truncate"
-    //         data-full-text={item.reason}>
-    //         {" "}
-    //         {item.reason}
-    //       </span>
-    //     );
-    //   }, sortable: false
-    // },
-=======
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
     {
       key: "reason",
       label: "REASON",
@@ -207,47 +178,6 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   return (
     <>
       <div>
-<<<<<<< HEAD
-        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
-          <div className="flex justify-between items-center">
-            {/*-dropdown*/}
-            <div className="">
-              <p className="font-medium pb-2">Filter by :</p>
-              <select
-                id="response"
-                className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                value={currentStatus}
-                onChange={(e) => handleFilterChange(e.target.value)}
-              >
-                {filterOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          {/*table*/}
-          <div className="mt-10">
-            <div className="overflow-x-auto">
-              {filteredUsers.length > 0 ? (
-                <TableComponent
-                  data={filteredUsers}
-                  columns={columns}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  paginate={paginate}
-                  totalCount={totalCount}
-                  OnchangeData={OnchangeData}
-                  formdata={formdata}
-                  handleSort={handleSort}
-                  sortOrder={sortOrder}
-                  sortColumn={sortColumn}
-                />
-              ) : (
-                <p>No Leave Applications data available.</p>
-              )}
-=======
         <EmployeeNavbar toggleSidebar={toggleSidebar} />
         <div className="flex w-100" id="body-row">
           <Sidebar isCollapsed={isCollapsed} />
@@ -302,7 +232,6 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
                   </div>
                 </div>
               </div>
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
             </div>
           </div>
         </div>

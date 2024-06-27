@@ -156,63 +156,6 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   return (
     <>
       <div>
-<<<<<<< HEAD
-        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
-          <div className="flex justify-between items-end flex-wrap gap-4">
-            <div className="flex items-end">
-              <div className="grow mr-4">
-                <p className="pb-2 font-medium">Filter by :</p>
-                <form className="max-w-52">
-                  <select
-                    id="name"
-                    className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                    value={filterName}
-                    onChange={(e) => handleFilterChange("name", e.target.value)}
-                  >
-                    <option value="">Select User </option>
-                    {getUserNames().map((name) => (
-                      <option key={name} value={name}>
-                        {name}
-                      </option>
-                    ))}
-                  </select>
-                </form>
-              </div>
-              <div className="flex-none">
-                <label>
-                  <button
-                    name="Select Date Range"
-                    id="dateofbirth"
-                    defaultValue="Select Date Range"
-                    className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                    onClick={handleToggleFilterModal}
-                  >
-                    {startDate && endDate
-                      ? `${startDate.toDateString()} - ${endDate.toDateString()}`
-                      : "Select Date Range"}
-                  </button>
-                </label>
-              </div>
-              <div className="flex-none">
-                {showFilterModal && (
-                  <div
-                    className="absolute top-0 left-0 h-full w-full  flex justify-center items-center"
-                    style={{ zIndex: "900", background: "rgba(0, 0, 0, 0.6)" }}
-                  >
-                    <div>
-                      <div className="bg-white p-4 rounded-md shadow-md">
-                        <div className="grid gap-4 mb-4">
-                          <div className="border border-black">
-                            <DateRangePickerComp
-                              onChange={(range: {
-                                startDate: Date | null;
-                                endDate: Date | null;
-                              }) => {
-                                setStartDate(range.startDate);
-                                setEndDate(range.endDate);
-                              }}
-                            />
-=======
         <EmployeeNavbar toggleSidebar={toggleSidebar} />
         <div className="flex w-100" id="body-row">
           <Sidebar isCollapsed={isCollapsed} />
@@ -298,7 +241,6 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
                                 </button>
                               </div>
                             </div>
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
                           </div>
                         </div>
                       )}
@@ -352,50 +294,6 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
                 </div>
               </div>
             </div>
-<<<<<<< HEAD
-
-            <div>
-              <button
-                className="rounded bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white focus:outline-0"
-                onClick={handleFetchAndDownload}
-                disabled={isLoading}
-              >
-                {isLoading ? "Loading..." : "Download Reports"}
-              </button>
-              <CSVLink
-                data={downloadData.map((record) => ({
-                  userName: record.userName,
-                  date: record.date,
-                  timeIn: record.timeIn,
-                  timeOut: record.timeOut,
-                  status: record.status,
-                  totalHours: record.totalHours,
-                }))}
-                filename={"attendance_report.csv"}
-                ref={csvLinkRef}
-                className="hidden"
-              />
-            </div>
-          </div>
-
-          <div className="mt-10">
-            <div className="overflow-x-auto">
-              <TableComponent
-                columns={columns}
-                data={filteredAttendance}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                paginate={paginate}
-                totalCount={totalCount}
-                OnchangeData={OnchangeData}
-                formdata={formdata}
-                handleSort={handleSort}
-                sortOrder={sortOrder}
-                sortColumn={sortColumn}
-              />
-            </div>
-=======
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
           </div>
         </div>
       </div>

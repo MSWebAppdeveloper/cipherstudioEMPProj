@@ -15,7 +15,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@heroicons/react": "^2.1.4",
     "@iconify/react": "^4.1.1",
-    "@nextui-org/react": "^2.4.1",
+    "@nextui-org/react": "^2.4.2",
     "@nextui-org/table": "^2.0.35",
     "@nextui-org/tabs": "^2.0.32",
     "ag-grid-react": "^31.3.2",
