@@ -129,8 +129,8 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   return (
     <>
       <div>
-        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-          <div className="flex justify-between items-end">
+        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
+          <div className="flex justify-between items-end flex-wrap gap-4">
             <div className="flex items-end">
               <div className="grow mr-4">
                 <p className="pb-2 font-medium">Filter by :</p>

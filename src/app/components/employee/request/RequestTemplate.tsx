@@ -116,21 +116,10 @@ const RequestTemplate: React.FC<RequestInterface> = ({
     return (
         <>
             <div>
-                <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5">
-                    <div className="text-end pb-5 pt-2">
-                        <button
-                            data-modal-target="authentication-modal"
-                            data-modal-toggle="authentication-modal"
-                            onClick={() => setModal((prev) => !prev)}
-                            className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
-                        >
-                            Request Leave
-                        </button>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <h3 className="text-2xl font-medium px-2 py-4">Leave Overview</h3>
-                        <div className="flex items-center">
-                            <span className="mr-4 text-lg font-medium">Year:</span>
+                <div className="pb-12 pt-5 px-5 rounded-lg box-shadow mt-5 lg:py-8">
+                    <div className="flex items-end justify-between px-3">
+                        <div className="">
+                            <p className="mr-4 font-medium pb-2">Year:</p>
                             <select
                                 value={formdata.year}
                                 name="year"
@@ -144,8 +133,19 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                                 <option value="2025">2025</option>
                             </select>
                         </div>
+                        
+                        <div className="">
+                            <button
+                                data-modal-target="authentication-modal"
+                                data-modal-toggle="authentication-modal"
+                                onClick={() => setModal((prev) => !prev)}
+                                className="rounded bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white focus:outline-0"
+                            >
+                                Request Leave
+                            </button>
+                        </div>
                     </div>
-                    <div className="flex flex-wrap -m-1 mt-3">
+                    <div className="flex flex-wrap -m-1 mt-10">
                         {/*-card*/}
                         {leaveTypes.map((leaveType, id) => (
                             <div
@@ -158,13 +158,13 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                                     )} opacity-75 text-white rounded-lg box-shadow overflow-hidden flex-1 flex flex-col`}
                                 >
                                     <div className="px-3 py-3 flex-1 flex flex-col">
-                                        <div className="flex justify-between">
+                                        <div className="flex justify-between card-direction">
                                             <div className="px-3">
                                                 <h3 className="mb-4 text-2xl py-2 border-b text-size">
                                                     {leaveType.leaveType}
                                                 </h3>
                                             </div>
-                                            <div className="mb-3 mt-1 text-grey-darker text-sm flex-1 px-6">
+                                            <div className="mb-3 mt-1 text-grey-darker text-sm flex-1 px-6 card-direction-2">
                                                 <ul className="space-y-2">
                                                     <li className="text-lg flex justify-between">
                                                         Allowed Leaves : {leaveType.allowedLeaves}
@@ -191,12 +191,11 @@ const RequestTemplate: React.FC<RequestInterface> = ({
                     </div>
                 </div>
                 {/*table*/}
-                <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
+                <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
                     {" "}
-                    <h3 className="text-2xl font-medium py-5">Leave History</h3>
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center">
-                            <span className="mr-4 text-lg font-medium">Sort by :</span>
+                        <div className="">
+                            <p className="mr-4 pb-2 font-medium">Filter by :</p>
                             <select
                                 id="response"
                                 className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"

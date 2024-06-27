@@ -24,11 +24,21 @@ export default function SignoutButton({}: { type?: string }) {
 
   return (
     <>
-      <div className="signout p-2  rounded-md" onClick={handleSignOut}>
-        <a href="#" className="flex items-center">
-        <Icon icon="ic:round-logout" width="20" height="20"  style={{ color: "#1565e5" }} />
-        Logout
-        </a>
+    <div className="px-2">
+      <div
+        className="signout flex items-center p-2  rounded-md"
+        onClick={handleSignOut}
+      >
+        <div className="mr-2">
+          <Icon
+            icon="ic:round-logout"
+            width="20"
+            height="20"
+            style={{ color: "#1565e5" }}
+          />
+        </div>
+        <span className="font-medium text-sm flex ml-2">Logout</span>
+      </div>
       </div>
     </>
   );

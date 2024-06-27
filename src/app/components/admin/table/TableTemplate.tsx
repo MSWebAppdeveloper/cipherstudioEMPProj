@@ -99,17 +99,21 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
       label: "ACTIVE",
       render: (user: { isActive: boolean | undefined; id: string }) => (
         <label className="inline-flex items-center cursor-pointer">
-          <input
+          {/* <input
             type="checkbox"
             checked={user.isActive}
             onChange={(e) => handleToggleUserStatus(user.id, e.target.checked)}
-            className="sr-only peer"
-          />
-          <div
+            className=""
+          /> */}
+            <label className="switch">
+                  <input type="checkbox" defaultChecked />
+                  <span className="slider round" />
+            </label>
+          {/* <div
             className={`relative w-11 h-6 ${
               user.isActive ? "bg-green-500" : "bg-gray-200"
             } peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600`}
-          />
+          /> */}
         </label>
       ),
       sortable: false,
@@ -118,8 +122,8 @@ const UserTableTemplate: React.FC<UserTableProps> = ({
   return (
     <>
       <div>
-        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-          <div className="flex justify-between items-end">
+        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
+          <div className="flex justify-between items-end flex-wrap gap-2">
             <div>
               {/* Tab buttons */}
               <div className="flex space-x-4 items-end">

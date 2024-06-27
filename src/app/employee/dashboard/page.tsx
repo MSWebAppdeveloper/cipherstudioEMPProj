@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import EmployeePage from "../../components/employee/attendanceDashboard/page";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
@@ -10,7 +10,7 @@ const Employee = () => {
   // Effect to handle screen size changes
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 991) {
         setIsCollapsed(true);
       } else {
         setIsCollapsed(false);
@@ -38,7 +38,11 @@ const Employee = () => {
       <EmployeeNavbar toggleSidebar={toggleSidebar} />
       <div className={`flex w-100`} id="body-row">
         <Sidebar isCollapsed={isCollapsed} />
-        <div className={`right-sec lg:px-8 md:px-4 sm:px-4 ${isCollapsed ? 'collapsed' : ''}`}>
+        <div
+          className={`right-sec lg:px-8 md:px-4 sm:px-4 ${
+            isCollapsed ? "collapsed" : ""
+          }`}
+        >
           <EmployeePage />
         </div>
       </div>

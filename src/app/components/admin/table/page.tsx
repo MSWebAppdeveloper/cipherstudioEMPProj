@@ -99,7 +99,7 @@ const UserTableComponent: React.FC = () => {
     try {
       await axios.put(
         `
-      http://192.168.1.2:8080/api/employee/users/${userId}/status`,
+      http://192.168.1.12:8082/api/employee/users/${userId}/status`,
         { isActive }
       );
       getAllUsers(currentPage); // Refresh the user list after updating status

@@ -26,11 +26,13 @@ const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
   }, [text]);
 
   return (
-    <div className="center">
-      <div ref={textRef} className={`text ${isTruncated ? "truncated" : ""}`}>
-        {text}
-      </div>
-      {isTruncated && <div className="text-tooltip">{text}</div>}
+    <div className="">
+      <span className="overflow" style={{ float: "left", width: "50px" }}>
+        <span ref={textRef} className={`${isTruncated ? "truncated" : ""}`}>
+          {text}
+        </span>
+      </span>
+      {isTruncated && <span className="visible-text">{text}</span>}
     </div>
   );
 };
@@ -100,19 +102,19 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
         let colorClass = "";
         switch (item.status) {
           case "Pending":
-            colorClass = "bg-yellow-500";
+            colorClass = "text-yellow-500";
             break;
           case "Approved":
-            colorClass = "bg-green-500";
+            colorClass = "text-green-500";
             break;
           case "Rejected":
-            colorClass = "bg-red-500";
+            colorClass = "text-red-500";
             break;
           default:
-            colorClass = "bg-gray-500";
+            colorClass = "text-gray-500";
         }
         return (
-          <span className={`px-2 py-1 rounded text-white ${colorClass}`}>
+          <span className={`px-2 py-1 rounded ${colorClass}`}>
             {" "}
             {item.status}
           </span>
@@ -128,18 +130,28 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
           <div className="flex">
             <div>
               <button
-                className="rounded-full bg-green-500 text-white text-md hover:bg-green-600 shadow-xl mr-3 p-2"
+                className="text-md hover:text-green-800 mr-3 p-2"
                 onClick={() => approveApplication(leave.id)}
               >
-                <Icon icon="material-symbols:check" width={22} height={22} />
+                <Icon
+                  icon="material-symbols:check"
+                  width={22}
+                  height={22}
+                  style={{ color: "#22c55e" }}
+                />
               </button>
             </div>
             <div>
               <button
-                className="rounded-full bg-red-500 text-white text-md hover:bg-red-600 shadow-xl p-2"
+                className="text-md hover:text-red-800 p-2"
                 onClick={() => rejectApplication(leave.id)}
               >
-                <Icon icon="iconoir:xmark" width={22} height={22} />
+                <Icon
+                  icon="iconoir:xmark"
+                  width={22}
+                  height={22}
+                  style={{ color: "#ef4444" }}
+                />
               </button>
             </div>
           </div>
@@ -150,7 +162,7 @@ const LeaveApplicationsTemplate: React.FC<leaveApplicationsInterface> = ({
   return (
     <>
       <div>
-        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
+        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
           <div className="flex justify-between items-center">
             {/*-dropdown*/}
             <div className="">

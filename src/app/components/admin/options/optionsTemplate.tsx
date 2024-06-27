@@ -74,8 +74,8 @@ const OptionsTemplate: React.FC<OptionsProps> = ({
   return (
     <>
       <div>
-        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-          <div className="flex justify-between items-center">
+        <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
+          <div className="flex justify-between items-end">
             <div className="">
               <p className="pb-2 font-medium">Year:</p>
               <select
