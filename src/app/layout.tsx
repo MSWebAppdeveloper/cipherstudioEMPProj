@@ -5,9 +5,7 @@ import Loader from "@/components/common/Loader";
 
 import { Toaster } from "react-hot-toast";
 import NextAuthProvider from "./provider/NextAuthProvider";
-import EmployeeNavbar from "@/components/EmployeeNavbar";
-import Sidebar from "@/components/Sidebar";
-
+   
 export default function RootLayout({
   children,
 }: Readonly<{

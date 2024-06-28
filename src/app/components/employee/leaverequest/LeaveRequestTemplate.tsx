@@ -3,6 +3,7 @@ import { LeaveRequestInterface } from "./LeaveRequestInterface";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
 import Sidebar from "@/components/Sidebar";
 import TableComponent from "@/components/TableComponent";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
   deleteSelected,
@@ -71,7 +72,7 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
   const columns = [
     {
       key: "index",
-      label: "S NO.",
+      label: "#",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
     },
@@ -88,23 +89,18 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
         let colorClass = "";
         switch (item.status) {
           case "Pending":
-            colorClass = "bg-yellow-500";
+            colorClass = "text-yellow-500";
             break;
           case "Approved":
-            colorClass = "bg-green-500";
+            colorClass = "text-green-500";
             break;
           case "Rejected":
-            colorClass = "bg-red-500";
+            colorClass = "text-red-500";
             break;
           default:
-            colorClass = "bg-gray-500";
+            colorClass = "text-gray-500";
         }
-        return (
-          <span className={`px-2 py-1 rounded text-white ${colorClass}`}>
-            {" "}
-            {item.status}
-          </span>
-        );
+        return <span className={` rounded ${colorClass}`}> {item.status}</span>;
       },
       sortable: false,
     },
@@ -113,12 +109,17 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
       label: "ACTIONS",
       render: (leave: { id: any; status: string }) =>
         leave.status === "Pending" ? (
-          <div className="text-lg text-center">
+          <div className="flex">
             <button
-              className="px-3 py-1 bg-red-500 text-white text-md rounded-md hover:bg-red-600"
+              className=" hover:text-red-800 "
               onClick={() => deleteSelected(leave.id)}
             >
-              Delete
+              <Icon
+                icon="iconoir:xmark"
+                width={22}
+                height={22}
+                style={{ color: "#ef4444" }}
+              />
             </button>
           </div>
         ) : null,
@@ -155,20 +156,8 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
           >
             <div>
               <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5">
-                <div className="text-end pb-5 pt-2">
-                  <button
-                    data-modal-target="authentication-modal"
-                    data-modal-toggle="authentication-modal"
-                    onClick={() => setModal((prev) => !prev)}
-                    className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
-                  >
-                    Request Leave
-                  </button>
-                </div>
+                <div className="text-end pb-5 pt-2"></div>
                 <div className="flex justify-between items-center">
-                  <h3 className="text-2xl font-medium px-2 py-4">
-                    Leave Overview
-                  </h3>
                   <div className="flex items-center">
                     <span className="mr-4 text-lg font-medium">Year:</span>
                     <select
@@ -184,6 +173,14 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
                       <option value="2025">2025</option>
                     </select>
                   </div>
+                  <button
+                    data-modal-target="authentication-modal"
+                    data-modal-toggle="authentication-modal"
+                    onClick={() => setModal((prev) => !prev)}
+                    className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                  >
+                    Request Leave
+                  </button>
                 </div>
                 <div className="flex flex-wrap -m-1 mt-3">
                   {/*-card*/}

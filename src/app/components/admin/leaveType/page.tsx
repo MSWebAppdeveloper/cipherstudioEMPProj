@@ -46,7 +46,6 @@ const LeaveTypeComponent: React.FC = () => {
     try {
       const url = `leavetypes?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
       const response: any = await LeaveTypes(url);
-      // console.log(response.data);
       setLeaveTypes(response.data.data);
       setTotalPages(response.data.totalPages);
       setTotalCount(response.data.totalCount);

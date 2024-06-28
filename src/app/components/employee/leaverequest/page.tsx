@@ -103,7 +103,6 @@ const LeaveRequestComponent: React.FC = () => {
       );
       if (response.ok) {
         const userDetails = await response.json();
-        // console.log(userDetails)
         const userLeaveRequests = userDetails[0].leaveRequests;
         const userLeaveBalance = userDetails[0].leaveBalance;
         // const { leaveRequests, totalPages, totalCount } = userDetails.data;

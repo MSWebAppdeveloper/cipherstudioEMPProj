@@ -55,13 +55,12 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
   const softDeleteLeave = (leaveId: string) => {
     setDeleteAlertVisible(false); // Hide delete alert
     // Perform soft delete operation here
-    console.log("Soft delete leave with ID:", leaveId);
     deleteSelected(leaveId);
   };
   const columns = [
     {
       key: "index",
-      label: "S NO.",
+      label: "#",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
     },
@@ -74,7 +73,7 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
       label: "ACTIONS",
       render: (leave: { leave_type_id: any; leave: any }) => (
         <div className="flex">
-          <button className="btn-1 mr-3" onClick={() => openEditPopup(leave)}>
+          <button className="mr-3" onClick={() => openEditPopup(leave)}>
             <Icon
               icon="flowbite:edit-outline"
               width="1.2em"
@@ -83,7 +82,7 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
             />{" "}
           </button>
           <button
-            className="btn-2 btn-1"
+            className=""
             onClick={() => deleteSelected(leave.leave_type_id)}
           >
             <Icon
@@ -140,25 +139,24 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
 
                 {/*table*/}
                 <div className="mt-10">
-                  <div className="overflow-x-auto">
-                    {leaveTypes.length > 0 ? (
-                      <TableComponent
-                        data={leaveTypes}
-                        columns={columns}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        paginate={paginate}
-                        totalCount={totalCount}
-                        OnchangeData={OnchangeData}
-                        formdata={formdata}
-                        handleSort={handleSort}
-                        sortOrder={sortOrder}
-                        sortColumn={sortColumn}
-                      />
-                    ) : (
-                      <p>No Leave Available for this year.</p>
-                    )}
-                  </div>
+                  {leaveTypes.length > 0 ? (
+                    <TableComponent
+                      data={leaveTypes}
+                      columns={columns}
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      paginate={paginate}
+                      totalCount={totalCount}
+                      OnchangeData={OnchangeData}
+                      formdata={formdata}
+                      handleSort={handleSort}
+                      sortOrder={sortOrder}
+                      sortColumn={sortColumn}
+                    />
+                  ) : (
+                    <p>No Leave Available for this year.</p>
+                  )}
+
                   {/* Delete alert */}
                   {isDeleteAlertVisible && (
                     <div className="fixed deletePopup inset-0 overflow-y-auto">
@@ -271,4 +269,3 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
 };
 
 export default LeaveTypeTemplate;
-

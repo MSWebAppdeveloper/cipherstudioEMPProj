@@ -42,9 +42,9 @@ const Reports: React.FC = () => {
 
   const getAllUsers = async (page: number) => {
     try {
-      const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}`;
+      const url = `employee/users?&order=${formdata.order}`;
       const response: any = await UserDetails(url);
-      setAllUsers(response.data.data.filter((user: any) => user.isActive === true));
+      setAllUsers(response.data.filter((user: any) => user.isActive === true));
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -72,7 +72,6 @@ const Reports: React.FC = () => {
 
 
       if (forDownload) {
-        // console.log("report", response.data)
         setDownloadData(response.data);
         setIsLoading(false);
       } else {

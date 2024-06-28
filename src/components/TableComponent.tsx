@@ -1,4 +1,3 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import React from "react";
 import Pagination from "./Pagination";
 import { Icon } from "@iconify/react/dist/iconify.js";

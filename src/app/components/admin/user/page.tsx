@@ -58,7 +58,7 @@ const UserComponent: React.FC = () => {
 
   const getAllUsers = async (page: number, isActive: boolean) => {
     try {
-      const url = `employee/users?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&userRole=${filterValue}&isActive=${isActive}`;
+      const url = `employee/allusers?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&userRole=${filterValue}&isActive=${isActive}`;
       const response: any = await UserDetails(url);
       setAllUsers(response.data.data);
       setTotalPages(response.data.totalPages);

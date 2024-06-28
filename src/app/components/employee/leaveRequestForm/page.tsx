@@ -34,7 +34,6 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
       try {
         const url = `leavetypes`;
         const response: any = await LeaveTypes(url);
-        // console.log(response.data);
         setLeaveTypes(response.data.data);
       } catch (error) {
         console.error("Error fetching leaveTypes:", error);

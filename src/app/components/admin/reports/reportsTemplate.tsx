@@ -100,7 +100,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   const columns = [
     {
       key: "index",
-      label: "S NO.",
+      label: "#",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
     },
@@ -165,7 +165,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
             }`}
           >
             <div>
-              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
+              <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
                 <div className="flex justify-between items-center">
                   <div className="flex">
                     <div className="max-w-52 grow mr-4">
@@ -272,25 +272,23 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
                 </div>
 
                 <div className="mt-10">
-                  <div className="overflow-x-auto">
-                    {filteredAttendance.length > 0 ? (
-                      <TableComponent
-                        columns={columns}
-                        data={filteredAttendance}
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        paginate={paginate}
-                        totalCount={totalCount}
-                        OnchangeData={OnchangeData}
-                        formdata={formdata}
-                        handleSort={handleSort}
-                        sortOrder={sortOrder}
-                        sortColumn={sortColumn}
-                      />
-                    ) : (
-                      <p>No record available.</p>
-                    )}
-                  </div>
+                  {filteredAttendance.length > 0 ? (
+                    <TableComponent
+                      columns={columns}
+                      data={filteredAttendance}
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      paginate={paginate}
+                      totalCount={totalCount}
+                      OnchangeData={OnchangeData}
+                      formdata={formdata}
+                      handleSort={handleSort}
+                      sortOrder={sortOrder}
+                      sortColumn={sortColumn}
+                    />
+                  ) : (
+                    <p>No record available.</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -302,4 +300,3 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
 };
 
 export default ReportsTemplate;
-
