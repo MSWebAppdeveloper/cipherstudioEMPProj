@@ -55,7 +55,7 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
             }`}
           >
             {/*attendance--card*/}
-            <div className="lg:pt-10 md:pt-10 sm:pt-10 pt-10 box-shadow attendace-card px-10 mt-5 rounded-lg">
+            <div className="lg:pt-10 md:pt-10 sm:pt-10 pt-10 box-shadow attendace-card px-8 mt-5 rounded-lg">
               <div className="pb-8 max-w-sm">
                 <h3 className="pt-2 flex justify-between">
                   <b>Employee</b>{" "}
@@ -76,7 +76,7 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
               <div className="flex justify-between items-center py-8 border-gray-200 border-t">
                 <div>
                   <button
-                    className={`bg-blue-500 text-white text-lg py-2 px-5 font-medium rounded-md hover:bg-blue-600 ${
+                    className={`bg-blue-500 text-white text-lg py-2 px-5 font-medium rounded hover:bg-blue-600 shadow-md shadow-gray-300 ${
                       isDayInActive ? "" : "opacity-50 cursor-not-allowed"
                     }`}
                     onClick={(e) => {
@@ -89,7 +89,7 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
                 </div>
                 <div>
                   <button
-                    className={`bg-red-500 text-white text-lg py-2 px-5 font-medium rounded-md hover:bg-red-600 ${
+                    className={`bg-red-500 text-white text-lg py-2 px-5 font-medium rounded hover:bg-red-600 shadow-md shadow-gray-300 ${
                       isDayOutActive ? "" : "opacity-50 cursor-not-allowed"
                     }`}
                     onClick={(e) => {

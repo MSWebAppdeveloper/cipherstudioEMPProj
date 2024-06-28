@@ -1,8 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LeaveRequestInterface } from "./LeaveRequestInterface";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
 import Sidebar from "@/components/Sidebar";
 import TableComponent from "@/components/TableComponent";
+
+interface TruncatedTextProps {
+  text: string;
+}
+
+const isTextTruncated = (element: {
+  scrollWidth: number;
+  clientWidth: number;
+}) => {
+  return element.scrollWidth > element.clientWidth;
+};
+
+const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isTruncated, setIsTruncated] = useState(false);
+
+  useEffect(() => {
+    if (textRef.current) {
+      setIsTruncated(isTextTruncated(textRef.current));
+    }
+  }, [text]);
+
+  return (
+    <div className="truncate-wrapper">
+      <div
+        ref={textRef}
+        className={`truncate ${isTruncated ? "truncated" : ""}`}
+      >
+        {text}
+      </div>
+      {isTruncated && <div className="truncate-tooltip">{text}</div>}
+    </div>
+  );
+};
 
 const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
   deleteSelected,
@@ -80,7 +114,12 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
     { key: "startDate", label: "START DATE", sortable: true },
     { key: "endDate", label: "END DATE", sortable: false },
     { key: "total_days", label: "Total Days", sortable: true },
-    { key: "reason", label: "REASON", sortable: false },
+    {
+      key: "reason",
+      label: "REASON",
+      render: (item: { reason: any }) => <TruncatedText text={item.reason} />,
+      sortable: false,
+    },
     {
       key: "status",
       label: "STATUS",
@@ -154,23 +193,12 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
             }`}
           >
             <div>
-              <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5">
-                <div className="text-end pb-5 pt-2">
-                  <button
-                    data-modal-target="authentication-modal"
-                    data-modal-toggle="authentication-modal"
-                    onClick={() => setModal((prev) => !prev)}
-                    className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
-                  >
-                    Request Leave
-                  </button>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h3 className="text-2xl font-medium px-2 py-4">
-                    Leave Overview
-                  </h3>
-                  <div className="flex items-center">
-                    <span className="mr-4 text-lg font-medium">Year:</span>
+              <div
+                className="py-10 px-8 rounded-lg box-shadow mt-5"
+              >
+                <div className="flex justify-between items-end px-2">
+                  <div className="">
+                    <p className="pb-2 font-medium">Year:</p>
                     <select
                       value={formdata.year}
                       name="year"
@@ -184,6 +212,17 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
                       <option value="2025">2025</option>
                     </select>
                   </div>
+
+                  <div className="text-end pb-5">
+                  <button
+                    data-modal-target="authentication-modal"
+                    data-modal-toggle="authentication-modal"
+                    onClick={() => setModal((prev) => !prev)}
+                    className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                  >
+                    Request Leave
+                  </button>
+                </div>
                 </div>
                 <div className="flex flex-wrap -m-1 mt-3">
                   {/*-card*/}
@@ -234,12 +273,11 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
               {/*table*/}
               <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
                 {" "}
-                <h3 className="text-2xl font-medium py-5">Leave History</h3>
                 <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <span className="mr-4 text-lg font-medium">
+                  <div className="">
+                    <p className="pb-2 font-medium">
                       Filter by :
-                    </span>
+                    </p>
                     <select
                       id="response"
                       className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"

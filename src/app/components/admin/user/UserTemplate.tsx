@@ -106,7 +106,7 @@ const UserTemplate: React.FC<UserProps> = ({
             />
           </button>
           <button
-            className="btn-2 btn-1 "
+            className="btn-2 btn-1"
             onClick={() => deleteSelected(user.id)}
           >
             <Icon
@@ -174,7 +174,7 @@ const UserTemplate: React.FC<UserProps> = ({
           >
             <div>
               <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
-              <div className="flex justify-between items-end flex-wrap gap-2">
+              <div className="flex justify-between items-end flex-wrap gap-4">
                   <div>
                     {/* Tab buttons */}
                     <div className="flex space-x-4 items-end">
@@ -182,7 +182,7 @@ const UserTemplate: React.FC<UserProps> = ({
                       <p className="pb-2 font-medium">Filter by :</p>
                         <select
                           id="roleFilter"
-                          className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
+                          className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50 select-dropdown"
                           value={filterName}
                           onChange={(e) =>
                             handleFilterChange("userRole", e.target.value)
@@ -197,7 +197,7 @@ const UserTemplate: React.FC<UserProps> = ({
                         </select>
                       </form>
                       <button
-                        className={`px-4 py-2  rounded ${
+                        className={`px-4 py-2  rounded-md ${
                           currentTab === "Active"
                             ? "bg-blue-500 text-white"
                             : "bg-gray-200 text-gray-700"

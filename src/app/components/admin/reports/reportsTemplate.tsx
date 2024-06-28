@@ -166,7 +166,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
           >
             <div>
               <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-10">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center flex-wrap gap-2">
                   <div className="flex">
                     <div className="max-w-52 grow mr-4">
                       <form className="max-w-52">
@@ -249,7 +249,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
 
                   <div>
                     <button
-                      className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                      className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white focus:outline-0"
                       onClick={handleFetchAndDownload}
                       disabled={isLoading}
                     >

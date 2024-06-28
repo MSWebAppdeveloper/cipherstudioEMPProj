@@ -31,16 +31,6 @@ const EmployeeNavbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
           <Icon id="collapse-icon" icon="fa:bars" width="20" height="20" />
         </button>
       </div>
-<<<<<<< HEAD
-      {/* <div className="flex justify-between items-center">
-        <button className=" bg-gray-200 rounded-md hover:bg-gray-300">
-          <span className="font-semibold text-sm">
-            <SignoutButton />
-          </span>
-        </button>
-      </div> */}
-=======
->>>>>>> da3330fc74a7096a34f84dabd6224a8180401625
     </div>
   );
 };

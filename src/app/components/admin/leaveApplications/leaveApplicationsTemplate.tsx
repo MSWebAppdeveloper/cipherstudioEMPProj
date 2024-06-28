@@ -6,14 +6,13 @@ import EmployeeNavbar from "@/components/EmployeeNavbar";
 import Sidebar from "@/components/Sidebar";
 
 import TableComponent from "@/components/TableComponent";
+
+
 interface TruncatedTextProps {
   text: string;
 }
 
-const isTextTruncated = (element: {
-  scrollWidth: number;
-  clientWidth: number;
-}) => {
+const isTextTruncated = (element: { scrollWidth: number; clientWidth: number }) => {
   return element.scrollWidth > element.clientWidth;
 };
 
@@ -28,14 +27,17 @@ const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
   }, [text]);
 
   return (
-    <div className="center">
-      <div ref={textRef} className={`text ${isTruncated ? "truncated" : ""}`}>
+    <div className="truncate-wrapper">
+      <div ref={textRef} className={`truncate ${isTruncated ? "truncated" : ""}`}>
         {text}
       </div>
-      {isTruncated && <div className="text-tooltip">{text}</div>}
+      {isTruncated && 
+      <div className="truncate-tooltip">{text}</div>}
     </div>
   );
 };
+
+
 const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   leaveHistory,
   approveApplication,
@@ -95,16 +97,16 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   const columns = [
     {
       key: "index",
-      label: "S NO.",
+      label: "#",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
     },
     { key: "userName", label: "NAME", sortable: true },
-    { key: "leaveType", label: "LEAVE TYPE", sortable: true },
-    { key: "createdAt", label: "Submitted Date&Time", sortable: true },
+    { key: "leaveType", label: "TYPE", sortable: true },
+    { key: "createdAt", label: "Submitted D&T", sortable: true },
     { key: "startDate", label: "START DATE", sortable: true },
     { key: "endDate", label: "END DATE", sortable: false },
-    { key: "total_days", label: "Total Days", sortable: true },
+    { key: "total_days", label: "Days", sortable: true },
     {
       key: "reason",
       label: "REASON",
@@ -211,7 +213,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
                 </div>
                 {/*table*/}
                 <div className="mt-10">
-                  <div className="overflow-x-auto">
+                  <div className="">
                     {filteredUsers.length > 0 ? (
                       <TableComponent
                         data={filteredUsers}
