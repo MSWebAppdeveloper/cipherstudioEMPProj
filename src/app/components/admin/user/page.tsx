@@ -15,6 +15,7 @@ const initialFormValues = {
   isActive: true,
   limit: "10",
   order: "",
+  shift: "",
 };
 
 const UserComponent: React.FC = () => {
@@ -34,6 +35,7 @@ const UserComponent: React.FC = () => {
   const [currentTab, setCurrentTab] = useState("Active");
   const [filterType, setFilterType] = useState<"userRole">("userRole");
   const [filterValue, setFilterValue] = useState<string | [string, string]>("");
+  const [shift, setShift] = useState("");
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
@@ -55,7 +57,6 @@ const UserComponent: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
-
   const getAllUsers = async (page: number, isActive: boolean) => {
     try {
       const url = `employee/allusers?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&userRole=${filterValue}&isActive=${isActive}`;
@@ -63,6 +64,7 @@ const UserComponent: React.FC = () => {
       setAllUsers(response.data.data);
       setTotalPages(response.data.totalPages);
       setTotalCount(response.data.totalCount);
+      setShift(response.data.shift);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -108,7 +110,7 @@ const UserComponent: React.FC = () => {
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(
-        `http://192.168.1.2:8080/api/employee/users/${userId}/status`,
+        `http://192.168.1.3:8080/api/employee/users/${userId}/status`,
         { isActive }
       );
       getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
@@ -142,6 +144,7 @@ const UserComponent: React.FC = () => {
         handleClose={() => setModal(false)}
         user={selectedUser}
         onUpdate={handleEditUserUpdate}
+        shift={shift}
       />
       <UserTemplate
         formdata={formdata}

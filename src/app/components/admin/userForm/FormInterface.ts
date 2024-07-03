@@ -5,6 +5,7 @@ export interface UserFormProps {
     email: string;
     department: string;
     userRole: string;
+    shift: any;
   };
   handleChange: (e: any) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -12,4 +13,5 @@ export interface UserFormProps {
   handleClose: () => void;
   errors: registerErrorType;
   loading: boolean;
+  shift: any;
 }

@@ -18,6 +18,7 @@ export default function SignoutButton({}: { type?: string }) {
     localStorage.removeItem("name");
     localStorage.removeItem("token");
     localStorage.removeItem("userRole");
+    localStorage.removeItem("shift");
     toast.success("User signed out");
     router.push("/login");
   };

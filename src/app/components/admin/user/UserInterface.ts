@@ -7,6 +7,7 @@ export interface UserProps {
     isActive: boolean;
     limit: any;
     order:any;
+    shift:string;
   };
   allUsers?: Array<{
     id: string;
@@ -15,6 +16,7 @@ export interface UserProps {
     department: string;
     userRole: string;
     isActive: boolean;
+    shift:string;
   }>;
   filterName: string;
   setFilterName: React.Dispatch<React.SetStateAction<string>>;

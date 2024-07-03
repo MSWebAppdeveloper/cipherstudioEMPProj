@@ -28,6 +28,21 @@ const EmployeePage: React.FC = () => {
   const startTimeRef = React.useRef<number>(0);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [homeActiveStart, setHomeActiveStart] = useState("");
+  const [homeActiveEnd, setHomeActiveEnd] = useState("");
+  const shift = localStorage.getItem("shift");
+  const handleHomeActiveHoursChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: "start" | "end"
+  ) => {
+    const value = event.target.value;
+    if (type === "start") {
+      setHomeActiveStart(value);
+    } else {
+      setHomeActiveEnd(value);
+    }
+  };
+
   useEffect(() => {
     const updateClock = () => {
       const now = new Date();
@@ -47,7 +62,7 @@ const EmployeePage: React.FC = () => {
         const url = "employee/attendance/status";
         // const res= await Attendance("attendance/status")
         const response = await axios.get(
-          "http://192.168.1.2:8080/api/employee/attendance/status",
+          "http://192.168.1.3:8080/api/employee/attendance/status",
           { params: { UserId: userId } }
         );
         const { isClockedIn, attendanceId, existingEntry } = response.data;
@@ -100,11 +115,14 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.post(
-        "http://192.168.1.2:8080/api/employee/attendance/signin",
+        "http://192.168.1.3:8080/api/employee/attendance/signin",
         {
           UserId: localStorage.getItem("UserId"),
           timeIn: formattedTimeIn,
           date: new Date(currentDate).toISOString().split("T")[0],
+          shift,
+          homeActiveStart,
+          homeActiveEnd,
         }
       );
       setIsClockedIn(true);
@@ -138,7 +156,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.put(
-        `http://192.168.1.2:8080/api/employee/attendance/signout/${attendanceId}`,
+        `http://192.168.1.3:8080/api/employee/attendance/signout/${attendanceId}`,
         {
           timeOut: formattedTimeOut,
         }
@@ -221,6 +239,10 @@ const EmployeePage: React.FC = () => {
       isDayOutActive={isDayOutActive}
       status={status}
       formattedElapsedTime={formattedElapsedTime}
+      shift={shift}
+      handleHomeActiveHoursChange={handleHomeActiveHoursChange}
+      homeActiveStart={homeActiveStart}
+      homeActiveEnd={homeActiveEnd}
     />
   );
 };

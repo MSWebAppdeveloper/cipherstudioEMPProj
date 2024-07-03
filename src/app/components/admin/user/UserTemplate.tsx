@@ -91,6 +91,7 @@ const UserTemplate: React.FC<UserProps> = ({
     { key: "email", label: "EMAIL", sortable: true },
     { key: "userRole", label: "ACCOUNT TYPE", sortable: true },
     { key: "department", label: "DEPARTMENT", sortable: true },
+    { key: "shift", label: "Shift", sortable: true },
     {
       key: "actions",
       label: "ACTIONS",

@@ -7,14 +7,15 @@ import Sidebar from "@/components/Sidebar";
 const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
   handleSignIn,
   handleSignOut,
-
   currentTime,
-
+  shift,
   status,
   isDayInActive,
   isDayOutActive,
-
   formattedElapsedTime,
+  handleHomeActiveHoursChange,
+  homeActiveStart,
+  homeActiveEnd,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -63,6 +64,9 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
                     {localStorage.getItem("name")}
                   </span>
                 </h3>
+                {/* <h3 className="pt-2 flex justify-between">
+                  <b>Shift Type:</b> {shift}
+                </h3> */}
                 <h3 className="pt-2 flex justify-between">
                   <b>Current Status:</b> {status}
                 </h3>
@@ -72,6 +76,36 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
                 <h3 className="pt-2 flex justify-between">
                   <b>Total Active Hour:</b> {formattedElapsedTime}
                 </h3>
+                {shift === "Hybrid" && (
+                  <>
+                    <div className="pt-2 flex justify-between">
+                      <label htmlFor="homeActiveStart">
+                        <b>Home Active Start:</b>
+                      </label>
+                      <input
+                        type="time"
+                        id="homeActiveStart"
+                        value={homeActiveStart}
+                        onChange={(e) =>
+                          handleHomeActiveHoursChange(e, "start")
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="pt-2 flex justify-between">
+                      <label htmlFor="homeActiveEnd">
+                        <b>Home Active End:</b>
+                      </label>
+                      <input
+                        type="time"
+                        id="homeActiveEnd"
+                        value={homeActiveEnd}
+                        onChange={(e) => handleHomeActiveHoursChange(e, "end")}
+                        required
+                      />
+                    </div>
+                  </>
+                )}
               </div>
               <div className="flex justify-between items-center py-8 border-gray-200 border-t">
                 <div>

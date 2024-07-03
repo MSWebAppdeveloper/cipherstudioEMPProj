@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import UserFormTemplate from "./FormTemplate";
@@ -10,12 +10,14 @@ const initialFormValues = {
   email: "",
   department: "",
   userRole: "",
+  shift: "",
 };
 
 interface UserFormComponentProps {
   isModal: boolean;
   handleClose: () => void;
   user: any;
+  shift: any;
   onUpdate: () => void;
 }
 
@@ -23,6 +25,7 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
   isModal,
   handleClose,
   user,
+  shift,
   onUpdate,
 }) => {
   const [formData, setFormData] = useState(initialFormValues);
@@ -36,15 +39,9 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
       name: user?.name || "",
       email: user?.email || "",
       department: user?.department || "",
+      shift: user?.shift || "",
     });
   }, [user]);
-
-  const [formValues, setFormValues] = React.useState({
-    name: user ? user.name : "",
-    email: user ? user.email : "",
-    department: user ? user.department : "",
-    userRole: user ? user.userRole : "",
-  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,6 +61,7 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
         email: formData.email,
         department: formData.department,
         userRole: formData.userRole,
+        shift: formData.shift,
       };
 
       if (formData.id) {
@@ -93,15 +91,15 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
         }
       }
     } catch (error: any) {
-      debugger
-      console.error(error); 
+      debugger;
+      console.error(error);
       setLoading(false);
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.error;
         toast.error(errorMessage);
         // Handle the error message appropriately, for example, set it in state
         // setErrors({ error: errorMessage });
-      }else if(error.response.status === 500){
+      } else if (error.response.status === 500) {
         toast.error("user is already in the database");
       } else {
         const errorMessage = error.response.data;
@@ -116,6 +114,9 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
     handleClose();
   };
 
+    // Transform shift data into required format
+   
+
   return (
     <UserFormTemplate
       formData={formData}
@@ -125,6 +126,7 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
       handleClose={handleClosePopup}
       errors={errors}
       loading={loading}
+      shift={shift}
     />
   );
 };

@@ -8,4 +8,8 @@ export interface EmployeeAttendanceInterface {
   isDayInActive: boolean;
   isDayOutActive: boolean;
   status: string;
+  shift: string | null;
+  handleHomeActiveHoursChange: any;
+  homeActiveStart: any;
+  homeActiveEnd: any;
 }

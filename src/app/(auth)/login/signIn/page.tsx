@@ -79,6 +79,7 @@ function SignIn() {
           accessToken,
           refreshToken,
           userRole = "",
+          shift,
         } = response.data;
 
         localStorage.setItem("accessToken", accessToken);
@@ -87,6 +88,7 @@ function SignIn() {
         localStorage.setItem("name", name);
         localStorage.setItem("userRole", userRole);
         sessionStorage.setItem("userRole", userRole);
+        localStorage.setItem("shift", shift);
 
         // Save email and password in local storage if Remember Me is checked
         if (rememberMe) {
