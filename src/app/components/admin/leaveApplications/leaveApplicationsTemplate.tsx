@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { LeaveApplicationsInterface } from "./leaveApplicationsInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import EmployeeNavbar from "@/components/EmployeeNavbar";
-import Sidebar from "@/components/Sidebar";
 
 import TableComponent from "@/components/TableComponent";
+import { CSVLink } from "react-csv";
 
 interface TruncatedTextProps {
   text: string;
@@ -47,6 +46,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   rejectApplication,
   handleFilterChange,
   filterName,
+  filterStatus,
   currentPage,
   totalPages,
   paginate,
@@ -56,46 +56,35 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   handleSort,
   sortOrder,
   sortColumn,
+  allUsers,
+  downloadData,
+  isLoading,
+  fetchAllRecords,
+  isDataFetched,
+  setIsDataFetched,
 }) => {
   const [currentStatus, setCurrentStatus] = useState("ALL");
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const csvLinkRef = useRef(null);
 
-  // Effect to handle screen size changes
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 991) {
-        setIsCollapsed(true);
-      } else {
-        setIsCollapsed(false);
-      }
-    };
-
-    // Set initial state based on screen size
-    handleResize();
-
-    // Add event listener for resize
-    window.addEventListener("resize", handleResize);
-
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
+  const getUserNames = () => {
+    return allUsers.map((user) => user.name);
+  };
+  const handleFetchAndDownload = async () => {
+    setIsDataFetched(false);
+    await fetchAllRecords();
+    setIsDataFetched(true);
   };
 
-  // const handleFilterChange = (value: string) => {
-  //   setCurrentStatus(value);
-  // };
+  useEffect(() => {
+    if (isDataFetched && csvLinkRef.current) {
+      (csvLinkRef.current as any).link.click();
+      setIsDataFetched(false);
+    }
+  }, [isDataFetched]);
 
   const filterOptions = ["Pending", "Approved", "Rejected"];
   // Filter users based on the current tab
-  const filteredUsers: any =
-    currentStatus === "ALL"
-      ? leaveHistory
-      : leaveHistory?.filter((user) => user.status === currentStatus);
+  const filteredUsers: any = currentStatus === "ALL"? leaveHistory ?? [] : (leaveHistory?.filter((user) => user.status === currentStatus) ?? []);
 
   const columns = [
     {
@@ -106,7 +95,6 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
     },
     { key: "userName", label: "NAME", sortable: true },
     { key: "leaveType", label: "TYPE", sortable: true },
-    { key: "createdAt", label: "Submitted D&T", sortable: true },
     { key: "startDate", label: "START DATE", sortable: true },
     { key: "total_days", label: "Days", sortable: true },
     {
@@ -133,12 +121,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
           default:
             colorClass = "text-gray-500";
         }
-        return (
-          <span className={` rounded ${colorClass}`}>
-            {" "}
-            {item.status}
-          </span>
-        );
+        return <span className={` rounded ${colorClass}`}> {item.status}</span>;
       },
       sortable: false,
     },
@@ -148,32 +131,29 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
       render: (leave: { id: any; status: string }) =>
         leave.status === "Pending" ? (
           <div className="flex">
-           
-              <button
-                className=" hover:text-green-800 mr-3"
-                onClick={() => approveApplication(leave.id)}
-              >
-                <Icon
-                  icon="material-symbols:check"
-                  width={22}
-                  height={22}
-                  style={{ color: "#22c55e" }}
-                />
-              </button>
-           
-           
-              <button
-                className=" hover:text-red-800 "
-                onClick={() => rejectApplication(leave.id)}
-              >
-                <Icon
-                  icon="iconoir:xmark"
-                  width={22}
-                  height={22}
-                  style={{ color: "#ef4444" }}
-                />
-              </button>
-           
+            <button
+              className=" hover:text-green-800 mr-3"
+              onClick={() => approveApplication(leave.id)}
+            >
+              <Icon
+                icon="material-symbols:check"
+                width={22}
+                height={22}
+                style={{ color: "#22c55e" }}
+              />
+            </button>
+
+            <button
+              className=" hover:text-red-800 "
+              onClick={() => rejectApplication(leave.id)}
+            >
+              <Icon
+                icon="iconoir:xmark"
+                width={22}
+                height={22}
+                style={{ color: "#ef4444" }}
+              />
+            </button>
           </div>
         ) : null,
       sortable: false,
@@ -181,41 +161,75 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   ];
   return (
     <>
-      <div>
-        <EmployeeNavbar toggleSidebar={toggleSidebar} />
-        <div className="flex w-100" id="body-row">
-          <Sidebar isCollapsed={isCollapsed} />
-          <div
-            className={`right-sec lg:px-8 md:px-4 sm:px-4 ${
-              isCollapsed ? "collapsed" : ""
-            }`}
-          >
+ 
             <div>
               <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
-                <div className="flex justify-between items-center">
-                  {/*-dropdown*/}
-                  <div className="">
-                    <p className="font-medium pb-2">Filter by :</p>
-                    <select
-                      id="response"
-                      className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                      value={filterName}
-                      onChange={(e) =>
-                        handleFilterChange("status", e.target.value)
-                      }
+                <div className="flex justify-between  items-end flex-wrap gap-2">
+                  <div>
+                    <div className="flex space-x-4 items-end">
+                      <form className="max-w-52">
+                        <p className="font-medium pb-2">Filter by :</p>
+                        <select
+                          id="response"
+                          className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
+                          value={filterStatus}
+                          onChange={(e) =>
+                            handleFilterChange("status", e.target.value)
+                          }
+                        >
+                          <option value="">All</option>
+                          {filterOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </form>
+                      <form className="max-w-52">
+                        <select
+                          id="name"
+                          className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
+                          value={filterName}
+                          onChange={(e) =>
+                            handleFilterChange("name", e.target.value)
+                          }
+                        >
+                          <option value="">Select User </option>
+                          {getUserNames().map((name) => (
+                            <option key={name} value={name}>
+                              {name}
+                            </option>
+                          ))}
+                        </select>
+                      </form>
+                    </div>
+                  </div>
+                  <div>
+                    <button
+                      className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
+                      onClick={handleFetchAndDownload}
+                      disabled={isLoading}
                     >
-                      <option value="">All</option>
-                      {filterOptions.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
+                      {isLoading ? "Loading..." : "Download Reports"}
+                    </button>
+                    <CSVLink
+                      data={downloadData.map((record) => ({
+                        userName: record.userName,
+                        leaveType: record.leaveType,
+                        submittedDate: record.createdAt,
+                        startDate: record.startDate,
+                        total_days: record.total_days,
+                        status: record.status,
+                      }))}
+                      filename={"LeaveApplication_report.csv"}
+                      ref={csvLinkRef}
+                      className="hidden"
+                    />
                   </div>
                 </div>
                 {/*table*/}
                 <div className="mt-10">
-                  {filteredUsers.length > 0 ? (
+                {(filteredUsers?.length > 0) ? (
                     <TableComponent
                       data={filteredUsers}
                       columns={columns}
@@ -235,9 +249,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+      
     </>
   );
 };

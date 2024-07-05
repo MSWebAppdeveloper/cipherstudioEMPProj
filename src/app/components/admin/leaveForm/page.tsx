@@ -39,11 +39,7 @@ const LeaveFormComponent: React.FC<LeaveFormComponentProps> = ({
     });
   }, [leave]);
 
-  const [formValues, setFormValues] = React.useState({
-    leave_type_name: leave ? leave.leave_type_name : "",
-    allowed_leaves: leave ? leave.allowed_leaves : "",
-    leave_description: leave ? leave.leave_description : "",
-  });
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

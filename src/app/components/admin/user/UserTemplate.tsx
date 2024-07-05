@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { UserProps } from "./UserInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import TableComponent from "@/components/TableComponent";
-import Sidebar from "@/components/Sidebar";
-import EmployeeNavbar from "@/components/EmployeeNavbar";
 import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
 
 const UserTemplate: React.FC<UserProps> = ({
@@ -33,33 +31,6 @@ const UserTemplate: React.FC<UserProps> = ({
   const [selectedRole, setSelectedRole] = useState("ALL");
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  // Effect to handle screen size changes
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 991) {
-        setIsCollapsed(true);
-      } else {
-        setIsCollapsed(false);
-      }
-    };
-
-    // Set initial state based on screen size
-    handleResize();
-
-    // Add event listener for resize
-    window.addEventListener("resize", handleResize);
-
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
 
   const handleTabChange = (value: string) => {
     setCurrentTab(value);
@@ -162,15 +133,7 @@ const UserTemplate: React.FC<UserProps> = ({
   // ];
   return (
     <>
-      <div>
-        <EmployeeNavbar toggleSidebar={toggleSidebar} />
-        <div className="flex w-100" id="body-row">
-          <Sidebar isCollapsed={isCollapsed} />
-          <div
-            className={`right-sec lg:px-8 md:px-4 sm:px-4 ${
-              isCollapsed ? "collapsed" : ""
-            }`}
-          >
+     
             <div>
               <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
                 <div className="flex justify-between items-end flex-wrap gap-2">
@@ -361,9 +324,7 @@ const UserTemplate: React.FC<UserProps> = ({
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+       
     </>
   );
 };

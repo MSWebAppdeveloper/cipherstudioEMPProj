@@ -56,7 +56,6 @@ const Reports: React.FC = () => {
 
   const fetchAttendanceHistory = async (page: number, forDownload = false) => {
     try {
-
       const baseUrl = `employee/attendance?page=${page}&order=${formdata.order}`;
       const limit = forDownload ? "" : `&limit=${formdata.limit}`;
       const nameFilter = filterValue ? `&name=${filterValue}` : "";
@@ -64,21 +63,25 @@ const Reports: React.FC = () => {
         startDate && endDate
           ? `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
           : "";
-      const sort = sortColumn ? `&sortColumn=${sortColumn}&sortOrder=${sortOrder}` : "";
+      const sort = sortColumn
+        ? `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+        : "";
       const downloadFlag = forDownload ? "&forDownload=true" : "";
 
-      const response: any = await AttendanceHistory(baseUrl + limit + nameFilter + dateFilter + sort + downloadFlag);
-
-
+      const response: any = await AttendanceHistory(
+        baseUrl + limit + nameFilter + dateFilter + sort + downloadFlag
+      );
 
       if (forDownload) {
         setDownloadData(response.data);
         setIsLoading(false);
       } else {
-        const dataWithParsedTotalHours = response.data.data.map((entry: any) => ({
-          ...entry,
-          totalHours: parseFloat(entry.totalHours),
-        }));
+        const dataWithParsedTotalHours = response.data.data.map(
+          (entry: any) => ({
+            ...entry,
+            totalHours: parseFloat(entry.totalHours),
+          })
+        );
         setAttendance(dataWithParsedTotalHours);
         setTotalPages(response.data.totalPages);
         setTotalCount(response.data.totalCount);
@@ -90,9 +93,21 @@ const Reports: React.FC = () => {
 
   useEffect(() => {
     fetchAttendanceHistory(currentPage);
-  }, [currentPage, filterValue, formdata.limit, formdata.order, startDate, endDate, sortColumn, sortOrder]);
+  }, [
+    currentPage,
+    filterValue,
+    formdata.limit,
+    formdata.order,
+    startDate,
+    endDate,
+    sortColumn,
+    sortOrder,
+  ]);
 
-  const handleFilterChange = (type: "name" | "date", value: string | [string, string]) => {
+  const handleFilterChange = (
+    type: "name" | "date",
+    value: string | [string, string]
+  ) => {
     setFilterType(type);
     setFilterValue(value);
   };
@@ -138,7 +153,6 @@ const Reports: React.FC = () => {
         isLoading={isLoading}
         isDataFetched={isDataFetched}
         setIsDataFetched={setIsDataFetched}
-
       />
     </>
   );

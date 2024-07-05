@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { EmployeeAttendanceInterface } from "./employeeAttendanceInterface";
-import EmployeeNavbar from "@/components/EmployeeNavbar";
-import Sidebar from "@/components/Sidebar";
+
 
 const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
   handleSignIn,
@@ -17,44 +16,9 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
   homeActiveStart,
   homeActiveEnd,
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  // Effect to handle screen size changes
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 991) {
-        setIsCollapsed(true);
-      } else {
-        setIsCollapsed(false);
-      }
-    };
-
-    // Set initial state based on screen size
-    handleResize();
-
-    // Add event listener for resize
-    window.addEventListener("resize", handleResize);
-
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
   return (
     <>
-      <div>
-        <EmployeeNavbar toggleSidebar={toggleSidebar} />
-        <div className="flex w-100" id="body-row">
-          <Sidebar isCollapsed={isCollapsed} />
-          <div
-            className={`right-sec lg:px-8 md:px-4 sm:px-4 ${
-              isCollapsed ? "collapsed" : ""
-            }`}
-          >
+      
             {/*attendance--card*/}
             <div className="lg:pt-10 md:pt-10 sm:pt-10 pt-10 box-shadow attendace-card px-10 mt-5 rounded-lg">
               <div className="pb-8 max-w-sm">
@@ -136,9 +100,7 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+       
     </>
   );
 };

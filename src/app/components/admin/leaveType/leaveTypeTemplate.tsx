@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { LeaveTypeProps } from "./leaveTypeInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import TableComponent from "@/components/TableComponent";
-import EmployeeNavbar from "@/components/EmployeeNavbar";
-import Sidebar from "@/components/Sidebar";
 const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
   setModal,
   deleteSelected,
@@ -25,33 +23,8 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
 }) => {
   const [isDeleteAlertVisible, setDeleteAlertVisible] = useState(false);
   const [selectedLeaveId, setSelectedLeaveId] = useState("");
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Effect to handle screen size changes
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 991) {
-        setIsCollapsed(true);
-      } else {
-        setIsCollapsed(false);
-      }
-    };
 
-    // Set initial state based on screen size
-    handleResize();
-
-    // Add event listener for resize
-    window.addEventListener("resize", handleResize);
-
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
   const softDeleteLeave = (leaveId: string) => {
     setDeleteAlertVisible(false); // Hide delete alert
     // Perform soft delete operation here
@@ -99,15 +72,7 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
   ];
   return (
     <>
-      <div>
-        <EmployeeNavbar toggleSidebar={toggleSidebar} />
-        <div className="flex w-100" id="body-row">
-          <Sidebar isCollapsed={isCollapsed} />
-          <div
-            className={`right-sec lg:px-8 md:px-4 sm:px-4 ${
-              isCollapsed ? "collapsed" : ""
-            }`}
-          >
+     
             <div>
               <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
                 <div className="flex justify-between items-end">
@@ -261,9 +226,7 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+    
     </>
   );
 };

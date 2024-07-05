@@ -4,8 +4,6 @@ import { CSVLink } from "react-csv";
 import { ReportsInterface } from "./reportsInterface";
 import TableComponent from "@/components/TableComponent";
 import DateRangePickerComp from "@/components/DateRangePickerComp";
-import EmployeeNavbar from "@/components/EmployeeNavbar";
-import Sidebar from "@/components/Sidebar";
 const ReportsTemplate: React.FC<ReportsInterface> = ({
   attendance,
   reports,
@@ -34,33 +32,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
 }) => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const csvLinkRef = useRef(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Effect to handle screen size changes
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 991) {
-        setIsCollapsed(true);
-      } else {
-        setIsCollapsed(false);
-      }
-    };
-
-    // Set initial state based on screen size
-    handleResize();
-
-    // Add event listener for resize
-    window.addEventListener("resize", handleResize);
-
-    // Clean up event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
   const handleToggleFilterModal = () => {
     setShowFilterModal(!showFilterModal);
   };
@@ -105,6 +77,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
       sortable: false,
     },
     { key: "userName", label: "NAME", sortable: true },
+    { key: "shift", label: "SHIFT", sortable: false },
     { key: "date", label: "DATE", sortable: true },
     {
       key: "timeIn",
@@ -155,15 +128,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
 
   return (
     <>
-      <div>
-        <EmployeeNavbar toggleSidebar={toggleSidebar} />
-        <div className="flex w-100" id="body-row">
-          <Sidebar isCollapsed={isCollapsed} />
-          <div
-            className={`right-sec lg:px-8 md:px-4 sm:px-4 ${
-              isCollapsed ? "collapsed" : ""
-            }`}
-          >
+    
             <div>
               <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
                 <div className="flex justify-between items-center">
@@ -259,6 +224,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
                       data={downloadData.map((record) => ({
                         userName: record.userName,
                         date: record.date,
+                        shift: record.shift,
                         timeIn: record.timeIn,
                         timeOut: record.timeOut,
                         status: record.status,
@@ -292,9 +258,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+      
     </>
   );
 };

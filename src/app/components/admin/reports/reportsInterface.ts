@@ -6,6 +6,7 @@ export interface ReportEntry {
   timeOut: string;
   totalHours: string;
   status: string;
+  shift: string;
 }
 
 export interface formValues {

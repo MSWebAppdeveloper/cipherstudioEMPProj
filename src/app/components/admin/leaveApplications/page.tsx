@@ -1,7 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { ApproveLeave, HistoryLeave, RejectLeave } from "@/services/api";
-import { LeaveApplicationsInterface } from "./leaveApplicationsInterface";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  ApproveLeave,
+  HistoryLeave,
+  RejectLeave,
+  UserDetails,
+} from "@/services/api";
+import {
+  LeaveApplicationDownloadData,
+  LeaveApplicationsInterface,
+} from "./leaveApplicationsInterface";
 import LeaveApplicationsTemplate from "./leaveApplicationsTemplate";
 import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
@@ -12,8 +20,11 @@ const LeaveApplications: React.FC = () => {
   const [leaveHistory, setLeaveHistory] = useState<
     LeaveApplicationsInterface[]
   >([]);
-  const [filterType, setFilterType] = useState<"status">("status");
-  const [filterValue, setFilterValue] = useState<string | [string, string]>("");
+  const [downloadData, setDownloadData] = useState<
+    LeaveApplicationDownloadData[]
+  >([]);
+  const [filterType, setFilterType] = useState<"status" | "name">("status");
+  const [filterValue, setFilterValue] = useState<[string, string]>(["", ""]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -23,17 +34,72 @@ const LeaveApplications: React.FC = () => {
     order: "",
     status: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [sortColumn, setSortColumn] = useState<string>("createdAt");
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+
+  const [isDataFetched, setIsDataFetched] = useState(false);
+
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchApproverId();
-      await fetchLeaveHistory(currentPage);
-    };
+  const OnchangeData = (e: any) => {
+    setFormdata({
+      ...formdata,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    fetchData();
+  useEffect(() => {
+    getAllUsers(currentPage);
+    fetchApproverId();
+  }, []);
+
+  const getAllUsers = async (page: number) => {
+    try {
+      const url = `employee/users?&order=${formdata.order}`;
+      const response: any = await UserDetails(url);
+      setAllUsers(response.data.filter((user: any) => user.isActive === true));
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterValue, formdata.limit, formdata.order]);
+
+  const fetchLeaveHistory = async (page: number, forDownload = false) => {
+    try {
+      const statusFilter = filterValue[0] ? `&status=${filterValue[0]}` : "";
+      const nameFilter = filterValue[1] ? `&name=${filterValue[1]}` : "";
+      const limit = forDownload ? "" : `&limit=${formdata.limit}`;
+
+      const url = `leave-requests?page=${page}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
+
+      const downloadFlag = forDownload ? "&forDownload=true" : "";
+
+      const response: any = await HistoryLeave(
+        url + limit + downloadFlag + nameFilter + statusFilter
+      );
+      if (forDownload) {
+        console.log(response.data);
+        setDownloadData(response.data ?? []);
+        setIsLoading(false);
+      } else {
+        console.log(response.data.data);
+        setLeaveHistory(response.data.data ?? []);
+        setTotalPages(response.data.totalPages ?? 0);
+        setTotalCount(response.data.totalCount ?? 0);
+      }
+      // Update non-download state as usual
+    } catch (error) {
+      console.error("Error fetching leave history:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeaveHistory(currentPage);
   }, [
     filterValue,
     currentPage,
@@ -42,13 +108,6 @@ const LeaveApplications: React.FC = () => {
     sortColumn,
     sortOrder,
   ]);
-
-  const OnchangeData = (e: any) => {
-    setFormdata({
-      ...formdata,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -132,19 +191,6 @@ const LeaveApplications: React.FC = () => {
     }
   };
 
-  const fetchLeaveHistory = async (page: number) => {
-    try {
-      const statusFilter = filterValue ? `&status=${filterValue}` : "";
-      const url = `leave-requests?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
-      const response: any = await HistoryLeave(url + statusFilter);
-      setLeaveHistory(response.data.data);
-      setTotalPages(response.data.totalPages);
-      setTotalCount(response.data.totalCount);
-    } catch (error) {
-      console.error("Error fetching leave history:", error);
-    }
-  };
-
   const approveApplication = async (id: any) => {
     try {
       await fetchApproverId();
@@ -191,12 +237,10 @@ const LeaveApplications: React.FC = () => {
     }
   };
 
-  const handleFilterChange = (
-    type: "status",
-    value: string | [string, string]
-  ) => {
-    setFilterType(type);
-    setFilterValue(value);
+  const handleFilterChange = (type: "status" | "name", value: string) => {
+    setFilterValue((prevValue) => {
+      return type === "status" ? [value, prevValue[1]] : [prevValue[0], value];
+    });
   };
 
   const handleSort = (column: string) => {
@@ -206,6 +250,11 @@ const LeaveApplications: React.FC = () => {
   };
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const fetchAllRecords = async () => {
+    setIsLoading(true);
+    await fetchLeaveHistory(1, true);
+  };
 
   return (
     <>
@@ -220,8 +269,10 @@ const LeaveApplications: React.FC = () => {
         id={""}
         approveApplication={approveApplication}
         rejectApplication={rejectApplication}
-        filterName={filterType === "status" ? (filterValue as string) : ""}
+        filterStatus={filterValue[0]}
+        filterName={filterValue[1]}
         setFilterName={(value: any) => setFilterValue(value)}
+        allUsers={allUsers}
         currentPage={currentPage}
         paginate={paginate}
         totalPages={totalPages}
@@ -234,6 +285,11 @@ const LeaveApplications: React.FC = () => {
         handleSort={handleSort}
         sortOrder={sortOrder}
         sortColumn={sortColumn}
+        downloadData={downloadData}
+        isLoading={isLoading}
+        fetchAllRecords={fetchAllRecords}
+        isDataFetched={isDataFetched}
+        setIsDataFetched={setIsDataFetched}
       />
     </>
   );
