@@ -1062,3 +1062,11 @@ z-index: 999;
 .truncate-wrapper:hover .truncate-tooltip {
   display: block;
 }
+
+.custom-tooltip {
+  white-space: normal; /* Ensure text wraps */
+  max-width: 250px; /* Set a maximum width */
+  padding: 8px; /* Add padding */
+  border-radius: 4px; /* Optional: rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Optional: shadow for better visibility */
+}

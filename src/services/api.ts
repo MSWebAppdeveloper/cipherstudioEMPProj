@@ -152,6 +152,8 @@ export const RejectLeave = async (endpoint: any, payload: any) => {
   }
 };
 
+
+
 //....LeaveHistory
 
 export const HistoryLeave = async (endpoint: any) => {
@@ -172,6 +174,7 @@ export const registerLeave = async (endpoint: string, payload: any) => {
     throw error;
   }
 };
+
 // Update Leave Details
 export const updateLeaveDetails = async (endpoint: string, payload: any) => {
   try {
@@ -181,6 +184,7 @@ export const updateLeaveDetails = async (endpoint: string, payload: any) => {
     throw error;
   }
 };
+
 // Delete Leave
 export const deleteLeave = async (endpoint: string) => {
   try {
@@ -190,6 +194,46 @@ export const deleteLeave = async (endpoint: string) => {
     throw error;
   }
 };
+
+//Tasks.
+// Register Task
+export const RequestTask = async (endpoint: string, payload: any) => {
+  try {
+    const response = await postMethod(endpoint, payload);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+//....getTask
+
+export const HistoryTask = async (endpoint: any) => {
+  try {
+      const response = await getMethod(endpoint);
+      return response;
+  } catch (error) {
+      throw error;
+  }
+};
+// Update Leave Details
+export const updateTaskDetails = async (endpoint: string, payload: any) => {
+  try {
+    const response = await putMethod(endpoint, payload);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+// Delete Leave
+export const deleteTask = async (endpoint: string) => {
+  try {
+    const response = await deleteMethod(endpoint);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 // Post method
 const postMethod = async (endpoint: string, payload: any) => {

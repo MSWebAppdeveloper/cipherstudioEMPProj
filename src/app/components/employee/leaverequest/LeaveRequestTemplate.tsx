@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { LeaveRequestInterface } from "./LeaveRequestInterface";
 import TableComponent from "@/components/TableComponent";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Tooltip } from "react-tooltip";
 
 const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
   deleteSelected,
@@ -45,7 +46,22 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
     { key: "startDate", label: "START DATE", sortable: true },
     { key: "endDate", label: "END DATE", sortable: false },
     { key: "total_days", label: "Total Days", sortable: true },
-    { key: "reason", label: "REASON", sortable: false },
+    { key: "reason", label: "REASON", 
+      sortable: false,
+      render: (item: any) => (
+        <div>
+          <span 
+            data-tooltip-id={`reasonTooltip-${item.id}`} 
+            data-tooltip-content={item.reason} 
+            className={`truncate`}
+          >
+            {item.reason.length > 50 ? `${item.reason.substring(0, 50)}...` : item.reason}
+          </span>
+          {item.reason.length > 50 && (
+            <Tooltip id={`reasonTooltip-${item.id}`} className="custom-tooltip" />
+          )}
+        </div>
+      ), },
     {
       key: "status",
       label: "STATUS",

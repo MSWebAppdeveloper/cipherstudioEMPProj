@@ -1,50 +1,39 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { LeaveTypes, RequestLeave } from "@/services/api";
-import LeaveRequestFormTemplate from "./LeaveRequestFormTemplate";
+import { RequestTask, updateTaskDetails } from "@/services/api";
+import TasksFormTemplate from "./tasksFormTemplate";
 
 const initialValues = {
-  leaveType: "",
-  startDate: "",
-  endDate: "",
-  reason: "",
+  id: null,
+  projectName: "",
+  title: "",
+  description: "",
+  status: "",
+  estimatedTime: "",
+  timeTaken: "",
 };
-interface LeaveRequestFormComponentProps {
+
+interface TaskFormComponentProps {
   isModal: boolean;
   handleClose: () => void;
-  user: any;
+  task: any;
   onUpdate: () => void;
 }
-const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
+
+const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
   isModal,
   handleClose,
-  user,
+  task,
   onUpdate,
 }) => {
   const [formdata, setFormdata] = useState(initialValues);
-  const [leaveTypes, setLeaveTypes] = useState<
-    { leave_type_id: number; leave_type_name: string }[]
-  >([]);
   const [UserId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchLeaveTypes = async () => {
-      try {
-        const url = `leavetypes`;
-        const response: any = await LeaveTypes(url);
-        setLeaveTypes(response.data.data);
-      } catch (error) {
-        console.error("Error fetching leaveTypes:", error);
-      }
-    };
-
-    fetchLeaveTypes();
     const fetchUserId = async () => {
       try {
-        // Replace this with your actual authentication logic
-        // const loggedInUserId = await fetchLoggedInUserId();
         const UserId: any = localStorage.getItem("UserId");
         setUserId(UserId);
       } catch (error) {
@@ -55,6 +44,13 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
     fetchUserId();
   }, []);
 
+  useEffect(() => {
+    if (task) {
+      setFormdata(task);
+    } else {
+      setFormdata(initialValues);
+    }
+  }, [task]);
 
   const dataChange = (e: any) => {
     setFormdata({
@@ -65,27 +61,41 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
 
   const handleOnSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const requestData = {
         ...formdata,
         UserId: UserId,
         userName: localStorage.getItem("name"),
       };
-      const url = `leave-request`;
-      const response: any = await RequestLeave(url, requestData);
-      if (response.status === 201) {
-        toast.success("Leave request submitted successfully");
-        setFormdata(initialValues);
-        handleClose();
+      const url = `tasks/`;
+      if (formdata.id) {
+        const response: any = await updateTaskDetails(`tasks/${formdata.id}`, requestData);
+        if (response.status === 200) {
+          toast.success("Task updated successfully");
+        } else {
+          toast.error(response.data);
+        }
       } else {
-        toast.error(response.data);
+        const response: any = await RequestTask(url, requestData);
+        if (response.status === 201) {
+          toast.success("Task submitted successfully");
+        } else {
+          toast.error(response.data);
+        }
       }
+
+      setFormdata(initialValues);
+      handleClose();
+      onUpdate();
     } catch (error: any) {
       console.error(
-        "Error submitting leave request:",
+        "Error submitting task request:",
         error.response.data.error
       );
       toast.error(error.response.data.error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,12 +103,12 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
     setFormdata(initialValues); // Clear formData before closing
     handleClose();
   };
+
   return (
-    <LeaveRequestFormTemplate
+    <TasksFormTemplate
       dataChange={dataChange}
       handleOnSubmit={handleOnSubmit}
       formdata={formdata}
-      leaveTypes={leaveTypes}
       isModal={isModal}
       handleClose={handleClosePopup}
       loading={loading}
@@ -106,4 +116,4 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
   );
 };
 
-export default LeaveRequestFormComponent;
+export default TasksFormComponent;

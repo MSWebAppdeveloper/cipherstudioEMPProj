@@ -2,18 +2,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios"; // Import Axios for making HTTP requests
 
-import LeaveRequestTemplate from "./LeaveRequestTemplate";
-import LeaveRequestFormComponent from "../leaveRequestForm/page";
-import { LeaveRequestInterface } from "./LeaveRequestInterface";
-import { LeaveTypes, deleteUser } from "@/services/api";
+import { deleteUser } from "@/services/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { TaskTemplateInterface } from "./tasksInterface";
+import TaskTemplate from "./ṭasksTemplate";
+import TasksFormComponent from "../tasksForm/page";
 
-const LeaveRequestComponent: React.FC = () => {
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+const TaskComponent: React.FC = () => {
+  const [selectedTask, setSelectedTask] = useState<any>(null);
   const [isModal, setModal] = useState<boolean>(false);
-  const [leaveHistory, setLeaveHistory] = useState<LeaveRequestInterface[]>([]);
+  const [taskHistory, setTaskHistory] = useState<TaskTemplateInterface[]>([]);
   const [formdata, setFormdata] = useState({
     limit: "10",
     order: "",
@@ -26,21 +26,18 @@ const LeaveRequestComponent: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
-  const [leaveTypes, setLeaveTypes] = useState([]);
+  const [taskTypes, setTaskTypes] = useState([]);
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState<boolean>(false);
-  const [selectedUserId, setSelectedUserId] = useState<number>();
-  const [selectedYear, setSelectedYear] = useState<number>(
-    new Date().getFullYear()
-  );
+  const [selectedTaskId, setSelectedTaskId] = useState<number>();
+
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [sortColumn, setSortColumn] = useState<string>("createdAt");
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch all users from the server when the component mounts
-
-    fetchLeaveHistory(currentPage);
+    // Fetch all tasks from the server when the component mounts
+    fetchTaskHistory(currentPage);
   }, [
     filterValue,
     isModal,
@@ -81,10 +78,9 @@ const LeaveRequestComponent: React.FC = () => {
     }
   };
 
-  const fetchLeaveHistory = async (page: number) => {
+  const fetchTaskHistory = async (page: number) => {
     try {
-      let userId = localStorage.getItem("UserId");
-      // const statusFilter = filterValue ? `&status=${filterValue}` : "";
+      let UserId = localStorage.getItem("UserId");
       let accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         console.error("Token not found. Redirect to login page.");
@@ -92,7 +88,7 @@ const LeaveRequestComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://192.168.1.2:8082/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&status=${filterValue}`,
+        `http://192.168.1.2:8082/api/tasks/${UserId}?page=${page}&limit=${formdata.limit}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&status=${filterValue}`,
         {
           method: "GET",
           headers: {
@@ -101,20 +97,17 @@ const LeaveRequestComponent: React.FC = () => {
           },
         }
       );
+
       if (response.ok) {
         const userDetails = await response.json();
-        const userLeaveRequests = userDetails[0].leaveRequests;
-        const userLeaveBalance = userDetails[0].leaveBalance;
-        // const { leaveRequests, totalPages, totalCount } = userDetails.data;
-        setLeaveHistory(userLeaveRequests.data);
-        setTotalPages(userLeaveRequests.totalPages);
-        setTotalCount(userLeaveRequests.totalCount);
-        setLeaveTypes(userLeaveBalance);
+        setTaskHistory(userDetails.data);
+        setTotalPages(userDetails.totalPages);
+        setTotalCount(userDetails.totalCount);
       } else if (response.status === 401) {
         try {
           const newAccessToken = await refreshToken();
           if (newAccessToken) {
-            fetchLeaveHistory(page); // Retry fetching with the new token
+            fetchTaskHistory(page); // Retry fetching with the new token
           }
         } catch (error) {
           console.error("Failed to refresh token. Redirect to login page.");
@@ -139,32 +132,32 @@ const LeaveRequestComponent: React.FC = () => {
     }
   };
 
-  const openEditPopup = (user: any) => {
-    setSelectedUser(user);
+  const openEditPopup = (task: any) => {
+    setSelectedTask(task);
     setModal(true);
   };
 
-  const handleEditUserUpdate = () => {
+  const handleEditTaskUpdate = () => {
     setModal(false);
   };
 
-  const handleDelete = async (deletedItemId: any) => {
+  const handleDelete = async (deletedTaskId: any) => {
     try {
-      const response = await deleteUser(`leave-request/${deletedItemId}`);
+      const response = await deleteUser(`tasks/${deletedTaskId}`);
 
       if (response.status === 200) {
-        const updatedLeaveHistory = leaveHistory.filter(
-          (item) => item.id !== deletedItemId
+        const updatedTaskHistory = taskHistory.filter(
+          (item) => item.id !== deletedTaskId
         );
-        setLeaveHistory(updatedLeaveHistory);
-        toast.success("LeaveApplication deleted successfully!");
-        fetchLeaveHistory(currentPage);
+        setTaskHistory(updatedTaskHistory);
+        toast.success("Task deleted successfully!");
+        fetchTaskHistory(currentPage);
       } else {
         console.error("Delete failed:", response.statusText);
       }
     } catch (error) {
       console.error("Error deleting item:", error);
-      toast.error("Failed to delete LeaveApplication!");
+      toast.error("Failed to delete task!");
     } finally {
       setDeleteConfirmationVisible(false);
     }
@@ -172,18 +165,21 @@ const LeaveRequestComponent: React.FC = () => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const deleteUserHandler = async (userId: number) => {
-    setSelectedUserId(userId);
+  const deleteUserHandler = async (taskId: number) => {
+    setSelectedTaskId(taskId);
     setDeleteConfirmationVisible(true);
   };
+
   const cancelDeleteUser = () => {
     setDeleteConfirmationVisible(false);
   };
+
   const handleSort = (column: string) => {
     const order = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(order);
     setSortColumn(column);
   };
+
   const handleFilterChange = (
     type: "status",
     value: string | [string, string]
@@ -191,33 +187,32 @@ const LeaveRequestComponent: React.FC = () => {
     setFilterType(type);
     setFilterValue(value);
   };
+
   return (
     <>
-      <LeaveRequestFormComponent
+      <TasksFormComponent
         isModal={isModal}
         handleClose={() => setModal(false)}
-        user={selectedUser}
-        onUpdate={handleEditUserUpdate}
+        task={selectedTask}
+        onUpdate={handleEditTaskUpdate}
       />
-      <LeaveRequestTemplate
-        // deleteSelected={deleteUserHandler}
+      <TaskTemplate
         openEditPopup={openEditPopup}
         setModal={setModal}
-        leaveHistory={leaveHistory}
+        taskHistory={taskHistory}
         onDelete={handleDelete}
-        leaveType={""}
-        startDate={""}
-        endDate={""}
-        reason={""}
+        taskType={""}
+
+        description={""}
         status={""}
         id={""}
         filterName={filterType === "status" ? (filterValue as string) : ""}
         setFilterName={(value: any) => setFilterValue(value)}
         handleFilterChange={handleFilterChange}
         deleteSelected={deleteUserHandler}
-        confirmDeleteUser={handleDelete}
-        cancelDeleteUser={cancelDeleteUser}
-        selectedUserId={selectedUserId}
+        confirmDeleteTask={handleDelete}
+        cancelDeleteTask={cancelDeleteUser}
+        selectedTaskId={selectedTaskId}
         isDeleteConfirmationVisible={isDeleteConfirmationVisible}
         currentPage={currentPage}
         paginate={paginate}
@@ -226,16 +221,15 @@ const LeaveRequestComponent: React.FC = () => {
         totalCount={totalCount}
         OnchangeData={OnchangeData}
         formdata={formdata}
-        leaveTypes={leaveTypes}
-        total_days={0}
+        taskTypes={taskTypes}
         createdAt={undefined}
-        selectedYear={selectedYear}
         handleSort={handleSort}
         sortOrder={sortOrder}
         sortColumn={sortColumn}
+
       />
     </>
   );
 };
 
-export default LeaveRequestComponent;
+export default TaskComponent;

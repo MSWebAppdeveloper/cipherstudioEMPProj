@@ -112,7 +112,7 @@ const LeaveApplications: React.FC = () => {
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
     const response = await fetch(
-      "http://192.168.1.3:8080/api/employee/refresh",
+      "http://192.168.1.2:8082/api/employee/refresh",
       {
         method: "POST",
         headers: {
@@ -135,7 +135,7 @@ const LeaveApplications: React.FC = () => {
     try {
       let accessToken = localStorage.getItem("accessToken");
       let response = await fetch(
-        "http://192.168.1.3:8080/api/employee/user/details",
+        "http://192.168.1.2:8082/api/employee/user/details",
         {
           method: "GET",
           headers: {
@@ -149,7 +149,7 @@ const LeaveApplications: React.FC = () => {
         try {
           accessToken = await refreshToken();
           response = await fetch(
-            "http://192.168.1.3:8080/api/employee/user/details",
+            "http://192.168.1.2:8082/api/employee/user/details",
             {
               method: "GET",
               headers: {

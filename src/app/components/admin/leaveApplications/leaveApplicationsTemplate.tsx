@@ -5,40 +5,8 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 import TableComponent from "@/components/TableComponent";
 import { CSVLink } from "react-csv";
+import { Tooltip } from "react-tooltip";
 
-interface TruncatedTextProps {
-  text: string;
-}
-
-const isTextTruncated = (element: {
-  scrollWidth: number;
-  clientWidth: number;
-}) => {
-  return element.scrollWidth > element.clientWidth;
-};
-
-const TruncatedText: React.FC<TruncatedTextProps> = ({ text }) => {
-  const textRef = useRef<HTMLDivElement>(null);
-  const [isTruncated, setIsTruncated] = useState(false);
-
-  useEffect(() => {
-    if (textRef.current) {
-      setIsTruncated(isTextTruncated(textRef.current));
-    }
-  }, [text]);
-
-  return (
-    <div className="truncate-wrapper">
-      <div
-        ref={textRef}
-        className={`truncate ${isTruncated ? "truncated" : ""}`}
-      >
-        {text}
-      </div>
-      {isTruncated && <div className="truncate-tooltip">{text}</div>}
-    </div>
-  );
-};
 
 const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   leaveHistory,
@@ -100,7 +68,18 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
     {
       key: "reason",
       label: "REASON",
-      render: (item: { reason: any }) => <TruncatedText text={item.reason} />,
+      render: (item: any) =>   <div>
+      <span 
+        data-tooltip-id={`reasonTooltip-${item.id}`} 
+        data-tooltip-content={item.reason} 
+        className={`truncate`}
+      >
+        {item.reason.length > 50 ? `${item.reason.substring(0, 50)}...` : item.reason}
+      </span>
+      {item.reason.length > 50 && (
+        <Tooltip id={`reasonTooltip-${item.id}`} className="custom-tooltip" />
+      )}
+    </div>,
       sortable: false,
     },
     {

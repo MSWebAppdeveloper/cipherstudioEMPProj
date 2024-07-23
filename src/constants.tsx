@@ -28,7 +28,11 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     title: "Leave Types",
     path: "/admin/leaveType",
     icon:<Icon icon="iconoir:plug-type-l"  width="20" height="20" style={{color: "#1565e5"}}/>
-    
+  },
+  {
+    title: "Tasks",
+    path: "/admin/tasks",
+    icon: <Icon icon="cil:task"  width="20" height="20"   style={{color: "#1565e5"}} />,
   },
   {
     title: "Dashboard",
@@ -39,5 +43,10 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     title: "Leave Request",
     path: "/employee/leaveRequest",
     icon: <Icon icon="carbon:request-quote" width="20" height="20"   style={{color: "#1565e5"}} />,
+  },
+  {
+    title: "Tasks",
+    path: "/employee/tasks",
+    icon: <Icon icon="cil:task"  width="20" height="20"   style={{color: "#1565e5"}} />,
   },
 ];
