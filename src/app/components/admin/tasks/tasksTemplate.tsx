@@ -10,7 +10,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
   taskHistory,
 
   handleFilterChange,
-filterName,
+  filterName,
   filterStatus,
   currentPage,
   totalPages,
@@ -32,7 +32,7 @@ filterName,
     return allUsers.map((user) => user.name);
   };
 
- 
+
 
   useEffect(() => {
     if (isDataFetched && csvLinkRef.current) {
@@ -64,9 +64,9 @@ filterName,
       sortable: false,
       render: (task: any) => (
         <div>
-          <span 
-            data-tooltip-id={`descriptionTooltip-${task.id}`} 
-            data-tooltip-content={task.description} 
+          <span
+            data-tooltip-id={`descriptionTooltip-${task.id}`}
+            data-tooltip-content={task.description}
             className={`truncate`}
           >
             {task.description.length > 50 ? `${task.description.substring(0, 50)}...` : task.description}
@@ -78,7 +78,7 @@ filterName,
       ),
     },
     { key: "estimatedTime", label: "Est. Time", sortable: false },
-    { key: "timeTaken", label: "Taken Time", sortable: false },
+    { key: "takenHours", label: "Taken Time", sortable: false },
     {
       key: "status",
       label: "STATUS",

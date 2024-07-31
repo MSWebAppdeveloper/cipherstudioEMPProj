@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import LeaveFormTemplate from "./leaveFormTemplate";
 import { registerLeave, updateLeaveDetails } from "@/services/api";
+import { LeaveFormValues } from "./leaveFormInterface";
 
 const initialFormValues = {
   leave_type_id: 0,
@@ -49,8 +50,7 @@ const LeaveFormComponent: React.FC<LeaveFormComponentProps> = ({
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (values: LeaveFormValues, { setSubmitting }: any) => {
 
     try {
       setLoading(true);
@@ -88,7 +88,6 @@ const LeaveFormComponent: React.FC<LeaveFormComponentProps> = ({
         }
       }
     } catch (error: any) {
-      debugger
       console.error(error); 
       setLoading(false);
       if (error.response && error.response.status === 400) {
@@ -113,12 +112,11 @@ const LeaveFormComponent: React.FC<LeaveFormComponentProps> = ({
 
   return (
     <LeaveFormTemplate
-      formData={formData}
-      handleChange={handleChange}
-      handleSubmit={handleSubmit}
+      formdata={formData}
+      dataChange={handleChange}
+      handleOnSubmit={handleSubmit}
       isModal={isModal}
       handleClose={handleClosePopup}
-      errors={errors}
       loading={loading}
     />
   );

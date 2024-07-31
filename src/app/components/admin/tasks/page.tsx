@@ -65,8 +65,6 @@ const TaskComponent: React.FC = () => {
       const response: any = await HistoryTask(
         url + limit + nameFilter + statusFilter
       );
-
-      console.log(response.data.data);
       setTaskHistory(response.data.data ?? []);
       setTotalPages(response.data.totalPages ?? 0);
       setTotalCount(response.data.totalCount ?? 0);

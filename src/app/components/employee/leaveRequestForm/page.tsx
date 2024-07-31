@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { LeaveTypes, RequestLeave } from "@/services/api";
 import LeaveRequestFormTemplate from "./LeaveRequestFormTemplate";
+import { LeaveFormData } from "./LeaveRequestFormInterface";
 
-const initialValues = {
+
+const initialValues: LeaveFormData = {
   leaveType: "",
   startDate: "",
   endDate: "",
@@ -23,9 +25,7 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
   onUpdate,
 }) => {
   const [formdata, setFormdata] = useState(initialValues);
-  const [leaveTypes, setLeaveTypes] = useState<
-    { leave_type_id: number; leave_type_name: string }[]
-  >([]);
+  const [leaveTypes, setLeaveTypes] = useState<{ leave_type_id: number; leave_type_name: string }[]>([]);
   const [UserId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -43,7 +43,7 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
     fetchLeaveTypes();
     const fetchUserId = async () => {
       try {
-        // Replace this with your actual authentication logic
+
         // const loggedInUserId = await fetchLoggedInUserId();
         const UserId: any = localStorage.getItem("UserId");
         setUserId(UserId);
@@ -51,7 +51,7 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
         console.error("Error fetching user ID:", error);
       }
     };
-
+ 
     fetchUserId();
   }, []);
 
@@ -63,8 +63,7 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
     });
   };
 
-  const handleOnSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleOnSubmit = async (values: LeaveFormData, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
       const requestData = {
         ...formdata,
@@ -77,6 +76,7 @@ const LeaveRequestFormComponent: React.FC<LeaveRequestFormComponentProps> = ({
         toast.success("Leave request submitted successfully");
         setFormdata(initialValues);
         handleClose();
+        onUpdate();
       } else {
         toast.error(response.data);
       }

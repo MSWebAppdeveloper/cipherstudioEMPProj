@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios"; // Import Axios for making HTTP requests
-
 import { deleteUser } from "@/services/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -34,6 +32,9 @@ const TaskComponent: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [sortColumn, setSortColumn] = useState<string>("createdAt");
   const router = useRouter();
+  const [history, setHistory] = useState<any[]>([]); // Updated to any[] for better type handling
+  const [selectedTaskForHistory, setSelectedTaskForHistory] = useState<any>(null); // State for task history modal
+
 
   useEffect(() => {
     // Fetch all tasks from the server when the component mounts
@@ -55,6 +56,21 @@ const TaskComponent: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
+
+
+  // useEffect(() => {
+  //   async function fetchHistory() {
+  //     try {
+  //       const response = await fetch(`http://192.168.1.2:8082/api/tasks/${selectedTaskId}/history`);
+  //       const data = await response.json();
+  //       setHistory(data);
+  //     } catch (error) {
+  //       console.error('Error fetching task history:', error);
+  //     }
+  //   }
+
+  //   fetchHistory();
+  // }, [selectedTaskId]);
 
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -80,7 +96,7 @@ const TaskComponent: React.FC = () => {
 
   const fetchTaskHistory = async (page: number) => {
     try {
-      let UserId = localStorage.getItem("UserId");
+      const UserId = localStorage.getItem("UserId");
       let accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         console.error("Token not found. Redirect to login page.");
@@ -139,6 +155,98 @@ const TaskComponent: React.FC = () => {
 
   const handleEditTaskUpdate = () => {
     setModal(false);
+  };
+
+  const startTask = async (taskId: any) => {
+    try {
+      const response = await fetch(`http://192.168.1.2:8082/api/tasks/${taskId}/start`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'In Progress' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to start the task');
+      }
+
+      const updatedTask = await response.json();
+
+      // Update the UI to reflect the changes
+      fetchTaskHistory(currentPage);
+      toast.success('Task started successfully');
+    } catch (error) {
+      console.error('Error starting task:', error);
+    }
+  };
+
+  const endTask = async (taskId: any) => {
+    try {
+      const response = await fetch(`http://192.168.1.2:8082/api/tasks/${taskId}/end`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'Completed' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to end the task');
+      }
+
+      const updatedTask = await response.json();
+      // Update the UI to reflect the changes
+      fetchTaskHistory(currentPage);
+      toast.success('Task Completed successfully');
+    } catch (error) {
+      console.error('Error starting task:', error);
+    }
+  };
+
+  const holdTask = async (taskId: any) => {
+    try {
+      const response = await fetch(`http://192.168.1.2:8082/api/tasks/${taskId}/hold`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'Hold' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to Hold the task');
+      }
+
+      const updatedTask = await response.json();
+      // Update the UI to reflect the changes
+      fetchTaskHistory(currentPage);
+      toast.success('Task on Hold');
+    } catch (error) {
+      console.error('Error to hold task:', error);
+    }
+  };
+  const resumeTask = async (taskId: any) => {
+    try {
+      const response = await fetch(`http://192.168.1.2:8082/api/tasks/${taskId}/resume`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'In Progress' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to resume the task');
+      }
+
+      const updatedTask = await response.json();
+      // Update the UI to reflect the changes
+      fetchTaskHistory(currentPage);
+      toast.success('Task Resumed');
+    } catch (error) {
+      console.error('Error to resume task:', error);
+    }
   };
 
   const handleDelete = async (deletedTaskId: any) => {
@@ -226,7 +334,11 @@ const TaskComponent: React.FC = () => {
         handleSort={handleSort}
         sortOrder={sortOrder}
         sortColumn={sortColumn}
-
+        startTask={startTask}
+        endTask={endTask}
+        history={history}
+        holdTask={holdTask}
+        resumeTask={resumeTask}
       />
     </>
   );

@@ -1,31 +1,26 @@
-"use client";
+"use client"
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import UserFormTemplate from "./FormTemplate";
-import { registerUser, updateUserDetails } from "@/services/api";
+import { createProject, updateProject } from "@/services/api";
+import ProjectFormTemplate from "./projectFormTemplte";
+import { ProjectFormValues } from "./projectFormInterface";
 
-const initialFormValues = {
-  id: "",
-  name: "",
-  email: "",
-  department: "",
-  userRole: "",
-  shift: "",
+const initialFormValues: ProjectFormValues = {
+  id: 0,
+  projectName: "",
 };
 
-interface UserFormComponentProps {
+interface ProjectFormComponentProps {
   isModal: boolean;
   handleClose: () => void;
-  user: any;
-  shift: any;
+  project: any;
   onUpdate: () => void;
 }
 
-const UserFormComponent: React.FC<UserFormComponentProps> = ({
+const ProjectFormComponent: React.FC<ProjectFormComponentProps> = ({
   isModal,
   handleClose,
-  user,
-  shift,
+  project,
   onUpdate,
 }) => {
   const [formData, setFormData] = useState(initialFormValues);
@@ -34,56 +29,50 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
 
   useEffect(() => {
     setFormData({
-      id: user?.id || "",
-      userRole: user?.userRole || "",
-      name: user?.name || "",
-      email: user?.email || "",
-      department: user?.department || "",
-      shift: user?.shift || "",
+      id: project?.id || 0,
+      projectName: project?.projectName || "",
+
     });
-  }, [user]);
+  }, [project]);
+
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      
       [name]: value,
     }));
   };
 
-  const handleSubmit = async(values: any, { setSubmitting }: any) => {
-
+  const handleSubmit = async (values: ProjectFormValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
       setLoading(true);
-      const userData = {
-        name: formData.name,
-        email: formData.email,
-        department: formData.department,
-        userRole: formData.userRole,
-        shift: formData.shift,
+      const projectData = {
+        projectName: formData.projectName,
+
       };
 
       if (formData.id) {
-        // Update existing user
-        const response: any = await updateUserDetails(
-          `employee/users/${formData.id}`,
-          userData
+        // Update existing Project
+        const response: any = await updateProject(
+          `project/${formData.id}`,
+          projectData
         );
 
         if (response.status === 200) {
-          toast.success("User updated successfully");
+          toast.success("Project updated successfully");
           setLoading(false);
           setFormData(initialFormValues);
           onUpdate();
           handleClose();
         }
       } else {
-        // Create new user
-        const response: any = await registerUser("employee/users", userData);
+        // Create new Project
+        const response: any = await createProject("project", projectData);
 
         if (response.status === 201) {
-          toast.success("User added successfully");
+          toast.success("Project added successfully");
           setLoading(false);
           setFormData(initialFormValues);
           onUpdate();
@@ -99,7 +88,7 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
         // Handle the error message appropriately, for example, set it in state
         // setErrors({ error: errorMessage });
       } else if (error.response.status === 500) {
-        toast.error("user is already in the database");
+        toast.error("Project is already in the database");
       } else {
         const errorMessage = error.response.data;
         toast.error(errorMessage);
@@ -113,21 +102,16 @@ const UserFormComponent: React.FC<UserFormComponentProps> = ({
     handleClose();
   };
 
-    // Transform shift data into required format
-   
-
   return (
-    <UserFormTemplate
+    <ProjectFormTemplate
       formdata={formData}
-      handleChange={handleChange}
-      handleSubmit={handleSubmit}
+      dataChange={handleChange}
+      handleOnSubmit={handleSubmit}
       isModal={isModal}
       handleClose={handleClosePopup}
-      errors={errors}
       loading={loading}
-      shift={shift}
     />
   );
 };
 
-export default UserFormComponent;
+export default ProjectFormComponent;

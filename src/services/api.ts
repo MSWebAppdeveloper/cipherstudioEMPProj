@@ -196,6 +196,43 @@ export const deleteLeave = async (endpoint: string) => {
 };
 
 //Tasks.
+// Create Project
+export const createProject = async (endpoint: string, payload: any) => {
+  try {
+    const response = await postMethod(endpoint, payload);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Update Project Details
+export const updateProject = async (endpoint: string, payload: any) => {
+  try {
+    const response = await putMethod(endpoint, payload);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+//....Projects
+export const Projects = async (endpoint: any) => {
+  try {
+      const response = await getMethod(endpoint);
+      return response;
+  } catch (error) {
+      throw error;
+  }
+};
+// Delete Project
+export const deleteProject = async (endpoint: string) => {
+  try {
+    const response = await deleteMethod(endpoint);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 // Register Task
 export const RequestTask = async (endpoint: string, payload: any) => {
   try {
@@ -215,6 +252,17 @@ export const HistoryTask = async (endpoint: any) => {
       throw error;
   }
 };
+
+export const getInProgressTasks = async (endpoint: any) => {
+  try {
+      const response = await getMethod(endpoint);
+      return response;
+  } catch (error) {
+      throw error;
+  }
+};
+
+
 // Update Leave Details
 export const updateTaskDetails = async (endpoint: string, payload: any) => {
   try {
@@ -239,7 +287,7 @@ export const deleteTask = async (endpoint: string) => {
 const postMethod = async (endpoint: string, payload: any) => {
   try {
     const response = await axios.post(`${BASE_URL}${endpoint}`, payload);
-    return response;
+    return response; 
   } catch (error) {
     throw error;
   }

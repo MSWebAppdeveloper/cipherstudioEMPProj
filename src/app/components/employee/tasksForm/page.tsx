@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { RequestTask, updateTaskDetails } from "@/services/api";
+import { Projects, RequestTask, updateTaskDetails } from "@/services/api";
 import TasksFormTemplate from "./tasksFormTemplate";
 
 const initialValues = {
@@ -11,7 +11,8 @@ const initialValues = {
   description: "",
   status: "",
   estimatedTime: "",
-  timeTaken: "",
+  takenHours: "",
+  comments: "",
 };
 
 interface TaskFormComponentProps {
@@ -30,6 +31,8 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
   const [formdata, setFormdata] = useState(initialValues);
   const [UserId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [projects, setProjects] = useState<{ id: number; projectName: string }[]>([]);
+  const [tasks, setTasks] = useState<any[]>([initialValues]);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -40,7 +43,6 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
         console.error("Error fetching user ID:", error);
       }
     };
-
     fetchUserId();
   }, []);
 
@@ -52,6 +54,19 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
     }
   }, [task]);
 
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const url = `project`;
+        const response: any = await Projects(url);
+        setProjects(response.data.data);
+      } catch (error) {
+        console.error("Error fetching Projects:", error);
+      }
+    };
+    fetchProjects();
+  }, []);
+
   const dataChange = (e: any) => {
     setFormdata({
       ...formdata,
@@ -59,12 +74,15 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
     });
   };
 
-  const handleOnSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleInProgressTaskSelect = (task: any) => {
+    setFormdata(task);
+  };
+
+  const handleOnSubmit = async(values: any, { setSubmitting }: any) => {
     setLoading(true);
     try {
       const requestData = {
-        ...formdata,
+        ...values,
         UserId: UserId,
         userName: localStorage.getItem("name"),
       };
@@ -72,14 +90,16 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
       if (formdata.id) {
         const response: any = await updateTaskDetails(`tasks/${formdata.id}`, requestData);
         if (response.status === 200) {
-          toast.success("Task updated successfully");
+          toast.success("Status updated successfully");
+          setFormdata(initialValues);
         } else {
           toast.error(response.data);
         }
       } else {
         const response: any = await RequestTask(url, requestData);
         if (response.status === 201) {
-          toast.success("Task submitted successfully");
+          toast.success("Status submitted successfully");
+          setFormdata(initialValues);
         } else {
           toast.error(response.data);
         }
@@ -89,13 +109,11 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
       handleClose();
       onUpdate();
     } catch (error: any) {
-      console.error(
-        "Error submitting task request:",
-        error.response.data.error
-      );
+      console.error("Error submitting Status request:", error.response.data.error);
       toast.error(error.response.data.error);
     } finally {
       setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -103,6 +121,8 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
     setFormdata(initialValues); // Clear formData before closing
     handleClose();
   };
+
+
 
   return (
     <TasksFormTemplate
@@ -112,6 +132,9 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
       isModal={isModal}
       handleClose={handleClosePopup}
       loading={loading}
+      projects={projects}
+      handleInProgressTaskSelect={handleInProgressTaskSelect}
+      tasks={tasks}
     />
   );
 };

@@ -21,6 +21,14 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/dashboard/users/page.jsx", "src/components/DateRangePickerComp.jsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/dashboard/users/page.jsx",
+    "src/components/DateRangePickerComp.jsx",
+    "src/app/components/admin/projectForm"
+  ],
   "exclude": ["node_modules"]
 }

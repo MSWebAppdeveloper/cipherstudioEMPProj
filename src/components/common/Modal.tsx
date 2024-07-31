@@ -12,7 +12,7 @@ export const customStyles: Modal.Styles = {
     bottom: "auto",
     background: "none",
     width: "80%", // Base width for all screens
-    maxWidth: "600px", // Max width for larger screens
+    maxWidth: "full", // Max width for larger screens
     border: "none",
     transform: "translate(-50%, -50%)",
     overflow: "auto",
