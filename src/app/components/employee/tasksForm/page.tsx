@@ -122,6 +122,7 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
     handleClose();
   };
 
+
   return (
     <TasksFormTemplate
       dataChange={dataChange}
