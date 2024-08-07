@@ -7,10 +7,13 @@ import { signOut } from "next-auth/react";
 import { TaskTemplateInterface } from "./tasksInterface";
 import TaskTemplate from "./ṭasksTemplate";
 import TasksFormComponent from "../tasksForm/page";
+import CommentPopup from "@/components/CommentPopup";
 
 const TaskComponent: React.FC = () => {
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [isModal, setModal] = useState<boolean>(false);
+  const [isCommentPopupOpen, setCommentPopupOpen] = useState<boolean>(false); // State for comment popup
+
   const [taskHistory, setTaskHistory] = useState<TaskTemplateInterface[]>([]);
   const [formdata, setFormdata] = useState({
     limit: "10",
@@ -61,7 +64,7 @@ const TaskComponent: React.FC = () => {
   // useEffect(() => {
   //   async function fetchHistory() {
   //     try {
-  //       const response = await fetch(`http://192.168.1.2:8082/api/tasks/${selectedTaskId}/history`);
+  //       const response = await fetch(`http://192.168.1.3:8080/api/tasks/${selectedTaskId}/history`);
   //       const data = await response.json();
   //       setHistory(data);
   //     } catch (error) {
@@ -75,7 +78,7 @@ const TaskComponent: React.FC = () => {
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
     const response = await fetch(
-      "http://192.168.1.2:8082/api/employee/refresh",
+      "http://192.168.1.3:8080/api/employee/refresh",
       {
         method: "POST",
         headers: {
@@ -97,6 +100,7 @@ const TaskComponent: React.FC = () => {
   const fetchTaskHistory = async (page: number) => {
     try {
       const UserId = localStorage.getItem("UserId");
+      const userName = localStorage.getItem("name");
       let accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         console.error("Token not found. Redirect to login page.");
@@ -104,7 +108,7 @@ const TaskComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://192.168.1.2:8082/api/tasks/${UserId}?page=${page}&limit=${formdata.limit}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&status=${filterValue}`,
+        `http://192.168.1.3:8080/api/tasks/${UserId}?userName=${userName}&page=${page}&limit=${formdata.limit}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&status=${filterValue}`,
         {
           method: "GET",
           headers: {
@@ -153,13 +157,18 @@ const TaskComponent: React.FC = () => {
     setModal(true);
   };
 
+  const holdTask = (task: any) => {
+    setSelectedTask(task);
+    setCommentPopupOpen(true); // Open the comment popup
+  };
+
   const handleEditTaskUpdate = () => {
     setModal(false);
   };
 
   const startTask = async (taskId: any) => {
     try {
-      const response = await fetch(`http://192.168.1.2:8082/api/tasks/${taskId}/start`, {
+      const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -183,7 +192,7 @@ const TaskComponent: React.FC = () => {
 
   const endTask = async (taskId: any) => {
     try {
-      const response = await fetch(`http://192.168.1.2:8082/api/tasks/${taskId}/end`, {
+      const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/end`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -204,31 +213,55 @@ const TaskComponent: React.FC = () => {
     }
   };
 
-  const holdTask = async (taskId: any) => {
+  // const holdTask = async (taskId: any) => {
+  //   try {
+  //     const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/hold`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ status: 'Hold' }),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Failed to Hold the task');
+  //     }
+
+  //     const updatedTask = await response.json();
+  //     // Update the UI to reflect the changes
+  //     fetchTaskHistory(currentPage);
+  //     toast.success('Task on Hold');
+  //   } catch (error) {
+  //     console.error('Error to hold task:', error);
+  //   }
+  // };
+  const handleCommentSubmit = async (comment: string, taskId: number) => {
     try {
-      const response = await fetch(`http://192.168.1.2:8082/api/tasks/${taskId}/hold`, {
+      const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/hold`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: 'Hold' }),
+        body: JSON.stringify({ status: 'Hold', comment }), // Include comment in the request
       });
 
       if (!response.ok) {
-        throw new Error('Failed to Hold the task');
+        throw new Error('Failed to hold the task');
       }
 
       const updatedTask = await response.json();
-      // Update the UI to reflect the changes
-      fetchTaskHistory(currentPage);
+      fetchTaskHistory(currentPage); // Refresh task history
       toast.success('Task on Hold');
     } catch (error) {
       console.error('Error to hold task:', error);
+    } finally {
+      setCommentPopupOpen(false); // Close the popup after submission
     }
   };
+
   const resumeTask = async (taskId: any) => {
     try {
-      const response = await fetch(`http://192.168.1.2:8082/api/tasks/${taskId}/resume`, {
+      const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/resume`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -298,6 +331,13 @@ const TaskComponent: React.FC = () => {
 
   return (
     <>
+      <CommentPopup
+        isOpen={isCommentPopupOpen}
+        task={selectedTask}
+        onClose={() => setCommentPopupOpen(false)}
+        onSubmit={handleCommentSubmit}
+      />
+
       <TasksFormComponent
         isModal={isModal}
         handleClose={() => setModal(false)}

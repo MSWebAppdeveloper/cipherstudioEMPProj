@@ -20,6 +20,9 @@ const ProjectComponent: React.FC = () => {
         {
             id: number;
             projectName: string;
+            assignedTo: string[];
+            createdBy: string; 
+            startDate: string; 
         }[]
     >([]);
 
@@ -42,7 +45,11 @@ const ProjectComponent: React.FC = () => {
         try {
             const url = `project?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
             const response: any = await Projects(url);
-            setProjects(response.data.data);
+            setProjects(response.data.data.map((proj: any) => ({
+                ...proj,
+                assignedTo: proj.assignedTo || [], // Ensure it defaults to an empty array if not present
+                createdBy: proj.createdBy || "",
+            })));
             setTotalPages(response.data.totalPages);
             setTotalCount(response.data.totalCount);
         } catch (error) {

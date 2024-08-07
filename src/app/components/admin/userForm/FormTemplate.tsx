@@ -11,11 +11,6 @@ const validationSchema = Yup.object({
   name: Yup.string().required("Full Name is required"),
   email: Yup.string().email("Invalid email address").required("Email is required"),
   userRole: Yup.string().required("Account Type is required"),
-  shift: Yup.string().required("Shift is required"),
-  department: Yup.string().when("userRole", {
-    is: "Employee",
-    then: Yup.string().required("Department is required for employees"),
-  }),
 });
 
 

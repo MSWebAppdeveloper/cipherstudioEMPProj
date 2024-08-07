@@ -39,6 +39,22 @@ const ProjectsTemplate: React.FC<ProjectProps> = ({
         },
         { key: "projectName", label: "Project Name", sortable: true },
         {
+            key: "assignedTo",
+            label: "Assigned To",
+            render: (project: { assignedTo: string[] }) => (
+                <span>{project.assignedTo.join(", ")}</span> // Display as a comma-separated list
+            ),
+            sortable: false,
+        },
+        {
+            key: "createdBy",
+            label: "Created By",
+            render: (project: { createdBy: string }) => (
+                <span>{project.createdBy}</span>
+            ),
+            sortable: false,
+        },
+        {
             key: "actions",
             label: "ACTIONS",
             render: (project: { id: any; project: any }) => (

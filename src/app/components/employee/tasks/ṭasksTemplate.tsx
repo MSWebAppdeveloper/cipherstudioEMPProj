@@ -5,6 +5,9 @@ import { TaskTemplateInterface } from "./tasksInterface";
 import { Tooltip } from "react-tooltip";
 import 'react-tooltip/dist/react-tooltip.css';
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+
 const TaskTemplate: React.FC<TaskTemplateInterface> = ({
   isDeleteConfirmationVisible,
   selectedTaskId,
@@ -28,10 +31,12 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
   history,
   holdTask,
   resumeTask,
-  openEditPopup
+  openEditPopup,
+  deleteSelected,
 }) => {
   const [currentStatus, setCurrentStatus] = useState("ALL");
-  const filterOptions = ["Recently Added", "In Progress", "Completed"];
+  const filterOptions = ["ALL", "Recently Added", "In Progress", "Completed", "Hold"];
+
   // Filter tasks based on the current tab
   const filteredTasks: any =
     currentStatus === "ALL"
@@ -40,9 +45,10 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
 
   const router = useRouter();
 
-  const handleProjectNameClick = (projectId: any) => {
-    router.push(`/TaskHistoryPage?projectId=${projectId}`);
+  const handleProjectNameClick = (taskId: any, projectName: string) => {
+    router.push(`/employee/TaskHistoryPage?taskId=${taskId}&projectName=${projectName}`);
   };
+
   const columns = [
     {
       key: "index",
@@ -54,7 +60,7 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
       key: "projectName", label: " Project Name", sortable: false,
       render: (task: any) => (
         <span
-          onClick={() => handleProjectNameClick(task.projectId)}
+          onClick={() => handleProjectNameClick(task.id, task.projectName)}
           className="text-blue-500 cursor-pointer"
         >
           {task.projectName}
@@ -82,8 +88,8 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
         </div>
       ),
     },
-    { key: "estimatedTime", label: "Est. Hours", sortable: false },
-    { key: "takenHours", label: "Taken Hours", sortable: false },
+    { key: "estimatedTime", label: "Est. Time", sortable: false },
+    { key: "takenTime", label: "Taken Time", sortable: false },
     {
       key: "status",
       label: "STATUS",
@@ -118,6 +124,17 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
             <button className="mr-3" onClick={() => openEditPopup(task)}>
               <Icon
                 icon="flowbite:edit-outline"
+                width="1.2em"
+                height="1.2em"
+                style={{ color: "#323232" }}
+              />{" "}
+            </button>
+            <button
+              className=""
+              onClick={() => deleteSelected(task.id)}
+            >
+              <Icon
+                icon="mi:delete"
                 width="1.2em"
                 height="1.2em"
                 style={{ color: "#323232" }}
@@ -162,7 +179,7 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
                     Mark as done
                   </span>
                 </button>
-                <button className="relative group" onClick={() => holdTask(task.id)}>
+                <button className="relative group" onClick={() => holdTask(task.id, task)}>
                   <Icon
                     icon="mdi:pause-circle"
                     width="1.2em"
@@ -180,40 +197,13 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
       ),
       sortable: false,
     },
-    // {
-    //   key: "history",
-    //   label: "History",
-    //   render: (task: any) => (
-    //     <div>
-    //       <button
-    //         onClick={() => setExpandedTaskId(expandedTaskId === task.id ? null : task.id)}
-    //         className="text-blue-500"
-    //       >
-    //         View History
-    //       </button>
-    //       {expandedTaskId === task.id && ( // Condition to check if history should be displayed
-    //         <div className="mt-2">
-    //           <h4 className="font-semibold">Task History</h4>
-    //           <ul>
-    //             {taskHistory.filter(entry => entry.taskId === task.id).map((entry: any) => (
-    //               <li key={entry.id}>
-    //                 {entry.status} - {entry.takenHours} hours - {new Date(entry.changeTimestamp).toLocaleString()}
-    //               </li>
-    //             ))}
-    //           </ul>
-    //         </div>
-    //       )}
-    //     </div>
-    //   ),
-    //   sortable: false,
-    // },
   ];
 
   return (
     <>
       <div>
-        <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5">
-          <div className="flex justify-between items-center">
+        <div className="pb-12 pt-4 px-5 rounded-lg box-shadow mt-5 bg-white">
+          <div className="flex justify-between items-center mb-4">
             <div className="flex items-center">
               <span className="mr-4 text-lg font-medium">Filter by :</span>
               <select
@@ -229,68 +219,94 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
                   </option>
                 ))}
               </select>
-
             </div>
             <div>
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 data-modal-target="authentication-modal"
                 data-modal-toggle="authentication-modal"
                 onClick={() => setModal((prev) => !prev)}
                 className="rounded-md bg-blue-500 hover:bg-blue-400 lg:px-5 lg:py-2 md:px-5 md:py-2 sm:px-3 sm:py-2 text-white lg:text-lg focus:outline-0"
               >
                 Add Task
-              </button>
+              </motion.button>
             </div>
           </div>
 
-          {/*table*/}
+          {/* Table */}
           <div className="mt-10">
-            <div className="overflow-x-auto">
-              {filteredTasks.length > 0 ? (
-                <TableComponent
-                  data={filteredTasks}
-                  columns={columns}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  paginate={paginate}
-                  totalCount={totalCount}
-                  OnchangeData={OnchangeData}
-                  formdata={formdata}
-                  handleSort={handleSort}
-                  sortOrder={sortOrder}
-                  sortColumn={sortColumn}
-                />
-              ) : (
-                <p>No Task data available.</p>
-              )}
-              {isDeleteConfirmationVisible && (
-                <div className="fixed inset-0 deletePopup overflow-y-auto flex justify-center items-center">
-                  <div className="absolute inset-0 bg-black opacity-50"></div>
-                  <div className="relative bg-white rounded-lg p-8">
-                    <p className="text-lg font-semibold mb-4">
-                      Are you sure you want to delete this task?
-                    </p>
-                    <div className="flex justify-end">
-                      <button
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
-                        onClick={() => confirmDeleteTask(selectedTaskId)}
+            <Tabs>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+                <div className="overflow-x-auto">
+                  <TabList className="flex space-x-4 border-b">
+                    {filterOptions.map((option) => (
+                      <Tab
+                        key={option}
+                        onClick={() => setCurrentStatus(option)}
+                        className="cursor-pointer py-2 px-4 transition-colors duration-300 ease-in-out border-b-2"
+                        selectedClassName="border-blue-500 text-blue-500"
                       >
-                        Yes
-                      </button>
-                      <button
-                        className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
-                        onClick={cancelDeleteTask}
-                      >
-                        No
-                      </button>
-                    </div>
-                  </div>
+                        {option}
+                      </Tab>
+                    ))}
+                  </TabList>
+                  {filterOptions.map((option) => (
+                    <TabPanel key={option} className="mt-4">
+                      {filteredTasks.length > 0 ? (
+                        <TableComponent
+                          data={filteredTasks}
+                          columns={columns}
+                          currentPage={currentPage}
+                          totalPages={totalPages}
+                          paginate={paginate}
+                          totalCount={totalCount}
+                          OnchangeData={OnchangeData}
+                          formdata={formdata}
+                          handleSort={handleSort}
+                          sortOrder={sortOrder}
+                          sortColumn={sortColumn}
+                        />
+                      ) : (
+                        <motion.p
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.5 }}
+                          className="text-gray-500"
+                        >No Task data available. </motion.p>
+                      )}
+                      {isDeleteConfirmationVisible && (
+                        <div className="fixed inset-0 deletePopup overflow-y-auto flex justify-center items-center">
+                          <div className="absolute inset-0 bg-black opacity-50"></div>
+                          <div className="relative bg-white rounded-lg p-8">
+                            <p className="text-lg font-semibold mb-4">
+                              Are you sure you want to delete this task?
+                            </p>
+                            <div className="flex justify-end">
+                              <button
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+                                onClick={() => confirmDeleteTask(selectedTaskId)}
+                              >
+                                Yes
+                              </button>
+                              <button
+                                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+                                onClick={cancelDeleteTask}
+                              >
+                                No
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </TabPanel>
+                  ))}
                 </div>
-              )}
-            </div>
+              </motion.div>
+            </Tabs>
           </div>
+          
         </div>
-
       </div>
     </>
   );

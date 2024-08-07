@@ -1,12 +1,13 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import { HistoryTask, UserDetails } from "@/services/api";
+import { deleteUser, HistoryTask, UserDetails } from "@/services/api";
 
 import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import TaskTemplate from "./tasksTemplate";
 import { TaskInterface } from "./tasksInterface";
+import TasksFormComponent from "../../employee/tasksForm/page";
 
 const TaskComponent: React.FC = () => {
   const [taskHistory, setTaskHistory] = useState<TaskInterface[]>([]);
@@ -22,9 +23,13 @@ const TaskComponent: React.FC = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [isModal, setModal] = useState<boolean>(false);
   const [sortColumn, setSortColumn] = useState<string>("createdAt");
   const [allUsers, setAllUsers] = useState<any[]>([]);
-
+  const [selectedTask, setSelectedTask] = useState<any>(null);
+  const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
+    useState<boolean>(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<number>();
   const [isDataFetched, setIsDataFetched] = useState(false);
 
   const router = useRouter();
@@ -56,7 +61,7 @@ const TaskComponent: React.FC = () => {
 
   const fetchTaskHistory = async (page: number, forDownload = false) => {
     try {
-      const statusFilter = filterValue[0] ? `&status=${filterValue[0]}` : "";
+      const statusFilter = `&status=${filterValue[0]}`;
       const nameFilter = filterValue[1] ? `&name=${filterValue[1]}` : "";
       const limit = forDownload ? "" : `&limit=${formdata.limit}`;
 
@@ -64,7 +69,7 @@ const TaskComponent: React.FC = () => {
 
       const response: any = await HistoryTask(
         url + limit + nameFilter + statusFilter
-      );
+      ); 
       setTaskHistory(response.data.data ?? []);
       setTotalPages(response.data.totalPages ?? 0);
       setTotalCount(response.data.totalCount ?? 0);
@@ -73,10 +78,25 @@ const TaskComponent: React.FC = () => {
     }
   };
 
+
+  const fetchTasksByStatus = async (status: string) => {
+    try {
+      const statusFilter = status !== "ALL" ? `&status=${status}` : "";
+      const url = `tasks?page=${currentPage}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}${statusFilter}`;
+      const response: any = await HistoryTask(url);
+      setTaskHistory(response.data.data ?? []);
+      setTotalPages(response.data.totalPages ?? 0);
+      setTotalCount(response.data.totalCount ?? 0);
+    } catch (error) {
+      console.error("Error fetching tasks by status:", error);
+    }
+  };
+
   useEffect(() => {
     fetchTaskHistory(currentPage);
   }, [
     filterValue,
+    isModal,
     currentPage,
     formdata.limit,
     formdata.order,
@@ -89,6 +109,11 @@ const TaskComponent: React.FC = () => {
     setFilterValue((prevValue) => {
       return type === "status" ? [value, prevValue[1]] : [prevValue[0], value];
     });
+  };
+
+  const openEditPopup = (task: any) => {
+    setSelectedTask(task);
+    setModal(true);
   };
 
   const handleSort = (column: string) => {
@@ -104,10 +129,50 @@ const TaskComponent: React.FC = () => {
     await fetchTaskHistory(1, true);
   };
 
+  const handleEditTaskUpdate = () => {
+    setModal(false);
+  };
+  const deleteUserHandler = async (taskId: number) => {
+    setSelectedTaskId(taskId);
+    setDeleteConfirmationVisible(true);
+  };
+
+  const handleDelete = async (deletedTaskId: any) => {
+    try {
+      const response = await deleteUser(`tasks/${deletedTaskId}`);
+
+      if (response.status === 200) {
+        const updatedTaskHistory = taskHistory.filter(
+          (item) => item.id !== deletedTaskId
+        );
+        setTaskHistory(updatedTaskHistory);
+        toast.success("Task deleted successfully!");
+        fetchTaskHistory(currentPage);
+      } else {
+        console.error("Delete failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      toast.error("Failed to delete task!");
+    } finally {
+      setDeleteConfirmationVisible(false);
+    }
+  };
+  const cancelDeleteUser = () => {
+    setDeleteConfirmationVisible(false);
+  };
+
   return (
     <>
+      <TasksFormComponent
+        isModal={isModal}
+        handleClose={() => setModal(false)}
+        task={selectedTask}
+        onUpdate={handleEditTaskUpdate}
+      />
       <TaskTemplate
         taskHistory={taskHistory}
+        setModal={setModal}
         filterStatus={filterValue[0]}
         filterName={filterValue[1]}
         setFilterName={(value: any) => setFilterValue(value)}
@@ -127,6 +192,13 @@ const TaskComponent: React.FC = () => {
         fetchAllRecords={fetchAllRecords}
         isDataFetched={isDataFetched}
         setIsDataFetched={setIsDataFetched}
+        openEditPopup={openEditPopup}
+        deleteSelected={deleteUserHandler}
+        confirmDeleteTask={handleDelete}
+        cancelDeleteTask={cancelDeleteUser}
+        isDeleteConfirmationVisible={isDeleteConfirmationVisible}
+        selectedTaskId={selectedTaskId}
+        fetchTasksByStatus={fetchTasksByStatus}
       />
     </>
   );

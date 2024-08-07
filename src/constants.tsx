@@ -37,7 +37,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   {
     title: "Projects",
     path: "/admin/projects",
-    icon: <Icon icon="cil:task"  width="20" height="20"   style={{color: "#1565e5"}} />,
+    icon: <Icon icon="grommet-icons:projects"  width="20" height="20"   style={{color: "#1565e5"}} />,
   },
   {
     title: "Dashboard",

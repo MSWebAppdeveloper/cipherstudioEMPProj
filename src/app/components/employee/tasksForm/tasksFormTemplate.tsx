@@ -6,6 +6,7 @@ import { TasksFormInterface } from "./tasksFormInterface";
 import { UseModal } from "@/components/common/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import Select from "react-select";
 
 const validationSchema = Yup.object({
   projectName: Yup.string().required("Project name is required"),
@@ -22,7 +23,13 @@ const TaskFormTemplate: React.FC<TasksFormInterface> = ({
   loading,
   projects,
   dataChange,
+  allUsers,
+  userRole,
 }) => {
+
+  const getUserOptions = () => {
+    return allUsers.map((user) => ({ value: user.name, label: user.name }));
+  };
   return (
     <UseModal isOpen={isModal} closeModal={handleClose}>
       <div
@@ -44,7 +51,7 @@ const TaskFormTemplate: React.FC<TasksFormInterface> = ({
         <div className="w-auto">
           <div className="text-center">
             <h1 className="text-3xl font-semibold text-gray-900">
-              Daily Status
+              {formdata.id ? "Add Comment" : "Daily Status"}
             </h1>
           </div>
           <div className="mt-5">
@@ -55,7 +62,123 @@ const TaskFormTemplate: React.FC<TasksFormInterface> = ({
             >
               {({ isSubmitting, setFieldValue }) => (
                 <Form>
-                  {formdata.id ? <>
+                  <div className="mb-4">
+                    <label
+                      htmlFor="projectName"
+                      className="block text-sm font-medium text-textColor"
+                    >
+                      Project Name:
+                    </label>
+                    <Field
+                      as="select"
+                      id="projectName"
+                      name="projectName"
+                      className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        setFieldValue('projectName', e.target.value);
+                        dataChange(e);
+                      }}
+                    >
+                      <option value="" disabled>
+                        Select Project
+                      </option>
+                      {projects.map((project) => (
+                        <option key={project.id} value={project.projectName}>
+                          {project.projectName}
+                        </option>
+                      ))}
+                    
+                      <option value="Other">Other</option>
+                    </Field>
+                    <ErrorMessage
+                      name="projectName"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
+                  </div>
+
+
+                  <div className="mb-4">
+                    <label
+                      htmlFor="assignedTo"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Assigned To
+                    </label>
+                    <Select
+                      isMulti
+                      name="assignedTo"
+                      options={getUserOptions()}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                      onChange={(selectedOptions) => {
+                        const values = selectedOptions ? selectedOptions.map(option => option.value) : [];
+                        setFieldValue('assignedTo', values);
+                        dataChange({ target: { name: 'assignedTo', value: values } });
+                      }}
+                      value={getUserOptions().filter(option => formdata.assignedTo.includes(option.value))}
+                    />
+                    <ErrorMessage
+                      name="assignedTo"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
+                  </div>
+
+
+                  {/* Task Title Field */}
+                  <div className="mb-4">
+                    <label
+                      htmlFor="title"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Title
+                    </label>
+                    <Field
+                      type="text"
+                      id="title"
+                      name="title"
+                      placeholder="Type here..."
+                      className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setFieldValue('title', e.target.value);
+                        dataChange(e);
+                      }}
+                    />
+                    <ErrorMessage
+                      name="title"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
+                  </div>
+
+                  {/* Description Field */}
+                  <div className="mb-4">
+                    <label
+                      htmlFor="description"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Description
+                    </label>
+                    <Field
+                      as="textarea"
+                      id="description"
+                      name="description"
+                      placeholder="Type here..."
+                      className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        setFieldValue('description', e.target.value);
+                        dataChange(e);
+                      }}
+                    />
+                    <ErrorMessage
+                      name="description"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
+                  </div>
+
+                  {formdata.id && (
                     <div className="mb-4">
                       <label
                         htmlFor="comments"
@@ -80,118 +203,34 @@ const TaskFormTemplate: React.FC<TasksFormInterface> = ({
                         className="text-red-600 text-sm"
                       />
                     </div>
-                  </> : <>
-                    <div className="mb-4">
-                      <label
-                        htmlFor="projectName"
-                        className="block text-sm font-medium text-textColor"
-                      >
-                        Project Name:
-                      </label>
-                      <Field
-                        as="select"
-                        id="projectName"
-                        name="projectName"
-                        className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                          setFieldValue('projectName', e.target.value);
-                          dataChange(e);
-                        }}
-                      >
-                        <option value="" disabled>
-                          Select Project
-                        </option>
-                        {projects.map((project) => (
-                          <option key={project.id} value={project.projectName}>
-                            {project.projectName}
-                          </option>
-                        ))}
-                      </Field>
-                      <ErrorMessage
-                        name="projectName"
-                        component="div"
-                        className="text-red-600 text-sm"
-                      />
-                    </div>
+                  )}
 
-                    {/* Task Title Field */}
-                    <div className="mb-4">
-                      <label
-                        htmlFor="title"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                      >
-                        Title
-                      </label>
-                      <Field
-                        type="text"
-                        id="title"
-                        name="title"
-                        placeholder="Type here..."
-                        className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          setFieldValue('title', e.target.value);
-                          dataChange(e);
-                        }}
-                      />
-                      <ErrorMessage
-                        name="title"
-                        component="div"
-                        className="text-red-600 text-sm"
-                      />
-                    </div>
+                  {/* Estimated Time Field */}
+                  <div className="mb-4">
+                    <label
+                      htmlFor="estimatedTime"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                      Estimated Time
+                    </label>
+                    <Field
+                      id="estimatedTime"
+                      name="estimatedTime"
+                      type="text"
+                      className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setFieldValue('estimatedTime', e.target.value);
+                        dataChange(e);
+                      }}
+                    />
+                    <ErrorMessage
+                      name="estimatedTime"
+                      component="div"
+                      className="text-red-600 text-sm"
+                    />
+                  </div>
 
-                    {/* Description Field */}
-                    <div className="mb-4">
-                      <label
-                        htmlFor="description"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                      >
-                        Description
-                      </label>
-                      <Field
-                        as="textarea"
-                        id="description"
-                        name="description"
-                        placeholder="Type here..."
-                        className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                          setFieldValue('description', e.target.value);
-                          dataChange(e);
-                        }}
-                      />
-                      <ErrorMessage
-                        name="description"
-                        component="div"
-                        className="text-red-600 text-sm"
-                      />
-                    </div>
 
-                    {/* Estimated Time Field */}
-                    <div className="mb-4">
-                      <label
-                        htmlFor="estimatedTime"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                      >
-                        Estimated Time
-                      </label>
-                      <Field
-                        id="estimatedTime"
-                        name="estimatedTime"
-                        type="text"
-                        className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          setFieldValue('estimatedTime', e.target.value);
-                          dataChange(e);
-                        }}
-                      />
-                      <ErrorMessage
-                        name="estimatedTime"
-                        component="div"
-                        className="text-red-600 text-sm"
-                      />
-                    </div>
-                  </>
-                  }
                   <button
                     type="submit"
                     className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500${isModal && " sm:w-full"
@@ -205,7 +244,7 @@ const TaskFormTemplate: React.FC<TasksFormInterface> = ({
                         spin
                       />
                     ) : (
-                      <>{formdata.id ?"Update" : "Save "}</>
+                      <>{formdata.id ? "Update" : "Save "}</>
                     )}
                   </button>
 

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-export default function SignoutButton({}: { type?: string }) {
+export default function SignoutButton({ }: { type?: string }) {
   const router = useRouter();
   const handleSignOut: any = async () => {
     await signOut({
@@ -32,7 +32,7 @@ export default function SignoutButton({}: { type?: string }) {
         >
           <div className="mr-2">
             <Icon
-              icon="ic:round-logout"
+              icon="circum:logout"
               width="20"
               height="20"
               style={{ color: "#1565e5" }}

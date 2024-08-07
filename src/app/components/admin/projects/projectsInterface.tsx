@@ -3,6 +3,9 @@ export interface ProjectProps {
     projects: {
         id: number;
         projectName: string;
+        assignedTo: string[];
+        createdBy: string; 
+        startDate: string; 
     }[];
     deleteSelected: (project: any) => void;
     openEditPopup: (project: any) => void;

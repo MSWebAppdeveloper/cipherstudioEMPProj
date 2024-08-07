@@ -4,6 +4,8 @@ import { FormikHelpers } from "formik";
 export interface ProjectFormValues {
   id: number;
   projectName: string;
+  assignedTo: string[]; // New field for assignedTo
+  createdBy?: string; // Optional field for createdBy
 }
 
 export interface ProjectFormTemplateProps {
@@ -13,4 +15,5 @@ export interface ProjectFormTemplateProps {
   isModal: boolean;
   handleClose: () => void;
   loading: boolean;
+  allUsers: any[];
 }

@@ -5,8 +5,9 @@ export interface TaskFormData {
   description: string;
   status: string;
   estimatedTime: string;
-  takenHours: string;
+  takenTime: string;
   comments: string;
+  assignedTo: string[];
 }
 
 export interface Project {
@@ -25,17 +26,20 @@ export interface Task {
 }
 
 export interface TasksFormInterface {
-  dataChange: (
-    e: any
+  dataChange: (e: any) => void;
+  handleOnSubmit: (
+    values: TaskFormData,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => void;
-  handleOnSubmit: (values: TaskFormData, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => void;
-  formdata: TaskFormData; 
+  formdata: TaskFormData;
   isModal: boolean;
   handleClose: () => void;
   loading: boolean;
   projects: { id: number; projectName: string }[];
   handleInProgressTaskSelect: (task: any) => void;
   tasks: Task[];
+  allUsers: any[];
+  userRole:string;
 }
 
 export interface Task {

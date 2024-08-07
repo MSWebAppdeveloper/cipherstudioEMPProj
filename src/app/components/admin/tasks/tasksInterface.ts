@@ -5,8 +5,9 @@ export interface TaskInterface {
   description: string;
   status: string;
   estimatedTime: string;
-  takenHours: string;
+  takenTime: string;
   createdAt: string;
+  assignedTo: string;
 }
 
 export interface TaskTemplateProps {
@@ -30,4 +31,13 @@ export interface TaskTemplateProps {
   fetchAllRecords: () => void;
   isDataFetched: boolean;
   setIsDataFetched: (value: boolean) => void;
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  confirmDeleteTask: (taskId: any) => void;
+  cancelDeleteTask: (taskId: any) => void;
+  deleteSelected: (task: any) => void;
+  openEditPopup: (task: any) => void;
+  isDeleteConfirmationVisible: boolean;
+  selectedTaskId: any;
+
+  fetchTasksByStatus:any;
 }

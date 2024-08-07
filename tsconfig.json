@@ -29,6 +29,6 @@
     "src/app/dashboard/users/page.jsx",
     "src/components/DateRangePickerComp.jsx",
     "src/app/components/admin/projectForm"
-  ],
+, "src/components/CustomSelect.jsx"  ],
   "exclude": ["node_modules"]
 }

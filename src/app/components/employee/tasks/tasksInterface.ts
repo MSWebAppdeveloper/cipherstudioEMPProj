@@ -1,7 +1,7 @@
 // TaskTemplateInterface.ts
 export interface TaskTemplateInterface {
   [x: string]: any;
-  deleteSelected: (user: any) => void;
+  deleteSelected: (task: any) => void;
   isDeleteConfirmationVisible: boolean;
   selectedTaskId: any;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,4 +30,5 @@ export interface TaskTemplateInterface {
     value: string | [string, string]
   ) => void;
   openEditPopup: (task: any) => void;
+  
 }

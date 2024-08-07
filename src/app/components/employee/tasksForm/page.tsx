@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Projects, RequestTask, updateTaskDetails } from "@/services/api";
+import { Projects, RequestTask, updateTaskDetails, UserDetails } from "@/services/api";
 import TasksFormTemplate from "./tasksFormTemplate";
 
 const initialValues = {
@@ -11,8 +11,9 @@ const initialValues = {
   description: "",
   status: "",
   estimatedTime: "",
-  takenHours: "",
+  takenTime: "",
   comments: "",
+  assignedTo: [], 
 };
 
 interface TaskFormComponentProps {
@@ -32,13 +33,18 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
   const [UserId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [projects, setProjects] = useState<{ id: number; projectName: string }[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [tasks, setTasks] = useState<any[]>([initialValues]);
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [userRole, setUserRole] = useState<string>("");
 
   useEffect(() => {
     const fetchUserId = async () => {
       try {
         const UserId: any = localStorage.getItem("UserId");
         setUserId(UserId);
+        const role = localStorage.getItem("userRole");
+        setUserRole(role || "");
       } catch (error) {
         console.error("Error fetching user ID:", error);
       }
@@ -57,7 +63,11 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const url = `project`;
+        let userRole = localStorage.getItem("userRole");
+        let userName = localStorage.getItem("name");
+       
+  
+        const url = `project?userRole=${userRole}&userName=${userName}`;
         const response: any = await Projects(url);
         setProjects(response.data.data);
       } catch (error) {
@@ -66,6 +76,20 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
     };
     fetchProjects();
   }, []);
+
+  useEffect(() => {
+    getAllUsers(currentPage);
+  }, []);
+
+  const getAllUsers = async (page: number) => {
+    try {
+      const url = `employee/users`;
+      const response: any = await UserDetails(url);
+      setAllUsers(response.data.filter((user: any) => user.isActive === true));
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   const dataChange = (e: any) => {
     setFormdata({
@@ -78,7 +102,7 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
     setFormdata(task);
   };
 
-  const handleOnSubmit = async(values: any, { setSubmitting }: any) => {
+  const handleOnSubmit = async (values: any, { setSubmitting }: any) => {
     setLoading(true);
     try {
       const requestData = {
@@ -117,6 +141,7 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
     }
   };
 
+  
   const handleClosePopup = () => {
     setFormdata(initialValues); // Clear formData before closing
     handleClose();
@@ -134,6 +159,8 @@ const TasksFormComponent: React.FC<TaskFormComponentProps> = ({
       projects={projects}
       handleInProgressTaskSelect={handleInProgressTaskSelect}
       tasks={tasks}
+      allUsers={allUsers}
+      userRole={userRole}
     />
   );
 };
