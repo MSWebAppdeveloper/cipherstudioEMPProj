@@ -6,13 +6,14 @@ const User = db.User;
 const CreateUser = db.CreateUser;
 const saveUser = async (req, res, next) => {
     try {
-        const { userName, email } = req.body;
+        const { name, email } = req.body;
 
-        const existingUsername = await User.findOne({ where: { userName } });
+        const existingUsername = await CreateUser.findOne({ where: { name } });
         if (existingUsername) return res.status(409).send("Username already taken");
 
-        const existingEmail = await User.findOne({ where: { email } });
+        const existingEmail = await CreateUser.findOne({ where: { email } });
         if (existingEmail) return res.status(409).send("Email already exists");
+        
 
         next();
     } catch (error) {
@@ -23,8 +24,11 @@ const saveUser = async (req, res, next) => {
 
 const saveEmployee = async (req, res, next) => {
     try {
-        const {  email } = req.body;
+        const { name, email } = req.body;
 
+        const existingUsername = await CreateUser.findOne({ where: { name } });
+        if (existingUsername) return res.status(409).send("Username already taken");
+        
         const existingEmail = await CreateUser.findOne({ where: { email } });
         if (existingEmail) return res.status(409).send("Email already exists");
 

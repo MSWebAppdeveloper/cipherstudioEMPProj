@@ -66,7 +66,7 @@ const approvalHistoryController = {
       const emailContentToUser = `
         <p>Hello ${leaveRequest.userName},</p>
         <p>Your leave request has been ${response} by ${approver.name}.</p>
-        <p>To view your leave history, go to your portal and view "Leave Request" section or <a href="http://192.168.1.2/employee/leaveRequest">Click Here</a>.</p>
+        <p>To view your leave history, go to your portal and view "Leave Request" section or <a href="http://192.168.1.3/employee/leaveRequest">Click Here</a>.</p>
       `;
 
       // Send email to user
@@ -81,7 +81,7 @@ const approvalHistoryController = {
       const emailContentToManagement = `
         <p>Hello Management,</p>
         <p>A new leave request has been ${response} by ${approver.name}.</p>
-        <p>Check all Leave Applications, go to your portal and view "Leaves" section or <a href="http://192.168.1.2/admin/leaveApplications">Click Here</a>.</p>
+        <p>Check all Leave Applications, go to your portal and view "Leaves" section or <a href="http://192.168.1.3/admin/leaveApplications">Click Here</a>.</p>
       `;
 
       // Send email to management

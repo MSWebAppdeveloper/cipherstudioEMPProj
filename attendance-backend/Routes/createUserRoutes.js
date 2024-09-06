@@ -8,7 +8,8 @@ router.post("/users", saveEmployee, UserController.createUser);
 router.post("/users/login", UserController.login);
 
 // Get all users
-router.get("/users", UserController.getAllUsers);
+router.get("/allusers", UserController.getAllUsers);
+router.get("/users", UserController.getUsers);
 
 // Get user by ID
 router.get("/users/:id", UserController.getUserById);

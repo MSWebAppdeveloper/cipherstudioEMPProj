@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const { sequelize } = require("../Models/index");
 const { format } = require("date-fns");
+const { where } = require("sequelize");
 
 // Function to generate a random password
 function generateRandomPassword() {
@@ -14,11 +15,11 @@ function generateRandomPassword() {
 const UserController = {
   createUser: async (req, res) => {
     try {
-      const { name, email, department, userRole } = req.body;
+      const { name, email, department, userRole, shift } = req.body;
 
       // Check if the email is already used for the given user role
       const existingUser = await db.CreateUser.findOne({
-        where: { email, userRole },
+        where: {name, email, userRole },
       });
 
       if (existingUser) {
@@ -40,7 +41,7 @@ const UserController = {
           <p>Your account has been created successfully.</p>
           <p>Email: ${email}</p>
           <p>Password: ${password}</p>
-          <p>Please click <a href="http://192.168.1.2/login">here</a> to log in.</p>
+          <p>Please click <a href="http://192.168.1.3/login">here</a> to log in.</p>
         `;
         subject = "Invitation to the Management Application";
       } else if (userRole === "Employee") {
@@ -50,7 +51,7 @@ const UserController = {
           <p>Your account has been created successfully.</p>
           <p>Email: ${email}</p>
           <p>Password: ${password}</p>
-          <p>Please click <a href="http://192.168.1.2/login">here</a> to log in.</p>
+          <p>Please click <a href="http://192.168.1.3/login">here</a> to log in.</p>
         `;
         subject = "Invitation to the Employee Application";
       } else {
@@ -93,6 +94,7 @@ const UserController = {
               password: hashedPassword,
               userRole,
               isActive,
+              shift,
             });
 
             return res.status(201).json(user);
@@ -110,19 +112,76 @@ const UserController = {
     }
   },
 
+
+
+  getUsers: async (req, res) => {
+    try {
+      // Pagination parameters
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
+      const order = req.query.order || "asc";
+  
+      // Sorting parameters
+      const sortColumns = req.query.sortColumn
+        ? req.query.sortColumn.split(",")
+        : ["name"];
+      const sortOrders = req.query.sortOrder
+        ? req.query.sortOrder.split(",")
+        : ["asc"];
+  
+      const orderClause = sortColumns.map((col, index) => [
+        col,
+        (sortOrders[index] || "desc").toUpperCase(),
+      ]);
+  
+      // Fetch users with the role 'Employee'
+      const users = await db.CreateUser.findAll({
+        where: {
+          userRole: 'Employee' // Filtering condition
+        },
+        order: orderClause,
+        limit: limit,    // Limit the number of results per page
+        offset: offset,  // Skip the results for previous pages
+      });
+  
+      return res.status(200).json(users);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
+
   getAllUsers: async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
       const offset = (page - 1) * limit;
       const order = req.query.order || "asc";
+      const shift = ["Day", "Night", "Hybrid"];
 
-      const sortColumns = req.query.sortColumn ? req.query.sortColumn.split(",") : ["name"];
-      const sortOrders = req.query.sortOrder ? req.query.sortOrder.split(",") : ["desc"];
+      const sortColumns = req.query.sortColumn
+        ? req.query.sortColumn.split(",")
+        : ["name"];
+      const sortOrders = req.query.sortOrder
+        ? req.query.sortOrder.split(",")
+        : ["desc"];
 
-      const orderClause = sortColumns.map((col, index) => [col, (sortOrders[index] || "desc").toUpperCase()]);
+      const orderClause = sortColumns.map((col, index) => [
+        col,
+        (sortOrders[index] || "desc").toUpperCase(),
+      ]);
 
+      const roleFilter = req.query.userRole || null;
+      const isActive = req.query.isActive === "true";
+
+      // Build the where clause for filtering by status
+      const whereClause = {
+        ...(roleFilter && { userRole: roleFilter }),
+        isActive: isActive,
+      };
       const users = await db.CreateUser.findAndCountAll({
+        where: whereClause,
         limit: parseInt(limit),
         offset: parseInt(offset),
         order: orderClause,
@@ -132,6 +191,7 @@ const UserController = {
         totalPages: Math.ceil(users.count / limit),
         currentPage: parseInt(page),
         data: users.rows,
+        shift: shift,
       });
     } catch (error) {
       console.error(error);
@@ -139,90 +199,106 @@ const UserController = {
     }
   },
 
-  getUserDetails: async (req, res) => {
+   getUserDetails : async (req, res) => {
     try {
-      const UserId = req.user.id;
-      const { userId } = req.body;
-      // console.log("params",req.user)
+      const UserId = req.user?.id;
+  
+      if (!UserId) {
+        return res.status(400).json({ error: "User ID is required" });
+      }
+  
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
       const offset = (page - 1) * limit;
       const order = req.query.order || "desc";
       const sortColumns = req.query.sortColumn ? req.query.sortColumn.split(",") : ["createdAt"];
       const sortOrders = req.query.sortOrder ? req.query.sortOrder.split(",") : ["desc"];
-
-      const orderClause = sortColumns.map((col, index) => [col, (sortOrders[index] || "desc").toUpperCase()]);
-
+      const statusFilter = req.query.status || null;
+  
+      const orderClause = sortColumns.map((col, index) => [
+        col,
+        (sortOrders[index] || "desc").toUpperCase(),
+      ]);
+  
+      const whereClause = {
+        UserId,
+        ...(statusFilter && { status: statusFilter }),
+      };
+  
       const user = await db.CreateUser.findOne({ where: { id: UserId } });
+  
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
       const attendanceDetails = await sequelize.query(
         `
-              SELECT * FROM public."CreateUsers" c
-              JOIN public."Attendances" a ON c.id = a."UserId" WHERE c.id = :userId;
-          `,
+          SELECT * FROM public."CreateUsers" c
+          JOIN public."Attendances" a ON c.id = a."UserId" 
+          WHERE c.id = :userId;
+        `,
         { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT }
       );
-
-      const additionalDetails = await sequelize.query(`
-        SELECT * FROM public."CreateUsers" c
-        JOIN public."Profiles" p ON c.id = p."UserId" WHERE c.id = :userId;
-    `, { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT });
-
-      // Fetch leave request details
+  
+      const additionalDetails = await sequelize.query(
+        `
+          SELECT * FROM public."CreateUsers" c
+          JOIN public."Profiles" p ON c.id = p."UserId" 
+          WHERE c.id = :userId;
+        `,
+        { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT }
+      );
+  
       const leaveRequestDetails = await db.leaveRequest.findAndCountAll({
-        where: { UserId },
-        limit: limit,
-        offset: offset,
+        where: whereClause,
+        limit,
+        offset,
         order: orderClause,
       });
-
-      // Format the createdAt field for each leave request
+  
       const formattedData = leaveRequestDetails.rows.map((request) => ({
         ...request.toJSON(),
-        createdAt: format(
-          new Date(request.createdAt),
-          "MMMM do, yyyy, h:mm:ss a"
-        ),
+        createdAt: format(new Date(request.createdAt), "MMMM do, yyyy, h:mm:ss a"),
       }));
-
-      // Determine the current year and construct the assign_year format
+  
       const currentYear = parseInt(req.query.year) || new Date().getFullYear();
       const assignYearStart = `${currentYear}-04-01`;
       const assignYearEnd = `${currentYear + 1}-03-31`;
-      // Fetch leave balance details
+  
       const leaveBalance = await sequelize.query(
         `
-            SELECT
-              lt."leave_type_name" AS "leaveType",
-              lt."allowed_leaves" AS "allowedLeaves",
-              lt."assign_year" AS "assign_year",
-              SUM(CASE WHEN lr."status" = 'Approved' THEN lr."total_days" ELSE 0 END) AS "totalTakenLeave",
-              SUM(CASE WHEN lr."status" = 'Pending' THEN lr."total_days" ELSE 0 END) AS "pendingLeaves",
-              GREATEST(lt."allowed_leaves" - SUM(CASE WHEN lr."status" = 'Approved' THEN lr."total_days" ELSE 0 END), 0) AS "leavesLeft",
-              CASE
-                WHEN SUM(CASE WHEN lr."status" = 'Approved' THEN lr."total_days" ELSE 0 END) > lt."allowed_leaves" 
-                THEN SUM(CASE WHEN lr."status" = 'Approved' THEN lr."total_days" ELSE 0 END) - lt."allowed_leaves"
-                ELSE 0
-                END AS "extraTakenLeaves"
-              FROM
-              public."LeaveTypes" lt
-            LEFT JOIN
-              public."LeaveRequests" lr ON lt."leave_type_id" = lr."leave_type_id" AND lr."UserId" = :userId
-            WHERE
-              lt."assign_year" BETWEEN :assignYearStart AND :assignYearEnd
-            GROUP BY
-              lt."leave_type_name", lt."allowed_leaves", lt."assign_year";
-            `,
-
+          SELECT
+            lt."leave_type_name" AS "leaveType",
+            lt."allowed_leaves" AS "allowedLeaves",
+            lt."assign_year" AS "assign_year",
+            SUM(CASE WHEN lr."status" = 'Approved' THEN lr."total_days" ELSE 0 END) AS "totalTakenLeave",
+            SUM(CASE WHEN lr."status" = 'Pending' THEN lr."total_days" ELSE 0 END) AS "pendingLeaves",
+            GREATEST(lt."allowed_leaves" - SUM(CASE WHEN lr."status" = 'Approved' THEN lr."total_days" ELSE 0 END), 0) AS "leavesLeft",
+            CASE
+              WHEN SUM(CASE WHEN lr."status" = 'Approved' THEN lr."total_days" ELSE 0 END) > lt."allowed_leaves" 
+              THEN SUM(CASE WHEN lr."status" = 'Approved' THEN lr."total_days" ELSE 0 END) - lt."allowed_leaves"
+              ELSE 0
+            END AS "extraTakenLeaves"
+          FROM
+            public."LeaveTypes" lt
+          LEFT JOIN
+            public."LeaveRequests" lr ON lt."leave_type_id" = lr."leave_type_id" AND lr."UserId" = :userId
+          WHERE
+            lt."assign_year" BETWEEN :assignYearStart AND :assignYearEnd
+          GROUP BY
+            lt."leave_type_name", lt."allowed_leaves", lt."assign_year";
+        `,
         {
           replacements: {
             userId: UserId,
-            assignYearStart: assignYearStart,
-            assignYearEnd: assignYearEnd,
+            assignYearStart,
+            assignYearEnd,
           },
           type: sequelize.QueryTypes.SELECT,
         }
       );
-
+  
+  
       const mergedDetails = {
         ...user.toJSON(),
         ...additionalDetails[0],
@@ -233,18 +309,16 @@ const UserController = {
           totalPages: Math.ceil(leaveRequestDetails.count / limit),
           currentPage: page,
         },
-        leaveBalance: leaveBalance,
+        leaveBalance,
       };
-      // console.log("merged details", mergedDetails);
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
+  
       return res.status(200).json([mergedDetails]);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Internal Server Error" });
     }
   },
+  
 
   getUserById: async (req, res) => {
     try {
@@ -265,8 +339,6 @@ const UserController = {
         `,
         { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT }
       );
-      // console.log("leaveRequest", leaveRequestDetails);
-      // console.log("attendacne", attendanceDetails);
       const mergedDetails = {
         ...user.toJSON(),
         attendance: attendanceDetails,
@@ -286,12 +358,12 @@ const UserController = {
   updateUser: async (req, res) => {
     try {
       const userId = req.params.id;
-      const { name, department } = req.body;
+      const { name, department, shift } = req.body;
       const user = await db.CreateUser.findByPk(userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-      await user.update({ name, department });
+      await user.update({ name, department, shift });
       return res.status(200).json(user);
     } catch (error) {
       console.error(error);
@@ -299,25 +371,27 @@ const UserController = {
     }
   },
 
-   updateUserDetails :async (req, res) => {
+  updateUserDetails: async (req, res) => {
     try {
-        const userId = req.user.id;
-        const user = await db.CreateUser.findByPk(userId);
-        if (!user) return res.status(404).send("User not found");
-        const { designation, phoneNumber, country, state, city, address } = req.body;
-        user.designation = designation;
-        user.phoneNumber = phoneNumber;
-        user.country = country;
-        user.state = state;
-        user.city = city;
-        user.address = address;
-        await db.CreateUser.save();
-        return res.status(200).send(user);
+      const userId = req.user.id;
+      const user = await db.CreateUser.findByPk(userId);
+      if (!user) return res.status(404).send("User not found");
+      const { designation, phoneNumber, country, state, city, address, shift } =
+        req.body;
+      user.designation = designation;
+      user.phoneNumber = phoneNumber;
+      user.country = country;
+      user.state = state;
+      user.city = city;
+      user.address = address;
+      user.shift = shift;
+      await db.CreateUser.save();
+      return res.status(200).send(user);
     } catch (error) {
-        console.error(error);
-        return res.status(500).send("Internal Server Error");
+      console.error(error);
+      return res.status(500).send("Internal Server Error");
     }
-},
+  },
   updateUserStatus: async (req, res) => {
     try {
       const userId = req.params.id;
@@ -367,6 +441,7 @@ const UserController = {
           email: user.email,
           name: user.name,
           userRole: user.userRole,
+          shift: user.shift,
         },
         process.env.secretKey,
         { expiresIn: "12h" }
@@ -377,6 +452,7 @@ const UserController = {
           email: user.email,
           name: user.name,
           userRole: user.userRole,
+          shift: user.shift,
         },
         process.env.refreshTokenSecret
       );
@@ -388,6 +464,7 @@ const UserController = {
         refreshToken,
         UserId: user.id,
         userRole: user.userRole,
+        shift: user.shift,
       });
     } catch (error) {
       return res.status(500).send("Internal Server Error");
@@ -405,7 +482,7 @@ const UserController = {
       if (!user) {
         return res.status(403).send("Invalid Refresh Token");
       }
-      
+
       const newAccessToken = jwt.sign(
         {
           id: user.id,
@@ -416,7 +493,7 @@ const UserController = {
         process.env.secretKey,
         { expiresIn: "1m" }
       );
-      
+
       return res.status(200).send({ accessToken: newAccessToken });
     } catch (error) {
       return res.status(403).send("Invalid Refresh Token");

@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false,
       },
       email: {
@@ -24,12 +25,24 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      isActive:{
+      isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
-      }
+      },
+      shift: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
-    { timestamps: true }
+    {
+      timestamps: true,
+      paranoid: true, // Enables soft delete
+    }
   );
+
   return CreateUser;
 };

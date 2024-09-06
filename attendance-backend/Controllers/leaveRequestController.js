@@ -1,7 +1,7 @@
 const db = require("../Models");
 const moment = require("moment");
 const { format } = require("date-fns");
-
+const { Op } = require("sequelize");
 const nodemailer = require("nodemailer");
 const { where } = require("sequelize");
 // Function to send email
@@ -73,7 +73,7 @@ const LeaveRequestController = {
         <p>Reason: ${reason}</p>
         <p>Number of Days: ${daysTaken}</p>
         <p>Status: Pending</p>
-        <p>To view your leave history, go to your portal and view "Leave Request" section or  <a href="http://192.168.1.2/employee/leaveRequest">Click Here</a>. </p> 
+        <p>To view your leave history, go to your portal and view "Leave Request" section or  <a href="http://192.168.1.3/employee/leaveRequest">Click Here</a>. </p> 
       `;
 
       sendEmail(userEmail, "Leave Request Submitted", userHtmlContent);
@@ -90,7 +90,7 @@ const LeaveRequestController = {
         <p>Number of Days: ${daysTaken}</p>
         <p>User Email: ${userEmail}</p>
         <p>Status: Pending</p>
-        <p>To response this request, go to your portal and view "Leaves" section or  <a href="http://192.168.1.2/admin/leaveApplications">Click Here</a>. </p> 
+        <p>To response this request, go to your portal and view "Leaves" section or  <a href="http://192.168.1.3/admin/leaveApplications">Click Here</a>. </p> 
       `;
 
       sendEmail(managementEmail, "New Leave Request", managementHtmlContent);
@@ -108,15 +108,61 @@ const LeaveRequestController = {
       const limit = parseInt(req.query.limit) || 10;
       const offset = (page - 1) * limit;
       const order = req.query.order || "desc";
+      const sortColumns = req.query.sortColumn
+        ? req.query.sortColumn.split(",")
+        : ["createdAt"];
+      const sortOrders = req.query.sortOrder
+        ? req.query.sortOrder.split(",")
+        : ["desc"];
+      const statusFilter = req.query.status || null;
+      const nameFilter = req.query.name || null;
+      const forDownload = req.query.forDownload === "true";
 
-      const sortColumns = req.query.sortColumn ? req.query.sortColumn.split(",") : ["createdAt"];
-      const sortOrders = req.query.sortOrder ? req.query.sortOrder.split(",") : ["desc"];
+      // Construct order clause
+      const orderClause = sortColumns.map((col, index) => [
+        col,
+        (sortOrders[index] || "desc").toUpperCase(),
+      ]);
 
-      const orderClause = sortColumns.map((col, index) => [col, (sortOrders[index] || "desc").toUpperCase()]);
+      // Build the where clause for filtering by status and name
+      const whereClause = {
+        ...(statusFilter && { status: statusFilter }),
+        ...(nameFilter && { userName: { [Op.like]: `%${nameFilter}%` } }),
+      };
 
+      // Handle download request
+      if (forDownload) {
+        const leaveRequests = await db.leaveRequest.findAll({
+          where: whereClause,
+          order: [["createdAt", "DESC"]],
+        });
+        const formattedDowanloadData = leaveRequests.map((request) => ({
+          ...request.toJSON(),
+          createdAt: format(
+            new Date(request.createdAt),
+            "MMMM do, yyyy, h:mm:ss a"
+          ),
+        }));
+        const downloadData = formattedDowanloadData.map((request) => ({
+          id: request.id,
+          userName: request.userName,
+          leaveType: request.leaveType,
+          createdAt: request.createdAt,
+          startDate: request.startDate,
+          total_days: request.total_days,
+          reason: request.reason,
+          status: request.status,
+          // Add other fields as needed for download
+        }));
+        // console.log(downloadData);
+        return res.status(200).json(downloadData);
+      }
+
+      // Fetch leave requests
       const leaveRequests = await db.leaveRequest.findAndCountAll({
-        limit: parseInt(limit),
-        offset: parseInt(offset),
+        where: whereClause,
+        limit,
+        offset,
         order: orderClause,
       });
 
@@ -128,11 +174,11 @@ const LeaveRequestController = {
           "MMMM do, yyyy, h:mm:ss a"
         ),
       }));
-
+      // console.log(formattedData);
       return res.status(200).json({
         totalCount: leaveRequests.count,
         totalPages: Math.ceil(leaveRequests.count / limit),
-        currentPage: parseInt(page),
+        currentPage: page,
         data: formattedData,
       });
     } catch (error) {
@@ -143,12 +189,64 @@ const LeaveRequestController = {
 
   getLeaveRequestById: async (req, res) => {
     try {
-      const leaveRequestId = req.params.id;
-      const leaveRequest = await db.leaveRequest.findByPk(leaveRequestId);
+      const UserId = req.params.id;
+      // const UserId = req.user?.id;
+
+      // Pagination parameters
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = (page - 1) * limit;
+      const order = req.query.order || "desc";
+      const sortColumns = req.query.sortColumn
+        ? req.query.sortColumn.split(",")
+        : ["createdAt"];
+      const sortOrders = req.query.sortOrder
+        ? req.query.sortOrder.split(",")
+        : ["desc"];
+
+      // Sorting order clause
+      const orderClause = sortColumns.map((col, index) => [
+        col,
+        (sortOrders[index] || "desc").toUpperCase(),
+      ]);
+
+      // Status filter (optional)
+      const statusFilter = req.query.status || null;
+
+      const whereClause = {
+        UserId,
+        ...(statusFilter && { status: statusFilter }),
+      };
+      // Query to fetch leave request by ID with optional pagination and status filter
+      const leaveRequest = await db.leaveRequest.findAndCountAll({
+        where: whereClause,
+        limit,
+        offset,
+        order: orderClause,
+      });
+      console.log(leaveRequest);
       if (!leaveRequest) {
         return res.status(404).json({ error: "Leave request not found" });
       }
-      return res.status(200).json(leaveRequest);
+
+      // Format data as needed
+      const formattedData = leaveRequest.rows.map((request) => ({
+        ...request.toJSON(),
+        createdAt: format(
+          new Date(request.createdAt),
+          "MMMM do, yyyy, h:mm:ss a"
+        ),
+      }));
+
+      // Response object with paginated data
+      const response = {
+        data: formattedData,
+        totalCount: leaveRequest.count,
+        totalPages: Math.ceil(leaveRequest.count / limit),
+        currentPage: page,
+      };
+
+      return res.status(200).json(response);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Internal Server Error" });
@@ -157,7 +255,7 @@ const LeaveRequestController = {
 
   getLeaveHistoryByUserId: async (req, res) => {
     try {
-      console.log("id-------------", req.params.id);
+      // console.log("id-------------", req.params.id);
       const userId = req.params.id;
       const leaveHistory = await db.leaveRequest.findAll({
         where: { UserId: userId },

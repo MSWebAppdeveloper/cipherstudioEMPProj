@@ -4,7 +4,8 @@ const db = require("../Models");
 const AttendanceController = {
   signin: async (req, res) => {
     try {
-      const { UserId, timeIn, date } = req.body;
+      const { UserId, timeIn, date, homeActiveStart, homeActiveEnd, shift } =
+        req.body;
 
       // Check if an entry for the given date and UserId already exists
       const existingEntry = await db.Attendance.findOne({
@@ -20,12 +21,31 @@ const AttendanceController = {
           error: "Attendance record already exists for this date and user",
         });
       }
+      let homeHours = 0;
+      let homeStart = null;
+      let homeEnd = null;
+      // Calculate home active hours
+      if (shift === "Hybrid" && homeActiveStart && homeActiveEnd) {
+        homeStart = new Date(`${date} ${homeActiveStart}`);
+        homeEnd = new Date(`${date} ${homeActiveEnd}`);
+
+        if (homeEnd < homeStart) {
+          // If the home end time is earlier in the day than the home start time, add one day to home end
+          homeEnd.setDate(homeEnd.getDate() + 1);
+        }
+
+        homeHours = (homeEnd - homeStart) / (1000 * 60 * 60); // Convert milliseconds to hours
+      }
 
       // Save the attendance record to the database using Sequelize model
       const newAttendance = await db.Attendance.create({
         UserId,
         timeIn,
         date,
+        homeActiveStart: homeStart ? homeActiveStart : null,
+        homeActiveEnd: homeEnd ? homeActiveEnd : null,
+        homeHours,
+        shift,
         status: "Active", // Set status to "Active" upon sign-in
       });
 
@@ -75,33 +95,55 @@ const AttendanceController = {
       const currentDate = new Date();
       const timeIn = attendance.timeIn;
       const signOutTime = timeOut;
-
+      const shift = attendance.shift;
+      const date = attendance.date;
+      const homeActiveStart = attendance.homeActiveStart;
+      const homeActiveEnd = attendance.homeActiveEnd;
       // Combine current date with time strings
       const combinedTimeIn = `${currentDate.toDateString()} ${timeIn}`;
       const combinedSignOutTime = `${currentDate.toDateString()} ${signOutTime}`;
 
-      const timeInDate = new Date(combinedTimeIn);
-      const signOutDate = new Date(combinedSignOutTime);
+      let timeInDate = new Date(combinedTimeIn);
+      let signOutDate = new Date(combinedSignOutTime);
+
+      if (signOutDate < timeInDate) {
+        // If the sign-out time is earlier in the day than the time-in time, add one day to sign-out
+        signOutDate.setDate(signOutDate.getDate() + 1);
+      }
+
+      let officeHours = (signOutDate - timeInDate) / (1000 * 60 * 60); // Convert milliseconds to hours
+
+      // Calculate home active hours
+      let homeHours = 0;
+      if (homeActiveStart && homeActiveEnd) {
+        const homeStart = new Date(`${date} ${homeActiveStart}`);
+        const homeEnd = new Date(`${date} ${homeActiveEnd}`);
+
+        if (homeEnd < homeStart) {
+          // If the home end time is earlier in the day than the home start time, add one day to home end
+          homeEnd.setDate(homeEnd.getDate() + 1);
+        }
+
+        homeHours = (homeEnd - homeStart) / (1000 * 60 * 60); // Convert milliseconds to hours
+      }
+
+      if (shift === "Hybrid") {
+        // If the shift type is hybrid, ensure totalHours is calculated as office hours + home hours
+        officeHours += homeHours || 0; // Add home active hours
+      }
 
       attendance.timeOut = signOutTime;
-      const timeDifference = signOutDate.getTime() - timeInDate.getTime();
+      attendance.totalHours = officeHours;
 
-      if (!isNaN(timeDifference)) {
-        const hours = timeDifference / (1000 * 60 * 60);
-        attendance.totalHours = hours;
-
-        // Determine status based on total hours
-        if (hours === 0 || hours < 4) {
-          attendance.status = "Absent";
-        } else if (hours >= 4 && hours < 7) {
-          attendance.status = "Half Day";
-        } else if (hours >= 7 && hours < 9) {
-          attendance.status = "Short Leave";
-        } else if (hours >= 9) {
-          attendance.status = "Full Day";
-        }
-      } else {
-        console.log("Invalid date input");
+      // Determine status based on total hours
+      if (officeHours === 0 || officeHours < 4) {
+        attendance.status = "Absent";
+      } else if (officeHours >= 4 && officeHours < 7) {
+        attendance.status = "Half Day";
+      } else if (officeHours >= 7 && officeHours < 9) {
+        attendance.status = "Short Leave";
+      } else if (officeHours >= 9) {
+        attendance.status = "Full Day";
       }
 
       await attendance.save();
@@ -200,8 +242,8 @@ const AttendanceController = {
           as: "CreateUser",
           where: nameFilter
             ? {
-              name: nameFilter,
-            }
+                name: nameFilter,
+              }
             : undefined,
         },
       ];
@@ -220,11 +262,12 @@ const AttendanceController = {
           timeOut: formatTime(attendance.timeOut), // Format time here
           totalHours: attendance.totalHours,
           status: attendance.status,
+          shift: attendance.shift,
           createdAt: attendance.createdAt,
           updatedAt: attendance.updatedAt,
           userName: attendance.CreateUser ? attendance.CreateUser.name : null,
         }));
-        console.log(reports);
+    
         return res.status(200).json(reports);
       }
 
@@ -266,10 +309,12 @@ const AttendanceController = {
         timeOut: formatTime(attendance.timeOut), // Format time here
         totalHours: attendance.totalHours,
         status: attendance.status,
+        shift: attendance.shift,
         createdAt: attendance.createdAt,
         updatedAt: attendance.updatedAt,
         userName: attendance.CreateUser ? attendance.CreateUser.name : null,
       }));
+      // console.log(modifiedAttendances)
       return res.status(200).json({
         totalCount: allAttendances.count,
         totalPages: Math.ceil(allAttendances.count / limit),

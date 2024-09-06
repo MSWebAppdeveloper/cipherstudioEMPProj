@@ -21,7 +21,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+  }, {
+    paranoid: true,  // This enables the soft delete functionality
+    timestamps: true,
   });
-
   return LeaveTypes;
 };

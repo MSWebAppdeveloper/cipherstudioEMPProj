@@ -9,6 +9,8 @@ const leaveTypesRoutes = require("./Routes/leaveTypesRoutes");
 const leaveRequestRoutes = require("./Routes/leaveRequestRoutes");
 const approvalTableRoutes = require("./Routes/approvalTableRoutes");
 const notificationLogRoutes = require("./Routes/notificationLogRoutes");
+const taskRoutes = require("./Routes/taskRoutes");
+const projectRoutes = require("./Routes/projectRoutes");
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -71,6 +73,8 @@ app.use("/api/leavetypes", leaveTypesRoutes);
 app.use("/api", leaveRequestRoutes);
 app.use("/api", approvalTableRoutes);
 app.use("/api", notificationLogRoutes);
+app.use("/api", taskRoutes);
+app.use("/api", projectRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

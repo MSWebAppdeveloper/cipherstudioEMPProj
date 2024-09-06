@@ -8,11 +8,23 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
+    shift: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     timeIn: {
       type: DataTypes.TIME,
       allowNull: true,
     },
     timeOut: {
+      type: DataTypes.TIME,
+      allowNull: true,
+    },
+    homeActiveStart: {
+      type: DataTypes.TIME,
+      allowNull: true,
+    },
+    homeActiveEnd: {
       type: DataTypes.TIME,
       allowNull: true,
     },

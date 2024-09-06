@@ -34,7 +34,9 @@ const LeaveTypesController = {
 
   getAllLeaveTypes: async (req, res) => {
     try {
-      const leaveTypes = await db.leavetypes.findAll();
+      const leaveTypes = await db.leavetypes.findAll({
+        where: { deletedAt: null },
+      });
       return res.status(200).json(leaveTypes);
     } catch (error) {
       console.error(error);
@@ -45,7 +47,9 @@ const LeaveTypesController = {
   getLeaveTypeById: async (req, res) => {
     try {
       const { id } = req.params;
-      const leaveType = await db.leavetypes.findByPk(id);
+      const leaveType = await db.leavetypes.findOne({
+        where: { leave_type_id: id, deletedAt: null },
+      });
       if (!leaveType) {
         return res.status(404).json({ error: "Leave Type not found" });
       }
@@ -65,7 +69,9 @@ const LeaveTypesController = {
         allowed_leaves,
         assign_year,
       } = req.body;
-      const leaveType = await db.leavetypes.findByPk(id);
+      const leaveType = await db.leavetypes.findOne({
+        where: { leave_type_id: id, deletedAt: null },
+      });
       if (!leaveType) {
         return res.status(404).json({ error: "Leave Type not found" });
       }
@@ -86,7 +92,9 @@ const LeaveTypesController = {
   deleteLeaveType: async (req, res) => {
     try {
       const { id } = req.params;
-      const leaveType = await db.leavetypes.findByPk(id);
+      const leaveType = await db.leavetypes.findOne({
+        where: { leave_type_id: id, deletedAt: null },
+      });
       if (!leaveType) {
         return res.status(404).json({ error: "Leave Type not found" });
       }
@@ -110,21 +118,31 @@ const LeaveTypesController = {
       const offset = (page - 1) * limit;
       const order = req.query.order || "desc";
       const currentYear = parseInt(req.query.year) || new Date().getFullYear(); // Get the year from query parameter or use the current year
-   
 
+      // console.log('Current Year:', currentYear);
       const assignYearStart = `${currentYear}-04-01`;
       const assignYearEnd = `${currentYear + 1}-03-31`;
 
-      const sortColumns = req.query.sortColumn ? req.query.sortColumn.split(",") : ["leave_type_name"];
-      const sortOrders = req.query.sortOrder ? req.query.sortOrder.split(",") : ["asc"];
+      const sortColumns = req.query.sortColumn
+        ? req.query.sortColumn.split(",")
+        : ["leave_type_name"];
+      const sortOrders = req.query.sortOrder
+        ? req.query.sortOrder.split(",")
+        : ["asc"];
 
-      const orderClause = sortColumns.map((col, index) => [col, (sortOrders[index] || "asc").toUpperCase()]);
+      const orderClause = sortColumns.map((col, index) => [
+        col,
+        (sortOrders[index] || "asc").toUpperCase(),
+      ]);
 
       const leaveTypeDetails = await db.leavetypes.findAndCountAll({
         where: {
           assign_year: `${assignYearStart} - ${assignYearEnd}`,
+          deletedAt: null,
         },
         order: orderClause,
+        limit: limit,
+        offset: offset,
       });
       return res.status(200).json({
         totalCount: leaveTypeDetails.count,

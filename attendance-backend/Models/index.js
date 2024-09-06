@@ -29,6 +29,9 @@ db.approvalHistory = require("./approvalHistory")(sequelize, DataTypes);
 db.leaveRequest = require("./leaveRequest")(sequelize, DataTypes);
 db.notificationLog = require("./notificationLogModel")(sequelize, DataTypes);
 db.Profile = require("./profileModel")(sequelize, DataTypes);
+db.Task = require("./taskModel")(sequelize, DataTypes);
+db.Project = require("./projectModel")(sequelize, DataTypes);
+db.TaskHistory = require("./taskHistoryModel")(sequelize, DataTypes);
 // Define associations
 
 db.CreateUser.hasOne(db.Attendance, { foreignKey: "UserId", as: "Attendance" });
@@ -38,11 +41,9 @@ db.CreateUser.hasMany(db.leaveRequest, {
   foreignKey: "UserId",
   as: "LeaveRequest",
 });
-
 // Additional association for LeaveRequest
 db.leaveRequest.belongsTo(db.CreateUser, {
   foreignKey: "UserId",
-  onDelete: "CASCADE",
 });
 db.leaveRequest.belongsTo(db.leavetypes, {
   foreignKey: "leaveType",
@@ -52,17 +53,27 @@ db.leaveRequest.belongsTo(db.leavetypes, {
 
 db.Attendance.belongsTo(db.CreateUser, {
   foreignKey: "UserId",
-  onDelete: "CASCADE",
 });
 
 db.approvalHistory.belongsTo(db.leaveRequest, {
   foreignKey: "leave_request_id",
-  onDelete: "CASCADE",
 });
 db.approvalHistory.belongsTo(db.CreateUser, {
   foreignKey: "approver_id",
-  onDelete: "CASCADE",
 });
 
+db.CreateUser.hasMany(db.Task, { foreignKey: "UserId", as: "Task" });
+db.Task.belongsTo(db.CreateUser, { foreignKey: "UserId", onDelete: "CASCADE" });
+
+// New association for TaskHistory
+db.Task.hasMany(db.TaskHistory, { foreignKey: "TaskId", as: "TaskHistory" });
+db.TaskHistory.belongsTo(db.Task, {
+  foreignKey: "TaskId",
+});
+
+// Additional association for LeaveRequest
+db.Task.belongsTo(db.CreateUser, {
+  foreignKey: "UserId",
+});
 //exporting the module
 module.exports = db;
