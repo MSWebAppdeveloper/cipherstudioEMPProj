@@ -12,7 +12,7 @@ const notificationLogRoutes = require("./Routes/notificationLogRoutes");
 const taskRoutes = require("./Routes/taskRoutes");
 const projectRoutes = require("./Routes/projectRoutes");
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8082;
 const app = express();
 const http = require("http");
 const server = http.createServer(app);

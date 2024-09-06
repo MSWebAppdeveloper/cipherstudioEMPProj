@@ -16,6 +16,7 @@ sequelize
     console.log(err);
   });
 
+  
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
