@@ -2,7 +2,6 @@
 import React from "react";
 import { EmployeeAttendanceInterface } from "./employeeAttendanceInterface";
 
-
 const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
   handleSignIn,
   handleSignOut,
