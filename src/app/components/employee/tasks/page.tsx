@@ -123,6 +123,7 @@ const TaskComponent: React.FC = () => {
        
         setTaskHistory(userDetails.data)
        
+        setTaskHistory(userDetails.data);
         setTotalPages(userDetails.totalPages);
         setTotalCount(userDetails.totalCount);
       } else if (response.status === 401) {

@@ -62,7 +62,6 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
 
   const handleProjectNameClick = (taskId: any, projectName: string) => {
     router.push(`/employee/TaskDetailPage?taskId=${taskId}&projectName=${projectName}`);
-    console.log(taskId)
   };
 
   const getUserNames = () => {
@@ -104,13 +103,17 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
     {
       key: "projectName",
       label: " Project Name",
-      sortable: false
+      sortable: false,
+      render: (task: any) => (
+        <span
+        >
+          {task.projectName}
+        </span>
+      ),
     },
 
 
     { key: "title", label: "Title", sortable: false },
-
-
 
     {
       key: "assignedTo", label: "Assigned to",
@@ -121,6 +124,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
             data-tooltip-content={task.assignedTo}
             className="truncate"
           >
+            {/* {task.assignedTo.join(", ")} */}
             {task.assignedTo.length > 50 ? `${task.assignedTo.join(", ").substring(0, 50)}...` : task.assignedTo.join(", ")}
           </span>
           {task.assignedTo.length > 50 && (
@@ -153,13 +157,10 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
       sortable: false,
     },
     {
-      key: "updatedAt",
-      label: " Last Update",
-      sortable: false,
-      render: (task: any) => (
-        <span>
-          {task.updatedAt}
-        </span>
+      key:"updatedAt",
+      label:"Last Update",
+      render:(task:any)=>(
+        <span>{task.updatedAt}</span>
       )
     },
     {
