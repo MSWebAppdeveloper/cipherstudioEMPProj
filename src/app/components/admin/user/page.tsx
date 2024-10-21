@@ -110,7 +110,7 @@ const UserComponent: React.FC = () => {
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(
-        `http://192.168.1.20:8080/api/employee/users/${userId}/status`,
+        `http://192.168.1.3:8080/api/employee/users/${userId}/status`,
         { isActive }
       );
       getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
