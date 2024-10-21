@@ -157,6 +157,13 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
       sortable: false,
     },
     {
+      key:"updatedAt",
+      label:"Last Update",
+      render:(task:any)=>(
+        <span>{task.updatedAt}</span>
+      )
+    },
+    {
       key: "actions",
       label: "ACTIONS",
       render: (task: { id: any; status: string; projectName: any }) => (
