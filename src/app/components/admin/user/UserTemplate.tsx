@@ -54,15 +54,16 @@ const UserTemplate: React.FC<UserProps> = ({
   const columns = [
     {
       key: "index",
-      label: "#",
+      label: "S.No",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
+      visible:true
     },
-    { key: "name", label: "NAME", sortable: true },
-    { key: "email", label: "EMAIL", sortable: true },
-    { key: "userRole", label: "ACCOUNT TYPE", sortable: true },
-    { key: "department", label: "DEPARTMENT", sortable: true },
-    { key: "shift", label: "Shift", sortable: true },
+    { key: "name", label: "NAME", sortable: true , visible:true },
+    { key: "email", label: "EMAIL", sortable: true, visible:true },
+    { key: "userRole", label: "ACCOUNT TYPE", sortable: true, visible:true },
+    { key: "department", label: "DEPARTMENT", sortable: true , visible:false},
+    { key: "shift", label: "SHIFT", sortable: true , visible:false},
     {
       key: "actions",
       label: "ACTIONS",
@@ -90,6 +91,7 @@ const UserTemplate: React.FC<UserProps> = ({
         </div>
       ),
       sortable: false,
+      visible:true
     },
     {
       key: "active",
@@ -109,6 +111,7 @@ const UserTemplate: React.FC<UserProps> = ({
         </label>
       ),
       sortable: false,
+      visible:false
     },
   ];
   // let tabs = [

@@ -64,7 +64,7 @@ const TaskComponent: React.FC = () => {
   // useEffect(() => {
   //   async function fetchHistory() {
   //     try {
-  //       const response = await fetch(`http://192.168.1.3:8080/api/tasks/${selectedTaskId}/history`);
+  //       const response = await fetch(`http://192.168.1.2:8080/api/tasks/${selectedTaskId}/history`);
   //       const data = await response.json();
   //       setHistory(data);
   //     } catch (error) {
@@ -78,7 +78,7 @@ const TaskComponent: React.FC = () => {
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
     const response = await fetch(
-      "http://192.168.1.3:8080/api/employee/refresh",
+      "http://192.168.1.2:8080/api/employee/refresh",
       {
         method: "POST",
         headers: {
@@ -108,7 +108,7 @@ const TaskComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://192.168.1.3:8080/api/tasks/${UserId}?userName=${userName}&page=${page}&limit=${formdata.limit}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&status=${filterValue}`,
+        `http://192.168.1.2:8080/api/tasks/${UserId}?userName=${userName}&page=${page}&limit=${formdata.limit}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&status=${filterValue}`,
         {
           method: "GET",
           headers: {
@@ -172,7 +172,7 @@ const TaskComponent: React.FC = () => {
 
   const startTask = async (taskId: any) => {
     try {
-      const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/start`, {
+      const response = await fetch(`http://192.168.1.2:8080/api/tasks/${taskId}/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ const TaskComponent: React.FC = () => {
 
   const endTask = async (taskId: any) => {
     try {
-      const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/end`, {
+      const response = await fetch(`http://192.168.1.2:8080/api/tasks/${taskId}/end`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -219,7 +219,7 @@ const TaskComponent: React.FC = () => {
 
   // const holdTask = async (taskId: any) => {
   //   try {
-  //     const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/hold`, {
+  //     const response = await fetch(`http://192.168.1.2:8080/api/tasks/${taskId}/hold`, {
   //       method: 'PUT',
   //       headers: {
   //         'Content-Type': 'application/json',
@@ -241,7 +241,7 @@ const TaskComponent: React.FC = () => {
   // };
   const handleCommentSubmit = async (comment: string, taskId: number) => {
     try {
-      const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/hold`, {
+      const response = await fetch(`http://192.168.1.2:8080/api/tasks/${taskId}/hold`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -265,7 +265,7 @@ const TaskComponent: React.FC = () => {
 
   const resumeTask = async (taskId: any) => {
     try {
-      const response = await fetch(`http://192.168.1.3:8080/api/tasks/${taskId}/resume`, {
+      const response = await fetch(`http://192.168.1.2:8080/api/tasks/${taskId}/resume`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

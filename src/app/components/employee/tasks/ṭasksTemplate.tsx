@@ -52,9 +52,10 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
   const columns = [
     {
       key: "index",
-      label: "#",
+      label: "S.No",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
+      visible:true
     },
     {
       key: "projectName", label: " Project Name", sortable: false,
@@ -66,9 +67,10 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
           {task.projectName}
         </span>
       ),
+      visible:true
     },
-    { key: "createdAt", label: "Assigned Date&Time", sortable: true },
-    { key: "title", label: "Title", sortable: false },
+    { key: "createdAt", label: "Assigned Date&Time", sortable: true , visible:true },
+    { key: "title", label: "Title", sortable: false , visible:true },
     // {
     //   key: "description",
     //   label: "Description",
@@ -114,6 +116,7 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
         return <span className={`rounded ${colorClass}`}> {item.status}</span>;
       },
       sortable: false,
+      visible:true
     },
     {
       key: "actions",
@@ -215,6 +218,7 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
         </>
       ),
       sortable: false,
+      visible:true
     },
   ];
 

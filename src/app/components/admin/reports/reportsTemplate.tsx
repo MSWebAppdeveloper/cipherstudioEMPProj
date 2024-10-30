@@ -72,27 +72,30 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
   const columns = [
     {
       key: "index",
-      label: "#",
+      label: "S.No",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
+      visible:true
     },
-    { key: "userName", label: "NAME", sortable: true },
-    { key: "shift", label: "SHIFT", sortable: false },
-    { key: "date", label: "DATE", sortable: true },
+    { key: "userName", label: "NAME", sortable: true,  visible:true },
+    { key: "shift", label: "SHIFT", sortable: false ,  visible:false},
+    { key: "date", label: "DATE", sortable: true  , visible:true},
     {
       key: "timeIn",
       label: "TIME-IN",
       sortable: true,
+      visible:false
     },
     {
       key: "timeOut",
       label: "TIME-OUT",
       sortable: false,
+      visible:false
     },
-    { key: "totalHours", label: "TOTAL-HRS", sortable: true },
+    { key: "totalHours", label: "TOTAL-HRS", sortable: true ,  visible:true},
     {
       key: "status",
-      label: "Status",
+      label: "STATUS",
       render: (item: { status: any }) => {
         let colorClass = "";
         switch (item.status) {
@@ -123,6 +126,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
         return <span className={colorClass}>{item.status}</span>;
       },
       sortable: false,
+      visible:true
     },
   ];
 

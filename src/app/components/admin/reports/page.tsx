@@ -35,7 +35,7 @@ const Reports: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
-
+//ab dono component h tumhare pas to ab mujhe jese page vale component me sortable ke liyea bollean value le h vese hi column ke liyea visible lo or fir use table component me mange kro
   useEffect(() => {
     getAllUsers(currentPage);
   }, []);

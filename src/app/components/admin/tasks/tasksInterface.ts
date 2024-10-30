@@ -26,8 +26,8 @@ export interface TaskTemplateProps {
   OnchangeData: (e: any) => void;
   formdata: any;
   handleFilterChange: (
-    type: "name" | "date",
-    value: string | [string, string]
+    type: "name" | "date" |"columns",
+    value: string | [string, string] |any
   ) => void;
   handleSort: (column: string) => void;
   sortOrder: "asc" | "desc";

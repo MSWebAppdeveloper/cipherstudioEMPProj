@@ -33,14 +33,15 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
   const columns = [
     {
       key: "index",
-      label: "#",
+      label: "S.No",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
+      visible:true
     },
-    { key: "leave_type_name", label: "Leave Type", sortable: true },
-    { key: "assign_year", label: "Assign Year", sortable: false },
-    { key: "allowed_leaves", label: "Allowed Days", sortable: false },
-    { key: "leave_description", label: "Description", sortable: false },
+    { key: "leave_type_name", label: "LEAVE TYPE", sortable: true , visible:true},
+    { key: "assign_year", label: "ASSIGN YEAR", sortable: false , visible:true },
+    { key: "allowed_leaves", label: "ALLOWED DAY", sortable: false , visible:true},
+    { key: "leave_description", label: "DESCRIPTION", sortable: false , visible:true},
     {
       key: "actions",
       label: "ACTIONS",
@@ -68,6 +69,7 @@ const LeaveTypeTemplate: React.FC<LeaveTypeProps> = ({
         </div>
       ),
       sortable: false,
+      visible:true
     },
   ];
   return (

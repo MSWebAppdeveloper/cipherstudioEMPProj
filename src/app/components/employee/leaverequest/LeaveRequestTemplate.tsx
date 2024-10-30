@@ -37,17 +37,19 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
   const columns = [
     {
       key: "index",
-      label: "#",
+      label: "S.No",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
+      visible:true
     },
-    { key: "leaveType", label: "LEAVE TYPE", sortable: true },
-    { key: "createdAt", label: "Submitted Date&Time", sortable: true },
-    { key: "startDate", label: "START DATE", sortable: true },
-    { key: "endDate", label: "END DATE", sortable: false },
-    { key: "total_days", label: "Total Days", sortable: true },
+    { key: "leaveType", label: "LEAVE TYPE", sortable: true , visible:true },
+    { key: "createdAt", label: "Submitted Date&Time", sortable: true, visible:true},
+    { key: "startDate", label: "START DATE", sortable: true,visible:true },
+    { key: "endDate", label: "END DATE", sortable: false , visible:true},
+    { key: "total_days", label: "Total Days", sortable: true, visible:true },
     { key: "reason", label: "REASON", 
-      sortable: false,
+      sortable: false, 
+      visible:true,
       render: (item: any) => (
         <div>
           <span 
@@ -83,6 +85,7 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
         return <span className={` rounded ${colorClass}`}> {item.status}</span>;
       },
       sortable: false,
+      visible:true
     },
     {
       key: "actions",
@@ -104,6 +107,7 @@ const LeaveRequestTemplate: React.FC<LeaveRequestInterface> = ({
           </div>
         ) : null,
       sortable: false,
+      visible:true
     },
   ];
   function getBackgroundColor(leaveType: any) {

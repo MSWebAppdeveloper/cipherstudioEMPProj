@@ -57,14 +57,15 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
   const columns = [
     {
       key: "index",
-      label: "#",
+      label: "S.No",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
+      visible:true
     },
-    { key: "userName", label: "NAME", sortable: true },
-    { key: "leaveType", label: "TYPE", sortable: true },
-    { key: "startDate", label: "START DATE", sortable: true },
-    { key: "total_days", label: "Days", sortable: true },
+    { key: "userName", label: "NAME", sortable: true , visible:true},
+    { key: "leaveType", label: "TYPE", sortable: true , visible:true },
+    { key: "startDate", label: "START DATE", sortable: true , visible:true },
+    { key: "total_days", label: "DATE", sortable: true , visible:false},
     {
       key: "reason",
       label: "REASON",
@@ -81,6 +82,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
       )}
     </div>,
       sortable: false,
+      visible:false
     },
     {
       key: "status",
@@ -103,6 +105,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
         return <span className={` rounded ${colorClass}`}> {item.status}</span>;
       },
       sortable: false,
+      visible:false
     },
     {
       key: "actions",
@@ -136,6 +139,7 @@ const LeaveApplicationsTemplate: React.FC<LeaveApplicationsInterface> = ({
           </div>
         ) : null,
       sortable: false,
+      visible:true
     },
   ];
   return (

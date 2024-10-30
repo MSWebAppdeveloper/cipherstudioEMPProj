@@ -55,7 +55,7 @@ const TaskDetailPage = () => {
 
   useEffect(() => {
     if (taskId) {
-      axios.get(`http://192.168.1.3:8080/api/task/${taskId}/details`)
+      axios.get(`http://192.168.1.2:8080/api/task/${taskId}/details`)
         .then(response => {
           setTask(response.data);
           setTaskHistory(response.data.TaskHistory);

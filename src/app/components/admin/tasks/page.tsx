@@ -12,8 +12,8 @@ const TaskComponent: React.FC = () => {
   const [taskHistory, setTaskHistory] = useState<TaskInterface[]>([]);
   const [downloadData, setDownloadData] = useState<TaskInterface[]>([]);
 
-  const [filterValue, setFilterValue] = useState<string | [string, string]>("");
-  const [filterType, setFilterType] = useState<"name" | "date">("name");
+  const [filterValue, setFilterValue] = useState<string | [string, string] |any>("");
+  const [filterType, setFilterType] = useState<"name" | "date" |"columns">("name");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -54,6 +54,7 @@ const TaskComponent: React.FC = () => {
       const url = `employee/users?&order=${formdata.order}`;
       const response: any = await UserDetails(url);
       setAllUsers(response.data.filter((user: any) => user.isActive === true));
+      
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -101,8 +102,8 @@ const TaskComponent: React.FC = () => {
   ]);
 
   const handleFilterChange = (
-    type: "name" | "date",
-    value: string | [string, string]
+    type: "name" | "date"| "columns",
+    value: string | [string, string] |any
   ) => {
     setFilterType(type);
     setFilterValue(value);
@@ -203,6 +204,7 @@ const TaskComponent: React.FC = () => {
         endDate={endDate}
         setStartDate={setStartDate}
         setEndDate={setEndDate}
+      
       />
     </>
   );

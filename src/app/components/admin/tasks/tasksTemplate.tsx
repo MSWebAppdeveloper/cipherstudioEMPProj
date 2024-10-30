@@ -10,6 +10,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import DateRangePickerComp from "@/components/DateRangePickerComp";
 import { CSVLink } from "react-csv";
 
+
 const TaskTemplate: React.FC<TaskTemplateProps> = ({
   taskHistory,
   setModal,
@@ -43,11 +44,14 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
   isLoading,
   downloadData,
   fetchAllRecords,
+
 }) => {
+  // console.log(allUsers)
   const [currentStatus, setCurrentStatus] = useState("ALL");
   const csvLinkRef = useRef(null);
   const router = useRouter();
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const flowbite = require("flowbite-react/tailwind")
 
   const handleToggleFilterModal = () => {
     setShowFilterModal(!showFilterModal);
@@ -57,6 +61,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
     setFilterName("");
     setStartDate(null);
     setEndDate(null);
+    // setFilterColumn('')
   };
 
 
@@ -67,6 +72,9 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
   const getUserNames = () => {
     return allUsers.map((user) => user.name);
   };
+  const getUserColumn = () => {
+    return taskHistory.length > 0 ? Object.keys(taskHistory[0]) : []
+  }
 
   useEffect(() => {
     if (currentStatus === "ALL") {
@@ -91,19 +99,21 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
 
   const filterOptions = ["ALL", "Recently Added", "In Progress", "Completed", "Hold"];
   const filteredTasks = taskHistory.filter(task => currentStatus === "ALL" || task.status === currentStatus);
-
+ 
   const columns = [
     {
       key: "index",
-      label: "#",
+      label: "S.No",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
+      visible:true
     },
-    { key: "userName", label: "Created By", sortable: true },
+    { key: "userName", label: "CREATED BY", sortable: true , visible:true},
     {
       key: "projectName",
-      label: " Project Name",
+      label: " PROJECT NAME",
       sortable: false,
+      visible:true,
       render: (task: any) => (
         <span
         >
@@ -113,10 +123,10 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
     },
 
 
-    { key: "title", label: "Title", sortable: false },
+    { key: "title", label: "TITLE", sortable: false, visible:false },
 
     {
-      key: "assignedTo", label: "Assigned to",
+      key: "assignedTo", label: "ASSIGNED TO",
       render: (task: any) =>
         <div>
           <span
@@ -133,6 +143,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
         </div>
       ,
       sortable: false,
+      visible:false
     },
     {
       key: "status",
@@ -155,13 +166,15 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
         return <span className={`rounded ${colorClass}`}>{item.status}</span>;
       },
       sortable: false,
+      visible:false
     },
     {
-      key:"updatedAt",
-      label:"Last Update",
-      render:(task:any)=>(
+      key: "updatedAt",
+      label: "LAST UPDATE",
+      render: (task: any) => (
         <span>{task.updatedAt}</span>
-      )
+      ),
+      visible:false
     },
     {
       key: "actions",
@@ -210,9 +223,13 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
         </>
       ),
       sortable: false,
+      visible:true
     },
   ];
 
+ 
+
+  // console.log(columns)
   return (
     <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8 bg-white">
       <div className="flex justify-between items-end flex-wrap gap-2">
@@ -233,8 +250,9 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
                   </option>
                 ))}
               </select>
+             
             </form>
-
+           
             <div className="flex-none">
               <label>
                 <button
@@ -335,6 +353,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
           />
         </div>
       </div>
+
       <div className="mt-10">
         <Tabs>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
@@ -407,6 +426,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
           </motion.div>
         </Tabs>
       </div>
+
     </div>
   );
 };

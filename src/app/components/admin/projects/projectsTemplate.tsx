@@ -33,26 +33,29 @@ const ProjectsTemplate: React.FC<ProjectProps> = ({
     const columns = [
         {
             key: "index",
-            label: "#",
+            label: "S.No",
             render: (item: any, index: number) => <span>{index + 1}</span>,
             sortable: false,
+            visible:true
         },
-        { key: "projectName", label: "Project Name", sortable: true },
+        { key: "projectName", label: "Project Name", sortable: true, visible:true },
         {
             key: "assignedTo",
-            label: "Assigned To",
+            label: "ASSIGNED TO",
             render: (project: { assignedTo: string[] }) => (
                 <span>{project.assignedTo.join(", ")}</span> // Display as a comma-separated list
             ),
             sortable: false,
+            visible:false
         },
         {
             key: "createdBy",
-            label: "Created By",
+            label: "CREATED BY",
             render: (project: { createdBy: string }) => (
                 <span>{project.createdBy}</span>
             ),
             sortable: false,
+            visible:false
         },
         {
             key: "actions",
@@ -81,6 +84,7 @@ const ProjectsTemplate: React.FC<ProjectProps> = ({
                 </div>
             ),
             sortable: false,
+            visible:true
         },
     ];
     return (
