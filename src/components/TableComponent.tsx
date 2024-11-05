@@ -40,8 +40,16 @@ const TableComponent: React.FC<TableComponentProps> = ({
   //   }
   //   return acc;
   // }, {} as Record<string, boolean>);
+  
+  const userId=data?.[0]?.id
+  // console.log(userId)
+const leaveTypeId=data?.[0]?.leave_type_id
+
+// console.log(leaveTypeId)
+const storedkey=userId || leaveTypeId ?`visibleColumns.${userId}_${leaveTypeId}`: null
+
   const initialVisibleColumns = columns.reduce((acc, column) => {
-    const storedVisibleColumns = JSON.parse(localStorage.getItem("visibleColumns") || "{}");
+    const storedVisibleColumns =storedkey? JSON.parse(localStorage.getItem(storedkey) || "{}"):{};
     acc[column.key] = storedVisibleColumns[column.key] ?? column.visible;
     return acc;
   }, {} as Record<string, boolean>);
@@ -50,8 +58,13 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
 
   useEffect(() => {
-    localStorage.setItem("visibleColumns", JSON.stringify(visibleColumns));
-  }, [visibleColumns]);
+
+    if(storedkey)
+      {
+    localStorage.setItem(storedkey, JSON.stringify(visibleColumns));
+
+      }
+  }, [visibleColumns,storedkey]);
 
   const handleColumnChange = (column: string, event: React.MouseEvent) => {
     event.stopPropagation();
