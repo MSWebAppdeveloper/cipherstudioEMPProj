@@ -137,8 +137,8 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
               <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">
                 <div className="flex justify-between items-center">
                   <div className="flex">
-                    <div className="max-w-52 grow mr-4">
-                      <form className="max-w-52">
+                    <div className="max-w-full grow  mr-4">
+                      <form className="max-w-full">
                         <select
                           id="name"
                           className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
