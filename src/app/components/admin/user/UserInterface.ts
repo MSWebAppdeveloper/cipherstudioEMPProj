@@ -44,4 +44,5 @@ export interface UserProps {
   handleSort: (column: string) => void;
   sortOrder: "asc" | "desc";
   sortColumn: string;
+  handleCalendarClick:any
 }

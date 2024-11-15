@@ -99,21 +99,21 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
 
   const filterOptions = ["ALL", "Recently Added", "In Progress", "Completed", "Hold"];
   const filteredTasks = taskHistory.filter(task => currentStatus === "ALL" || task.status === currentStatus);
- 
+
   const columns = [
     {
       key: "index",
       label: "S.No",
       render: (item: any, index: number) => <span>{index + 1}</span>,
       sortable: false,
-      visible:true
+      visible: true
     },
-    { key: "userName", label: "CREATED BY", sortable: true , visible:true},
+    { key: "userName", label: "CREATED BY", sortable: true, visible: true },
     {
       key: "projectName",
       label: " PROJECT NAME",
       sortable: false,
-      visible:true,
+      visible: true,
       render: (task: any) => (
         <span
         >
@@ -123,7 +123,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
     },
 
 
-    { key: "title", label: "TITLE", sortable: false, visible:false },
+    { key: "title", label: "TITLE", sortable: false, visible: false },
 
     {
       key: "assignedTo", label: "ASSIGNED TO",
@@ -143,7 +143,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
         </div>
       ,
       sortable: false,
-      visible:false
+      visible: false
     },
     {
       key: "status",
@@ -166,7 +166,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
         return <span className={`rounded ${colorClass}`}>{item.status}</span>;
       },
       sortable: false,
-      visible:false
+      visible: false
     },
     {
       key: "updatedAt",
@@ -174,7 +174,7 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
       render: (task: any) => (
         <span>{task.updatedAt}</span>
       ),
-      visible:false
+      visible: false
     },
     {
       key: "actions",
@@ -223,11 +223,11 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
         </>
       ),
       sortable: false,
-      visible:true
+      visible: true
     },
   ];
 
- 
+
 
   // console.log(columns)
   return (
@@ -235,24 +235,25 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
       <div className="flex justify-between items-end flex-wrap gap-2">
         <div>
           <div className="flex space-x-4 items-end">
-            <form className="max-w-52">
-              <p className="font-medium pb-2">Filter by :</p>
-              <select
-                id="name"
-                className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
-                value={filterName}
-                onChange={(e) => handleFilterChange("name", e.target.value)}
-              >
-                <option value="">Select User</option>
-                {getUserNames().map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-             
-            </form>
-           
+            <div className="w-48">
+              <form className="w-64">
+                <p className="font-medium pb-2">Filter by :</p>
+                <select
+                  id="name"
+                  className="border border-gray-300 text-gray-800 text-md rounded-md block lg:p-2 p-2 md:p-2 sm:p-2 bg-slate-50"
+                  value={filterName}
+                  onChange={(e) => handleFilterChange("name", e.target.value)}
+                >
+                  <option value="">Select User</option>
+                  {getUserNames().map((name) => (
+                    <option key={name} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+
+              </form>
+            </div>
             <div className="flex-none">
               <label>
                 <button

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ReportsTemplate from "./reportsTemplate";
 import { AttendanceHistory, UserDetails } from "@/services/api";
 import { ReportEntry } from "./reportsInterface";
+import CalendarWithAttendance from "@/components/CalendearWithAttendence";
 
 const Reports: React.FC = () => {
   const [attendance, setAttendance] = useState<ReportEntry[]>([]);
@@ -28,6 +29,10 @@ const Reports: React.FC = () => {
   const [sortColumn, setSortColumn] = useState<string>("date");
   const [isLoading, setIsLoading] = useState(false);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  
+
+ 
+
 
   const OnchangeData = (e: any) => {
     setFormdata({
@@ -35,7 +40,7 @@ const Reports: React.FC = () => {
       [e.target.name]: e.target.value,
     });
   };
-//ab dono component h tumhare pas to ab mujhe jese page vale component me sortable ke liyea bollean value le h vese hi column ke liyea visible lo or fir use table component me mange kro
+
   useEffect(() => {
     getAllUsers(currentPage);
   }, []);
@@ -45,6 +50,7 @@ const Reports: React.FC = () => {
       const url = `employee/users?&order=${formdata.order}`;
       const response: any = await UserDetails(url);
       setAllUsers(response.data.filter((user: any) => user.isActive === true));
+      
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -55,6 +61,7 @@ const Reports: React.FC = () => {
   }, [filterValue, formdata.limit, formdata.order]);
 
   const fetchAttendanceHistory = async (page: number, forDownload = false) => {
+
     try {
       const baseUrl = `employee/attendance?page=${page}&order=${formdata.order}`;
       const limit = forDownload ? "" : `&limit=${formdata.limit}`;
@@ -80,9 +87,13 @@ const Reports: React.FC = () => {
           (entry: any) => ({
             ...entry,
             totalHours: parseFloat(entry.totalHours),
+          dayIn:entry.timeIn,
+          dayOut:entry.timeOut,
+          status:entry.status
           })
+          
         );
-        setAttendance(dataWithParsedTotalHours);
+        setAttendance(dataWithParsedTotalHours)
         setTotalPages(response.data.totalPages);
         setTotalCount(response.data.totalCount);
       }
@@ -152,7 +163,7 @@ const Reports: React.FC = () => {
         sortColumn={sortColumn}
         isLoading={isLoading}
         isDataFetched={isDataFetched}
-        setIsDataFetched={setIsDataFetched}
+        setIsDataFetched={setIsDataFetched} openCalanderPopUp={undefined}      
       />
     </>
   );

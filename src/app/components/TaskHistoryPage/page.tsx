@@ -28,7 +28,7 @@ const TaskHistoryPage = () => {
   useEffect(() => {
     if (taskId) {
       // Fetch the task history for the project
-      axios.get(`http://192.168.1.2:8080/api/task/${taskId}/history`)
+      axios.get(`http://192.168.1.8:8080/api/task/${taskId}/history`)
         .then(response => {
           setTaskHistory(response.data);
           setLoading(false);

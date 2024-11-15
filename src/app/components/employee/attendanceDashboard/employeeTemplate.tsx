@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { EmployeeAttendanceInterface } from "./employeeAttendanceInterface";
+import CalendarWithAttendance from "@/components/CalendearWithAttendence";
 
 
 const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
@@ -15,7 +16,9 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
   handleHomeActiveHoursChange,
   homeActiveStart,
   homeActiveEnd,
+  attendanceData,
 }) => {
+ 
   return (
     <>
       
@@ -100,6 +103,7 @@ const EmployeeTemplate: React.FC<EmployeeAttendanceInterface> = ({
                 </div>
               </div>
             </div>
+            <CalendarWithAttendance attendanceData={attendanceData}/>
        
     </>
   );

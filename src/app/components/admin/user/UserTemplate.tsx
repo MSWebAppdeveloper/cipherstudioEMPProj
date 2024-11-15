@@ -3,6 +3,8 @@ import { UserProps } from "./UserInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import TableComponent from "@/components/TableComponent";
 import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
+import { CiCalendar } from "react-icons/ci";
+
 
 const UserTemplate: React.FC<UserProps> = ({
   allUsers,
@@ -26,6 +28,7 @@ const UserTemplate: React.FC<UserProps> = ({
   filterName,
   currentTab,
   setCurrentTab,
+ handleCalendarClick
 }) => {
   // const [currentTab, setCurrentTab] = useState("Active");
   const [selectedRole, setSelectedRole] = useState("ALL");
@@ -93,6 +96,18 @@ const UserTemplate: React.FC<UserProps> = ({
       sortable: false,
       visible:true
     },
+    { key: "reports", label: "REPORT-CALANDER", 
+      render:(user:{id:any})=>(
+        <button className="mr-3" onClick={() => handleCalendarClick(user.id)}>
+       <CiCalendar
+          width="1.2em"
+          height="1.2em"
+          style={{ color: "#323232" }}
+        />
+      </button>
+      ),
+    sortable: false, visible: true 
+  },
     {
       key: "active",
       label: "ACTIVE",
@@ -114,26 +129,7 @@ const UserTemplate: React.FC<UserProps> = ({
       visible:false
     },
   ];
-  // let tabs = [
-  //   {
-  //     id: "photos",
-  //     label: "Photos",
-  //     content:
-  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  //   },
-  //   {
-  //     id: "music",
-  //     label: "Music",
-  //     content:
-  //       "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-  //   },
-  //   {
-  //     id: "videos",
-  //     label: "Videos",
-  //     content:
-  //       "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-  //   },
-  // ];
+ 
   return (
     <>
      

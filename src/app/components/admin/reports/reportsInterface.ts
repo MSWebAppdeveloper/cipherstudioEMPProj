@@ -7,6 +7,7 @@ export interface ReportEntry {
   totalHours: string;
   status: string;
   shift: string;
+ 
 }
 
 export interface formValues {
@@ -56,5 +57,6 @@ export interface ReportsInterface {
   isLoading:boolean;
   isDataFetched:boolean;
   setIsDataFetched:any;
-
+  openCalanderPopUp:any
+ 
 }

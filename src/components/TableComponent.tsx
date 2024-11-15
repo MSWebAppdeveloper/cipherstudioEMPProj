@@ -40,31 +40,29 @@ const TableComponent: React.FC<TableComponentProps> = ({
   //   }
   //   return acc;
   // }, {} as Record<string, boolean>);
-  
-  const userId=data?.[0]?.id
-  // console.log(userId)
-const leaveTypeId=data?.[0]?.leave_type_id
 
-// console.log(leaveTypeId)
-const storedkey=userId || leaveTypeId ?`visibleColumns.${userId}_${leaveTypeId}`: null
+  const userId = data?.[0]?.id
+  // console.log(userId)
+  const leaveTypeId = data?.[0]?.leave_type_id
+
+  // console.log(leaveTypeId)
+  const storedkey = userId || leaveTypeId ? `visibleColumns.${userId}_${leaveTypeId}` : null
 
   const initialVisibleColumns = columns.reduce((acc, column) => {
-    const storedVisibleColumns =storedkey? JSON.parse(localStorage.getItem(storedkey) || "{}"):{};
+    const storedVisibleColumns = storedkey ? JSON.parse(localStorage.getItem(storedkey) || "{}") : {};
     acc[column.key] = storedVisibleColumns[column.key] ?? column.visible;
     return acc;
   }, {} as Record<string, boolean>);
 
   const [visibleColumns, setVisibleColumn] = useState<Record<string, boolean>>(initialVisibleColumns)
-
-
+  
   useEffect(() => {
 
-    if(storedkey)
-      {
-    localStorage.setItem(storedkey, JSON.stringify(visibleColumns));
+    if (storedkey) {
+      localStorage.setItem(storedkey, JSON.stringify(visibleColumns));
 
-      }
-  }, [visibleColumns,storedkey]);
+    }
+  }, [visibleColumns, storedkey]);
 
   const handleColumnChange = (column: string, event: React.MouseEvent) => {
     event.stopPropagation();
@@ -92,27 +90,31 @@ const storedkey=userId || leaveTypeId ?`visibleColumns.${userId}_${leaveTypeId}`
     pageNumbers.push(i);
   }
 
+  const ShowDropdown = columns.some((column) => column.visible=== false)
+
+
+
   return (
     <div className="">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        {ShowDropdown && (
+          <div className="flex justify-end flex-row">
 
-        <div className="flex justify-end flex-row">
-
-          <Dropdown label="Column" style={{ backgroundColor: '#4c7ef4' }}>
-            {columns.filter((column) => !column.visible).map((column) => (
-              <Dropdown.Item key={column.key} >
-                <input
-                  type="checkbox"
-                  id={column.key}
-                  checked={visibleColumns[column.key] || false}
-                  onClick={(e) => handleColumnChange(column.key, e)}
-                  className="mx-1"
-                />
-                <label htmlFor={column.key} className="text-xs">{column.label}</label>
-              </Dropdown.Item>
-            ))}
-          </Dropdown>
-        </div>
+            <Dropdown label="Column" style={{ backgroundColor: '#4c7ef4' }}>
+              {columns.filter((column) => !column.visible).map((column) => (
+                <Dropdown.Item key={column.key} >
+                  <input
+                    type="checkbox"
+                    id={column.key}
+                    checked={visibleColumns[column.key] || false}
+                    onClick={(e) => handleColumnChange(column.key, e)}
+                    className="mx-1"
+                  />
+                  <label htmlFor={column.key} className="text-xs">{column.label}</label>
+                </Dropdown.Item>
+              ))}
+            </Dropdown>
+          </div>)}
         <div className=" overflow-x-auto">
           <table className="min-w-full bg-white text-left">
             <thead>

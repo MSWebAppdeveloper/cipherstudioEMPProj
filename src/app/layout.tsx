@@ -8,6 +8,7 @@ import NextAuthProvider from "./provider/NextAuthProvider";
 import EmployeeNavbar from "@/components/EmployeeNavbar";
 import Sidebar from "@/components/Sidebar"; 
 
+
 import 'react-tooltip/dist/react-tooltip.css';
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(true);

@@ -6,7 +6,7 @@ const nextConfig = {
   experimental:{
     serverActions:true,
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
 };
 

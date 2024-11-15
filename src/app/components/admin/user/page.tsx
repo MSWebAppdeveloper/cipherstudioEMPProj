@@ -1,12 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios"; // Import Axios for making HTTP requests
 
 import UserFormComponent from "../userForm/page";
 import { UserDetails, deleteUser } from "@/services/api";
 import UserTemplate from "./UserTemplate";
-
+import CalendarWithAttendance from "@/components/CalendearWithAttendence";
+import { AttendanceHistory } from "@/services/api";
 const initialFormValues = {
   name: "",
   email: "",
@@ -36,6 +37,9 @@ const UserComponent: React.FC = () => {
   const [filterType, setFilterType] = useState<"userRole">("userRole");
   const [filterValue, setFilterValue] = useState<string | [string, string]>("");
   const [shift, setShift] = useState("");
+  const [selectedUserAttendance, setSelectedUserAttendance] = useState<any[]>([])
+  const [showCalendarModal, setShowCalendarModal] = useState<boolean>(false)
+  const [attendanceData, setAttendanceData] = useState<any[]>([]);
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
@@ -76,6 +80,7 @@ const UserComponent: React.FC = () => {
   }, [filterValue, formdata.limit, formdata.order]);
 
   const deleteUserHandler = async (userId: string) => {
+    // console.log("Deleting user",userId);
     setSelectedUserId(userId);
     setDeleteConfirmationVisible(true);
   };
@@ -110,7 +115,7 @@ const UserComponent: React.FC = () => {
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(
-        `http://192.168.1.2:8080/api/employee/users/${userId}/status`,
+        `http://192.168.1.8:8080/api/employee/users/${userId}/status`,
         { isActive }
       );
       getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
@@ -137,6 +142,36 @@ const UserComponent: React.FC = () => {
     setFilterValue(value);
   };
 
+
+  const fetchAttendanceHistory = async (userId: string) => {
+    try {
+      const response = await axios.get(
+        `http://192.168.1.8:8080/api/employee/users/${userId}`
+      );
+      if (response.data && response.data[0].attendance) {
+        const formattedAttendance = response.data[0].attendance.map((attend: any) => ({
+          title: attend.status,
+          status: attend.status,
+          date: attend.date,
+          start: attend.timeIn,
+          end: attend.timeOut,
+        }));
+        
+        return formattedAttendance;
+        
+      }
+    } catch (error:any) {
+      console.error("Error fetching attendance history:", error.message);
+      return [];
+    }
+  };
+  
+  const handleCalendarClick = async (userId: string) => {
+    const userAttendance = await fetchAttendanceHistory(userId);
+    setSelectedUserAttendance(userAttendance || []);
+    setShowCalendarModal(true);
+  };
+  
   return (
     <>
       <UserFormComponent
@@ -170,7 +205,22 @@ const UserComponent: React.FC = () => {
         handleFilterChange={handleFilterChange}
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
+        handleCalendarClick={handleCalendarClick}
       />
+      {showCalendarModal && (
+        <div className="  absolute inset-0 flex justify-center items-center bg-gray-900 bg-opacity-75  z-[999]">
+          <div className=" bg-white p-4 rounded shadow-md max-w-4xl w-3/4 h-[90vh] overflow-y-auto">
+            <h2 className="text-lg font-semibold mb-2">Attendance Calendar</h2>
+            <CalendarWithAttendance attendanceData={selectedUserAttendance} />
+            <button
+              onClick={() => setShowCalendarModal(false)}
+              className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

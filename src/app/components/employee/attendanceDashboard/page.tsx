@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import EmployeeTemplate from "./employeeTemplate";
 import toast from "react-hot-toast";
+import { title } from "process";
 
 const EmployeePage: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(
@@ -30,6 +31,7 @@ const EmployeePage: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const [homeActiveStart, setHomeActiveStart] = useState("");
   const [homeActiveEnd, setHomeActiveEnd] = useState("");
+  const [attendanceData, setAttendanceData] = useState<any[]>([])
   const shift = localStorage.getItem("shift");
   const handleHomeActiveHoursChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -62,16 +64,19 @@ const EmployeePage: React.FC = () => {
         const url = "employee/attendance/status";
         // const res= await Attendance("attendance/status")
         const response = await axios.get(
-          "http://192.168.1.2:8080/api/employee/attendance/status",
+          "http://192.168.1.8:8080/api/employee/attendance/status",
           { params: { UserId: userId } }
         );
-        const { isClockedIn, attendanceId, existingEntry } = response.data;
+        const { isClockedIn, attendanceId, existingEntry } = response.data
+
         if (existingEntry) {
           setStatus(existingEntry.status);
           setTimerIn(existingEntry.timeIn);
         } else {
           setStatus("--");
         }
+        // console.log(response);
+
         setIsClockedIn(isClockedIn);
         setTimeIn(isClockedIn ? response.data.timeIn : "-");
         setTimeOut(isClockedIn ? response.data.timeOut : "-");
@@ -86,6 +91,7 @@ const EmployeePage: React.FC = () => {
         }
       } catch (error) {
         toast.error;
+        console.error("Error fetching attendance status:", error);
       }
     };
     checkAttendanceStatus();
@@ -115,7 +121,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.post(
-        "http://192.168.1.2:8080/api/employee/attendance/signin",
+        "http://192.168.1.8:8080/api/employee/attendance/signin",
         {
           UserId: localStorage.getItem("UserId"),
           timeIn: formattedTimeIn,
@@ -125,6 +131,8 @@ const EmployeePage: React.FC = () => {
           homeActiveEnd,
         }
       );
+      console.log(response.data);
+
       setIsClockedIn(true);
       setTimeIn(response.data.timeIn);
       setAttendanceId(response.data.id);
@@ -156,11 +164,12 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.put(
-        `http://192.168.1.2:8080/api/employee/attendance/signout/${attendanceId}`,
+        `http://192.168.1.8:8080/api/employee/attendance/signout/${attendanceId}`,
         {
           timeOut: formattedTimeOut,
         }
       );
+   
       setIsClockedIn(false);
       setTimeOut(response.data.timeOut);
       toast.success("Day-out successful");
@@ -182,6 +191,49 @@ const EmployeePage: React.FC = () => {
       toast.error;
     }
   };
+
+
+  //
+const fetchAttendanceData=async(date:string)=>{
+  try {
+    let userId = localStorage.getItem("UserId");   
+    let accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      console.error("Token not found. Redirect to login page.");
+      return;
+    }
+    const response = await fetch(
+      `http://192.168.1.8:8080/api/employee/user/details?userId=${userId}`,
+      
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.ok) {
+      const userDetails = await response.json();
+    
+      // console.log(userDetails[0].attendance.map((attend: any) => attend.status));  
+      const formattedAttendance=await userDetails[0].attendance.map((attend: any) => ({
+        title:attend.status,
+        status: attend.status,
+        date:attend.date,
+        start:attend.timeIn,
+        end:attend.timeOut
+        
+      }))
+      setAttendanceData(formattedAttendance);
+   
+    } 
+  } catch (error: any) {
+    console.error("Error fetching user details:", error.message);
+  }
+}
+
+useEffect(() => {fetchAttendanceData(currentDate)},[currentDate])
 
   // Function to convert time strings to seconds since midnight
   const timeToSeconds = (timeString: string) => {
@@ -243,6 +295,7 @@ const EmployeePage: React.FC = () => {
       handleHomeActiveHoursChange={handleHomeActiveHoursChange}
       homeActiveStart={homeActiveStart}
       homeActiveEnd={homeActiveEnd}
+      attendanceData={attendanceData}
     />
   );
 };
