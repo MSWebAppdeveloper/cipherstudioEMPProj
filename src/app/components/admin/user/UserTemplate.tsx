@@ -40,7 +40,7 @@ const UserTemplate: React.FC<UserProps> = ({
     // Reset to first page when tab changes
   };
 
-  // Dropdown options
+
   const filterOptions = ["Employee", "Management"];
   // Filter users based on the current tab and role
   const filteredUsers: any =
