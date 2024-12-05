@@ -4,7 +4,6 @@ import { CSVLink } from "react-csv";
 import { ReportsInterface } from "./reportsInterface";
 import TableComponent from "@/components/TableComponent";
 import DateRangePickerComp from "@/components/DateRangePickerComp";
-import CalendarWithAttendance from "@/components/CalendearWithAttendence";
 const ReportsTemplate: React.FC<ReportsInterface> = ({
   attendance,
   reports,

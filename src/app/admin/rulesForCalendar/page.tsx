@@ -1,4 +1,4 @@
-import RulesForCalendar from '@/app/components/employee/rulesForCalendar/page'
+import RulesForCalendar from '@/app/components/admin/rulesForCalendar/page'
 import { Metadata } from 'next'
 import React from 'react'
 

@@ -31,21 +31,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
   sortColumn,
 }) => {
 
-  // console.log(data)
-  // const initialVisibleColumns = columns.reduce((acc, column) => {
-  //   if (column.visible) {
-  //     acc[column.key] = true;
-  //   } else {
-  //     acc[column.key] = false
-  //   }
-  //   return acc;
-  // }, {} as Record<string, boolean>);
-
   const userId = data?.[0]?.id
-  // console.log(userId)
   const leaveTypeId = data?.[0]?.leave_type_id
-
-  // console.log(leaveTypeId)
   const storedkey = userId || leaveTypeId ? `visibleColumns.${userId}_${leaveTypeId}` : null
 
   const initialVisibleColumns = columns.reduce((acc, column) => {

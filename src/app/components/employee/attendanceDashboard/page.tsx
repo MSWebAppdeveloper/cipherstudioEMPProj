@@ -46,6 +46,7 @@ const EmployeePage: React.FC = () => {
   };
 
   useEffect(() => {
+    fetchAttendanceData(currentDate)
     const updateClock = () => {
       const now = new Date();
       setCurrentTime(now.toLocaleTimeString());
@@ -64,7 +65,7 @@ const EmployeePage: React.FC = () => {
         const url = "employee/attendance/status";
         // const res= await Attendance("attendance/status")
         const response = await axios.get(
-          "http://192.168.1.8:8080/api/employee/attendance/status",
+          "http://192.168.1.5:8080/api/employee/attendance/status",
           { params: { UserId: userId } }
         );
         const { isClockedIn, attendanceId, existingEntry } = response.data
@@ -75,7 +76,6 @@ const EmployeePage: React.FC = () => {
         } else {
           setStatus("--");
         }
-        // console.log(response);
 
         setIsClockedIn(isClockedIn);
         setTimeIn(isClockedIn ? response.data.timeIn : "-");
@@ -121,7 +121,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.post(
-        "http://192.168.1.8:8080/api/employee/attendance/signin",
+        "http://192.168.1.5:8080/api/employee/attendance/signin",
         {
           UserId: localStorage.getItem("UserId"),
           timeIn: formattedTimeIn,
@@ -131,7 +131,7 @@ const EmployeePage: React.FC = () => {
           homeActiveEnd,
         }
       );
-      console.log(response.data);
+    
 
       setIsClockedIn(true);
       setTimeIn(response.data.timeIn);
@@ -164,7 +164,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.put(
-        `http://192.168.1.8:8080/api/employee/attendance/signout/${attendanceId}`,
+        `http://192.168.1.5:8080/api/employee/attendance/signout/${attendanceId}`,
         {
           timeOut: formattedTimeOut,
         }
@@ -173,6 +173,10 @@ const EmployeePage: React.FC = () => {
       setIsClockedIn(false);
       setTimeOut(response.data.timeOut);
       toast.success("Day-out successful");
+      setTimeout(() => {
+      toast.success(response.data.message)
+      
+      },2000)
       setStatus(response.data.status);
       setIsDayInActive(true);
       setIsDayOutActive(false);
@@ -203,7 +207,7 @@ const fetchAttendanceData=async(date:string)=>{
       return;
     }
     const response = await fetch(
-      `http://192.168.1.8:8080/api/employee/user/details?userId=${userId}`,
+      `http://192.168.1.5:8080/api/employee/user/details?userId=${userId}`,
       
       {
         method: "GET",
@@ -215,8 +219,6 @@ const fetchAttendanceData=async(date:string)=>{
     );
     if (response.ok) {
       const userDetails = await response.json();
-    
-      // console.log(userDetails[0].attendance.map((attend: any) => attend.status));  
       const formattedAttendance=await userDetails[0].attendance.map((attend: any) => ({
         title:attend.status,
         status: attend.status,
@@ -233,7 +235,7 @@ const fetchAttendanceData=async(date:string)=>{
   }
 }
 
-useEffect(() => {fetchAttendanceData(currentDate)},[currentDate])
+
 
   // Function to convert time strings to seconds since midnight
   const timeToSeconds = (timeString: string) => {

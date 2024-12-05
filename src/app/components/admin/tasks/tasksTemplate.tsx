@@ -46,7 +46,6 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
   fetchAllRecords,
 
 }) => {
-  // console.log(allUsers)
   const [currentStatus, setCurrentStatus] = useState("ALL");
   const csvLinkRef = useRef(null);
   const router = useRouter();
@@ -226,10 +225,6 @@ const TaskTemplate: React.FC<TaskTemplateProps> = ({
       visible: true
     },
   ];
-
-
-
-  // console.log(columns)
   return (
     <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8 bg-white">
       <div className="flex justify-between items-end flex-wrap gap-2">

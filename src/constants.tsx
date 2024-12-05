@@ -40,6 +40,11 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     icon: <Icon icon="grommet-icons:projects"  width="20" height="20"   style={{color: "#1565e5"}} />,
   },
   {
+    title: "Rules For Calendar",
+    path: "/admin/rulesForCalendar",
+    icon: <Icon icon="oi:calendar"  width="20" height="20"   style={{color: "#1565e5"}} />,
+  },
+  {
     title: "Dashboard",
     path: "/employee/dashboard",
     icon: <Icon icon="material-symbols:dashboard-outline" width="20" height="20"  style={{color: "#1565e5"}} />,
@@ -54,9 +59,5 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     path: "/employee/tasks",
     icon: <Icon icon="cil:task"  width="20" height="20"   style={{color: "#1565e5"}} />,
   },
-  {
-    title: "Rules For Calendar",
-    path: "/employee/rulesForCalendar",
-    icon: <Icon icon="oi:calendar"  width="20" height="20"   style={{color: "#1565e5"}} />,
-  },
+
 ];

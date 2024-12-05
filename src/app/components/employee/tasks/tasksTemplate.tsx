@@ -34,7 +34,6 @@ const TaskTemplate: React.FC<TaskTemplateInterface> = ({
   openEditPopup,
   deleteSelected,
 }) => {
-  // console.log(taskHistory)
   const [currentStatus, setCurrentStatus] = useState("ALL");
   const filterOptions = ["ALL", "Recently Added", "In Progress", "Completed", "Hold"];
 

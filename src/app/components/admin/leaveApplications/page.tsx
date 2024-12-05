@@ -86,7 +86,6 @@ const LeaveApplications: React.FC = () => {
         setDownloadData(response.data ?? []);
         setIsLoading(false);
       } else {
-        console.log(response.data.data);
         setLeaveHistory(response.data.data ?? []);
         setTotalPages(response.data.totalPages ?? 0);
         setTotalCount(response.data.totalCount ?? 0);
@@ -111,7 +110,7 @@ const LeaveApplications: React.FC = () => {
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
     const response = await fetch(
-      "http://192.168.1.8:8080/api/employee/refresh",
+      "http://192.168.1.5:8080/api/employee/refresh",
       {
         method: "POST",
         headers: {
@@ -134,7 +133,7 @@ const LeaveApplications: React.FC = () => {
     try {
       let accessToken = localStorage.getItem("accessToken");
       let response = await fetch(
-        "http://192.168.1.8:8080/api/employee/user/details",
+        "http://192.168.1.5:8080/api/employee/user/details",
         {
           method: "GET",
           headers: {
@@ -148,7 +147,7 @@ const LeaveApplications: React.FC = () => {
         try {
           accessToken = await refreshToken();
           response = await fetch(
-            "http://192.168.1.8:8080/api/employee/user/details",
+            "http://192.168.1.5:8080/api/employee/user/details",
             {
               method: "GET",
               headers: {

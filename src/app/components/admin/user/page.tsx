@@ -80,7 +80,6 @@ const UserComponent: React.FC = () => {
   }, [filterValue, formdata.limit, formdata.order]);
 
   const deleteUserHandler = async (userId: string) => {
-    // console.log("Deleting user",userId);
     setSelectedUserId(userId);
     setDeleteConfirmationVisible(true);
   };
@@ -115,7 +114,7 @@ const UserComponent: React.FC = () => {
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(
-        `http://192.168.1.8:8080/api/employee/users/${userId}/status`,
+        `http://192.168.1.5:8080/api/employee/users/${userId}/status`,
         { isActive }
       );
       getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
@@ -146,20 +145,23 @@ const UserComponent: React.FC = () => {
   const fetchAttendanceHistory = async (userId: string) => {
     try {
       const response = await axios.get(
-        `http://192.168.1.8:8080/api/employee/users/${userId}`
+        `http://192.168.1.5:8080/api/employee/users/${userId}`
       );
-      if (response.data && response.data[0].attendance) {
-        const formattedAttendance = response.data[0].attendance.map((attend: any) => ({
+
+      if (response.data && response.data[0].calendarReport) {
+        const formattedAttendance = response.data[0].calendarReport.map((attend: any) => ({
           title: attend.status,
           status: attend.status,
           date: attend.date,
           start: attend.timeIn,
           end: attend.timeOut,
+          comment:attend.comment,
         }));
-        
+      
         return formattedAttendance;
-        
+     
       }
+    
     } catch (error:any) {
       console.error("Error fetching attendance history:", error.message);
       return [];

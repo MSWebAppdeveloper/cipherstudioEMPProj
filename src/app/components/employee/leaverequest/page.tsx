@@ -62,7 +62,7 @@ const LeaveRequestComponent: React.FC = () => {
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
     const response = await fetch(
-      "http://192.168.1.8:8080/api/employee/refresh",
+      "http://192.168.1.5:8080/api/employee/refresh",
       {
         method: "POST",
         headers: {
@@ -92,7 +92,7 @@ const LeaveRequestComponent: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://192.168.1.8:8080/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&status=${filterValue}`,
+        `http://192.168.1.5:8080/api/employee/user/details?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&status=${filterValue}`,
         {
           method: "GET",
           headers: {
@@ -103,7 +103,6 @@ const LeaveRequestComponent: React.FC = () => {
       );
       if (response.ok) {
         const userDetails = await response.json();
-        console.log(userDetails[0].attendance.map((attend: any) => attend.status));
         const userLeaveRequests = userDetails[0].leaveRequests;
         const userLeaveBalance = userDetails[0].leaveBalance;
         // const { leaveRequests, totalPages, totalCount } = userDetails.data;
