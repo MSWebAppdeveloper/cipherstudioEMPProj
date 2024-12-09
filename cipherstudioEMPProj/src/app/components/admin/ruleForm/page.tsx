@@ -33,7 +33,7 @@ const RuleFormComponent: React.FC<RuleFormComponentProps> = ({
     setFormData({
       id: rule?.id || "",
       name: rule?.name || "",
-     
+
     });
   }, [rule]);
 
@@ -63,34 +63,34 @@ const RuleFormComponent: React.FC<RuleFormComponentProps> = ({
       //     handleClose();
       //   }
       // } else {
-        // Create new user
-      
+      // Create new user
 
-        const response = await axios.post(`http://192.168.1.5:8080/api/rules`, {
-          ruleName: formData.name,
-          
-        });
-        if (response.status === 201) {
-          toast.success("Create rule successfully");
-          setLoading(false);
-          setFormData(initialFormValues);
-          onUpdate();
-          handleClose();
-        }else {
-          toast.error("Failed to create rule.");
-        }
+
+      const response = await axios.post(`http://192.168.1.8:8080/api/rules`, {
+        ruleName: formData.name,
+
+      });
+      if (response.status === 201) {
+        toast.success("Create rule successfully");
+        setLoading(false);
+        setFormData(initialFormValues);
+        onUpdate();
+        handleClose();
+      } else {
+        toast.error("Failed to create rule.");
+      }
       // }
     } catch (error: any) {
       console.error(error);
       setLoading(false);
       if (error.response && error.response.status === 401) {
         toast.error(error.response.data.error);
-      }else if( error.response.status === 400){
+      } else if (error.response.status === 400) {
         toast.error(error.response.data.error);
       } else {
         toast.error("Something went wrong!");
       }
-    } 
+    }
   };
 
   const handleClosePopup = () => {
@@ -109,7 +109,7 @@ const RuleFormComponent: React.FC<RuleFormComponentProps> = ({
         Name: undefined,
         Email: undefined,
         Password: undefined
-      }}    />
+      }} />
   );
 };
 

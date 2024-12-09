@@ -2,7 +2,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = new Sequelize(
-  `postgres://postgres:admin@localhost:5432/demo`,
+  `postgres://postgres:admin@localhost:5432/lms`,
   { dialect: "postgres" }
 );
 

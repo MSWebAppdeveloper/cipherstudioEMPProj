@@ -65,7 +65,7 @@ const EmployeePage: React.FC = () => {
         const url = "employee/attendance/status";
         // const res= await Attendance("attendance/status")
         const response = await axios.get(
-          "http://192.168.1.5:8080/api/employee/attendance/status",
+          "http://192.168.1.8:8080/api/employee/attendance/status",
           { params: { UserId: userId } }
         );
         const { isClockedIn, attendanceId, existingEntry } = response.data
@@ -121,7 +121,7 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.post(
-        "http://192.168.1.5:8080/api/employee/attendance/signin",
+        "http://192.168.1.8:8080/api/employee/attendance/signin",
         {
           UserId: localStorage.getItem("UserId"),
           timeIn: formattedTimeIn,
@@ -131,7 +131,7 @@ const EmployeePage: React.FC = () => {
           homeActiveEnd,
         }
       );
-    
+
 
       setIsClockedIn(true);
       setTimeIn(response.data.timeIn);
@@ -164,19 +164,19 @@ const EmployeePage: React.FC = () => {
         second: "2-digit",
       });
       const response = await axios.put(
-        `http://192.168.1.5:8080/api/employee/attendance/signout/${attendanceId}`,
+        `http://192.168.1.8:8080/api/employee/attendance/signout/${attendanceId}`,
         {
           timeOut: formattedTimeOut,
         }
       );
-   
+
       setIsClockedIn(false);
       setTimeOut(response.data.timeOut);
       toast.success("Day-out successful");
       setTimeout(() => {
-      toast.success(response.data.message)
-      
-      },2000)
+        toast.success(response.data.message)
+
+      }, 2000)
       setStatus(response.data.status);
       setIsDayInActive(true);
       setIsDayOutActive(false);
@@ -198,42 +198,42 @@ const EmployeePage: React.FC = () => {
 
 
   //
-const fetchAttendanceData=async(date:string)=>{
-  try {
-    let userId = localStorage.getItem("UserId");   
-    let accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      console.error("Token not found. Redirect to login page.");
-      return;
-    }
-    const response = await fetch(
-      `http://192.168.1.5:8080/api/employee/user/details?userId=${userId}`,
-      
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
+  const fetchAttendanceData = async (date: string) => {
+    try {
+      let userId = localStorage.getItem("UserId");
+      let accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        console.error("Token not found. Redirect to login page.");
+        return;
       }
-    );
-    if (response.ok) {
-      const userDetails = await response.json();
-      const formattedAttendance=await userDetails[0].attendance.map((attend: any) => ({
-        title:attend.status,
-        status: attend.status,
-        date:attend.date,
-        start:attend.timeIn,
-        end:attend.timeOut
-        
-      }))
-      setAttendanceData(formattedAttendance);
-   
-    } 
-  } catch (error: any) {
-    console.error("Error fetching user details:", error.message);
+      const response = await fetch(
+        `http://192.168.1.8:8080/api/employee/user/details?userId=${userId}`,
+
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        const userDetails = await response.json();
+        const formattedAttendance = await userDetails[0].attendance.map((attend: any) => ({
+          title: attend.status,
+          status: attend.status,
+          date: attend.date,
+          start: attend.timeIn,
+          end: attend.timeOut
+
+        }))
+        setAttendanceData(formattedAttendance);
+
+      }
+    } catch (error: any) {
+      console.error("Error fetching user details:", error.message);
+    }
   }
-}
 
 
 

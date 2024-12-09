@@ -36,7 +36,7 @@ const RuleForCalendarTemplate: React.FC<RulesForCalendarProps> = ({
       };
 
       const response = await axios.put(
-        `http://192.168.1.5:8080/api/rules/${ruleId}`,
+        `http://192.168.1.8:8080/api/rules/${ruleId}`,
         ruleData
       );
       if (response.status === 200) {
@@ -55,7 +55,7 @@ const RuleForCalendarTemplate: React.FC<RulesForCalendarProps> = ({
     }
   };
 
-  
+
 
   const handleRuleClick = (rule: any) => {
     setActiveTab(rule.ruleName === 'Grace' ? 'grace' : rule.key);
@@ -63,7 +63,7 @@ const RuleForCalendarTemplate: React.FC<RulesForCalendarProps> = ({
     setGraceStart(rule.graceTime || '');
     setAllowedCount(rule.allowedCount || '');
     setRuleId(rule.id);
-   
+
   };
 
   const softDeleteUser = (ruleId: string) => {
@@ -99,16 +99,17 @@ const RuleForCalendarTemplate: React.FC<RulesForCalendarProps> = ({
                         handleRuleClick(rule)
                       }
                       className='rule-name max-w-[90%] truncate'
-        style={{ flex: '0 0 90%' }}
+                      style={{ flex: '0 0 90%' }}
                     >
                       {rule.ruleName}
                     </span>
                     <button
-                    className="flex justify-center items-center ml-9"
-                    style={{ flex: '0 0 10%' }} 
-                      onClick={(e) =>{
+                      className="flex justify-center items-center ml-9"
+                      style={{ flex: '0 0 10%' }}
+                      onClick={(e) => {
                         e.stopPropagation();
-                         deleteSelected(rule.id)}}
+                        deleteSelected(rule.id)
+                      }}
                     >
                       <Icon
                         icon="mi:delete"
@@ -250,62 +251,62 @@ const RuleForCalendarTemplate: React.FC<RulesForCalendarProps> = ({
 
         {/* Grace Rules page */}
         {activeTab === 'grace' && (
-  <div>
-    <h1 className="text-3xl font-bold mb-4">Grace Rules for Calendar</h1>
-    <p className="text-lg text-gray-700">
-      Set the grace period for the attendance calendar.
-    </p>
+          <div>
+            <h1 className="text-3xl font-bold mb-4">Grace Rules for Calendar</h1>
+            <p className="text-lg text-gray-700">
+              Set the grace period for the attendance calendar.
+            </p>
 
-    {/* Grace Time and Allowed Count Inline */}
-    <div className="flex items-center space-x-4">
-      {/* Grace Start Time */}
-      <div className="flex flex-col">
-        <label
-          htmlFor="graceStart"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Grace Start Time (in minutes)
-        </label>
-        <input
-          type="number"
-          id="graceStart"
-          value={graceStart}
-          onChange={(e) => setGraceStart(e.target.value)}
-          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-          placeholder="Enter grace start time"
-        />
-      </div>
+            {/* Grace Time and Allowed Count Inline */}
+            <div className="flex items-center space-x-4">
+              {/* Grace Start Time */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="graceStart"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Grace Start Time (in minutes)
+                </label>
+                <input
+                  type="number"
+                  id="graceStart"
+                  value={graceStart}
+                  onChange={(e) => setGraceStart(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  placeholder="Enter grace start time"
+                />
+              </div>
 
-      {/* Allowed Count */}
-      <div className="flex flex-col">
-        <label
-          htmlFor="allowedCount"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Allowed Count
-        </label>
-        <input
-          type="number"
-          id="allowedCount"
-          value={allowedCount}
-          onChange={(e) => setAllowedCount(e.target.value)}
-          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-          placeholder="Enter allowed count"
-        />
-      </div>
+              {/* Allowed Count */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="allowedCount"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Allowed Count
+                </label>
+                <input
+                  type="number"
+                  id="allowedCount"
+                  value={allowedCount}
+                  onChange={(e) => setAllowedCount(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  placeholder="Enter allowed count"
+                />
+              </div>
 
-      {/* Submit Button */}
-      <div className="flex items-end">
-        <button
-          onClick={() => handleGraceSubmit(ruleId)}
-          className="bg-blue-600 text-white mt-5 py-2 px-4 rounded-md"
-        >
-          Save
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              {/* Submit Button */}
+              <div className="flex items-end">
+                <button
+                  onClick={() => handleGraceSubmit(ruleId)}
+                  className="bg-blue-600 text-white mt-5 py-2 px-4 rounded-md"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
 
 

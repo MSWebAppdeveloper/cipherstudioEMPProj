@@ -16,11 +16,11 @@ const RulesForCalendar: React.FC = () => {
     useState<boolean>(false);
   const getAllRules = async () => {
     try {
-      const response = await axios.get(`http://192.168.1.5:8080/api/rules`)
+      const response = await axios.get(`http://192.168.1.8:8080/api/rules`)
       setAllRules(response.data)
-     
+
     } catch (err) {
-      console.log("Error fetching users:" ,err)
+      console.log("Error fetching users:", err)
     }
   }
 
@@ -28,34 +28,34 @@ const RulesForCalendar: React.FC = () => {
     getAllRules()
   }, [])
 
-  
+
   const handleDeleteRule = async (ruleId: string) => {
     setSelectedRuleId(ruleId)
     setDeleteConfirmationVisible(true)
   }
- 
+
   const handleDeleteConfirmation = async () => {
     try {
-      const response = await axios.delete(`http://192.168.1.5:8080/api/rules/${selectedRuleId}`)
+      const response = await axios.delete(`http://192.168.1.8:8080/api/rules/${selectedRuleId}`)
       if (response.status === 200) {
         getAllRules()
         toast.success("User deleted successfully!");
       }
-    }catch (error) {
-        console.error("Error deleting user:", error);
-        toast.error("User deleted successfully");
-      }finally {
-        setDeleteConfirmationVisible(false);
-      }
-    }
-    const cancelDeleteRule = () => {
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("User deleted successfully");
+    } finally {
       setDeleteConfirmationVisible(false);
-    };
-  
+    }
+  }
+  const cancelDeleteRule = () => {
+    setDeleteConfirmationVisible(false);
+  };
+
 
   const handleEditUserUpdate = () => {
     getAllRules()
-  
+
   };
 
 
@@ -77,9 +77,9 @@ const RulesForCalendar: React.FC = () => {
         handleDeleteConfirmation={handleDeleteConfirmation}
         cancelDeleteRule={cancelDeleteRule}
         isDeleteConfirmationVisible={isDeleteConfirmationVisible}
-        selectedRuleId={selectedRuleId} 
+        selectedRuleId={selectedRuleId}
         onupdate={handleEditUserUpdate}
-         />
+      />
     </>
   );
 };

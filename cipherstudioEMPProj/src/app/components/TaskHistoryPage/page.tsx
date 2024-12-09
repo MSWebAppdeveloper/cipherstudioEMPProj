@@ -21,14 +21,14 @@ const TaskHistoryPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const taskId = searchParams.get('taskId'); // Fetch the taskId from the query parameters
-  const projectName = searchParams.get('projectName'); 
+  const projectName = searchParams.get('projectName');
   const [taskHistory, setTaskHistory] = useState<TaskHistory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     if (taskId) {
       // Fetch the task history for the project
-      axios.get(`http://192.168.1.5:8080/api/task/${taskId}/history`)
+      axios.get(`http://192.168.1.8:8080/api/task/${taskId}/history`)
         .then(response => {
           setTaskHistory(response.data);
           setLoading(false);

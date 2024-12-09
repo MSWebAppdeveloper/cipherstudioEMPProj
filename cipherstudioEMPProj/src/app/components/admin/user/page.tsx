@@ -114,7 +114,7 @@ const UserComponent: React.FC = () => {
   const handleToggleUserStatus = async (userId: string, isActive: boolean) => {
     try {
       await axios.put(
-        `http://192.168.1.5:8080/api/employee/users/${userId}/status`,
+        `http://192.168.1.8:8080/api/employee/users/${userId}/status`,
         { isActive }
       );
       getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
@@ -145,7 +145,7 @@ const UserComponent: React.FC = () => {
   const fetchAttendanceHistory = async (userId: string) => {
     try {
       const response = await axios.get(
-        `http://192.168.1.5:8080/api/employee/users/${userId}`
+        `http://192.168.1.8:8080/api/employee/users/${userId}`
       );
 
       if (response.data && response.data[0].calendarReport) {
@@ -155,25 +155,25 @@ const UserComponent: React.FC = () => {
           date: attend.date,
           start: attend.timeIn,
           end: attend.timeOut,
-          comment:attend.comment,
+          comment: attend.comment,
         }));
-      
+
         return formattedAttendance;
-     
+
       }
-    
-    } catch (error:any) {
+
+    } catch (error: any) {
       console.error("Error fetching attendance history:", error.message);
       return [];
     }
   };
-  
+
   const handleCalendarClick = async (userId: string) => {
     const userAttendance = await fetchAttendanceHistory(userId);
     setSelectedUserAttendance(userAttendance || []);
     setShowCalendarModal(true);
   };
-  
+
   return (
     <>
       <UserFormComponent
