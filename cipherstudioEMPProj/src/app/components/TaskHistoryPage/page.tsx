@@ -21,7 +21,7 @@ const TaskHistoryPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const taskId = searchParams.get('taskId'); // Fetch the taskId from the query parameters
-  const projectName = searchParams.get('projectName'); // Fetch the projectName from the query parameters
+  const projectName = searchParams.get('projectName'); 
   const [taskHistory, setTaskHistory] = useState<TaskHistory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
