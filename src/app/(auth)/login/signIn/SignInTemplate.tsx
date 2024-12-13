@@ -3,6 +3,7 @@ import { SignInInterface } from "./SignInInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
 import { Metadata } from "next";
+import Link from "next/link";
 
 const SignInTemplate: React.FC<SignInInterface> = ({
   onChangeData,
@@ -108,9 +109,9 @@ const SignInTemplate: React.FC<SignInInterface> = ({
                         <span className="text-color text-xs">Remember me</span>
                       </label>
                       <div>
-                        <a href="#" className="text-xs text-color">
+                        <Link href="/ForgetPassword" className="text-xs text-color">
                           Forgot Password?
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>

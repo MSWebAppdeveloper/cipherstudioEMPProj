@@ -5,6 +5,8 @@ import { UserLogin } from "@/services/api";
 import toast from "react-hot-toast";
 import SignInTemplate from "./SignInTemplate";
 import { useRouter } from "next/navigation";
+import LoginLoading from "@/skeletonComponent/LoginLoading";
+import ForgetPasswordComponent from "../../ForgetPassword/ForgetPassword/page";
 
 const initialFormValues = {
   email: "",
@@ -20,6 +22,10 @@ function SignIn() {
   const router = useRouter();
   const [redirecting, setRedirecting] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModal, setIsModal] = useState<boolean>(false);
+ 
+  
 
   useEffect(() => {
     // Check if there are saved credentials in local storage
@@ -131,16 +137,30 @@ function SignIn() {
     }
   };
 
+  useEffect (()=>{
+    setIsLoading(true)
+    const timer =setTimeout(()=>setIsLoading(false),1000)
+    return()=>clearTimeout(timer)
+  },[])
+
+  if(isLoading) {
+  return <LoginLoading/>
+  }
+
   return (
-    <SignInTemplate
-      onLogin={onLogin}
-      onChangeData={onChangeData}
-      formdata={formdata}
-      loading={loading}
-      errors={errors}
-      rememberMe={rememberMe}
-      onRememberMeChange={onRememberMeChange}
-    />
+    <>
+    
+      <SignInTemplate
+        onLogin={onLogin}
+        onChangeData={onChangeData}
+        formdata={formdata}
+        loading={loading}
+        errors={errors}
+        rememberMe={rememberMe}
+        onRememberMeChange={onRememberMeChange}
+        setModal={setIsModal}
+         />
+         </>
   );
 }
 

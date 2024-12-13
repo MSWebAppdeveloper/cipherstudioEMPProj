@@ -5,6 +5,7 @@ import RuleForCalendarTemplate from './RuleForCalendarTemplate';
 import RuleFormComponent from '../ruleForm/page';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import RuleForCalanderLoading from '@/skeletonComponent/RuleForCalanderLoading';
 
 const RulesForCalendar: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -12,6 +13,7 @@ const RulesForCalendar: React.FC = () => {
   const [selectedRule, setSelectedRule] = useState<any>(null);
   const [allRules, setAllRules] = useState<any[]>([]);
   const [selectedRuleId, setSelectedRuleId] = useState<string>("")
+  const[isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState<boolean>(false);
   const getAllRules = async () => {
@@ -57,6 +59,15 @@ const RulesForCalendar: React.FC = () => {
     getAllRules()
   
   };
+  useEffect (()=>{
+    setIsLoading(true);
+    const timer =setTimeout(()=>setIsLoading(false),1000)
+    return()=>clearTimeout(timer)
+  },[])
+  if(isLoading) {
+  return <RuleForCalanderLoading/>
+  }
+  
 
 
   return (

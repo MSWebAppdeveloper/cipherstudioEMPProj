@@ -4,6 +4,7 @@ import LeaveTypeTemplate from "./leaveTypeTemplate";
 import { LeaveTypes, deleteLeave } from "@/services/api";
 import LeaveFormComponent from "../leaveForm/page";
 import toast from "react-hot-toast";
+import LeaveTypeLoading from "@/skeletonComponent/LeaveTypeLoading";
 
 const LeaveTypeComponent: React.FC = () => {
   const [isModal, setModal] = useState<boolean>(false);
@@ -16,7 +17,7 @@ const LeaveTypeComponent: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
-
+const[isLoading, setIsLoading] = useState(false);
   const [leaveTypes, setLeaveTypes] = useState<
     {
       leave_type_id: number;
@@ -39,6 +40,7 @@ const LeaveTypeComponent: React.FC = () => {
 
 
   useEffect(() => {
+ 
     fetchLeaveTypes(currentPage);
   }, [currentPage, formdata.year, formdata.limit, formdata.order, sortColumn, sortOrder]);
 
@@ -100,6 +102,16 @@ const LeaveTypeComponent: React.FC = () => {
     setSortOrder(order);
     setSortColumn(column);
   };
+
+  //skeleton loading function
+  useEffect (()=>{
+    setIsLoading(true);
+    const timer =setTimeout(()=>setIsLoading(false),1000)
+    return()=>clearTimeout(timer)
+  },[])
+  if(isLoading) {
+  return <LeaveTypeLoading/>
+  }
   return (
     <>
       <LeaveFormComponent

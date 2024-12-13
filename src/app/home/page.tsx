@@ -2,10 +2,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Loading from '../Loading';
+import EmployeePageLoading from '@/skeletonComponent/EmployeePageLoading';
 
 const HomePage = () => {
     const router = useRouter();
     const [redirecting, setRedirecting] = useState(false);
+    const userRole = localStorage.getItem('userRole');
 
     useEffect(() => {
         // Check if userRole exists in localStorage
@@ -21,23 +24,25 @@ const HomePage = () => {
             } else if (userRole === 'Employee') {
                 router.push('/employee/dashboard');
             }
-        }, 1000);
+    },1000);
 
         // Cleanup function to clear the timeout
         return () => clearTimeout(redirectTimeout);
     }, [router]);
 
     return (
-        <div className="home-container h-screen grid items-center content-center text-center px-4 py-8 mx-auto max-w-7xl">
-            <h1 className="text-3xl font-bold md:text-4xl">
-                Welcome to Your Attendance Page
-            </h1>
-            {redirecting && <p className="text-red-700">Redirecting...</p>}
+        <div >
+            {redirecting && 
+            // <p className="text-red-700">Redirecting...</p> 
+           userRole === 'Management' ?
+           <Loading/>:
+        <EmployeePageLoading/>
+            }
             {!redirecting && (
                 <h3 className="text-2xl font-bold md:text-2xl">
                     Click{' '}
                     <span className="text-red-700">
-                        <Link href="/login">here </Link>
+                        <Link href="/">here </Link>
                     </span>{' '}
                     to Login.
                 </h3>

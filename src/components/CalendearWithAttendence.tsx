@@ -129,6 +129,10 @@ const CalendarWithAttendance: React.FC<CalendarWithAttendanceProps> = ({ attenda
         components={{
           event: CustomEvent, 
         }}
+        messages={{
+          previous: 'Previous',
+
+        }}
       />
     </div>
   );

@@ -14,6 +14,7 @@ import LeaveApplicationsTemplate from "./leaveApplicationsTemplate";
 import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import LeaveApplicationLoading from "@/skeletonComponent/LeaveApplicatinLoading";
 
 const LeaveApplications: React.FC = () => {
   const [approverId, setApproverId] = useState<number | null>(null);
@@ -51,6 +52,7 @@ const LeaveApplications: React.FC = () => {
   };
 
   useEffect(() => {
+   
     getAllUsers(currentPage);
     fetchApproverId();
   }, []);
@@ -253,6 +255,17 @@ const LeaveApplications: React.FC = () => {
     setIsLoading(true);
     await fetchLeaveHistory(1, true);
   };
+
+  useEffect (()=>{
+    setIsLoading(true)
+    const timer =setTimeout(()=>setIsLoading(false),1000)
+    return()=>clearTimeout(timer)
+  },[])
+
+  if(isLoading) {
+  return <LeaveApplicationLoading/>
+  }
+  
 
   return (
     <>

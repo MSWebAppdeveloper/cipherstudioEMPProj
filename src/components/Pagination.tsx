@@ -35,9 +35,17 @@ const Pagination: React.FC<PaginationProps> = ({
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
   // Adjust startPage and endPage if needed
-  if (totalPages - endPage < Math.floor(maxVisiblePages / 2)) {
-    startPage = Math.max(1, totalPages - maxVisiblePages + 1);
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
   }
+  // Ensure the range starts at 1 if the total number of pages is less than maxVisiblePages
+if (totalPages <= maxVisiblePages) {
+  startPage = 1;
+  endPage = totalPages;
+}
+  // if (totalPages - endPage < Math.floor(maxVisiblePages / 2)) {
+  //   startPage = Math.max(1, totalPages - maxVisiblePages + 1);
+  // }
 
   for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
@@ -45,7 +53,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <>
-      <div className="flex justify-between items-center mt-4 pagination-tbl">
+      <div className="flex  justify-between items-center mt-4 pagination-tbl space-y-2">
         <div>
           <label htmlFor="limit" className="mr-2">
             Items per page:
@@ -78,7 +86,6 @@ const Pagination: React.FC<PaginationProps> = ({
           </span>{" "}
           of <span className="font-medium">{totalCount}</span> results
         </span>
-
         <div>
           <nav
             className="isolate inline-flex -space-x-px rounded-md shadow-sm"

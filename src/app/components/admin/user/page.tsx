@@ -8,6 +8,8 @@ import { UserDetails, deleteUser } from "@/services/api";
 import UserTemplate from "./UserTemplate";
 import CalendarWithAttendance from "@/components/CalendearWithAttendence";
 import { AttendanceHistory } from "@/services/api";
+import Loading from "@/app/Loading";
+import UserLoading from "@/skeletonComponent/UserLoading";
 const initialFormValues = {
   name: "",
   email: "",
@@ -40,10 +42,22 @@ const UserComponent: React.FC = () => {
   const [selectedUserAttendance, setSelectedUserAttendance] = useState<any[]>([])
   const [showCalendarModal, setShowCalendarModal] = useState<boolean>(false)
   const [attendanceData, setAttendanceData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+
+  const OnchangeData = (e: any) => {
+    setFormdata({
+      ...formdata,
+      [e.target.name]: e.target.value,
+    });
+  };
+
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
+    
     getAllUsers(currentPage, currentTab === "Active");
+  
   }, [
     filterValue,
     isModal,
@@ -55,20 +69,16 @@ const UserComponent: React.FC = () => {
     currentTab,
   ]);
 
-  const OnchangeData = (e: any) => {
-    setFormdata({
-      ...formdata,
-      [e.target.name]: e.target.value,
-    });
-  };
   const getAllUsers = async (page: number, isActive: boolean) => {
     try {
+      // setIsLoading(true)
       const url = `employee/allusers?page=${page}&limit=${formdata.limit}&order=${formdata.order}&sortColumn=${sortColumn}&sortOrder=${sortOrder}&userRole=${filterValue}&isActive=${isActive}`;
       const response: any = await UserDetails(url);
       setAllUsers(response.data.data);
       setTotalPages(response.data.totalPages);
       setTotalCount(response.data.totalCount);
       setShift(response.data.shift);
+      // setIsLoading(false);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -118,6 +128,7 @@ const UserComponent: React.FC = () => {
         { isActive }
       );
       getAllUsers(currentPage, currentTab === "Active"); // Refresh the user list after updating status
+
       toast.success(`User ${isActive ? "enabled" : "disabled"} successfully!`);
     } catch (error) {
       console.error("Error toggling user status:", error);
@@ -155,25 +166,35 @@ const UserComponent: React.FC = () => {
           date: attend.date,
           start: attend.timeIn,
           end: attend.timeOut,
-          comment:attend.comment,
+          comment: attend.comment,
         }));
-      
+
         return formattedAttendance;
-     
+
       }
-    
-    } catch (error:any) {
+
+    } catch (error: any) {
       console.error("Error fetching attendance history:", error.message);
       return [];
     }
   };
-  
+
   const handleCalendarClick = async (userId: string) => {
     const userAttendance = await fetchAttendanceHistory(userId);
     setSelectedUserAttendance(userAttendance || []);
     setShowCalendarModal(true);
   };
-  
+
+  //Skeleton loading function
+  useEffect(() => {
+    setIsLoading(true)
+    const timer = setTimeout(() => setIsLoading(false), 1000)
+    return () => clearTimeout(timer)
+  }, [])
+  if (isLoading) {
+    return <UserLoading />
+  }
+
   return (
     <>
       <UserFormComponent
@@ -211,7 +232,7 @@ const UserComponent: React.FC = () => {
       />
       {showCalendarModal && (
         <div className="  absolute inset-0 flex justify-center items-center bg-gray-900 bg-opacity-75  z-[999]">
-          <div className=" bg-white p-4 rounded shadow-md max-w-4xl w-3/4 h-[90vh] overflow-y-auto">
+          <div className=" bg-white p-4 rounded shadow-md max-w-6xl w-3/4 h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold mb-2">Attendance Calendar</h2>
             <CalendarWithAttendance attendanceData={selectedUserAttendance} />
             <button
