@@ -7,6 +7,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ForgetPasswordProps } from "./ForegetPasswordInterface";
+import Link from "next/link";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -93,6 +94,11 @@ const ForgetPasswordTemplate: React.FC<ForgetPasswordProps> = ({
                         "Verify mail address"
                       )}
                     </button>
+                    <div>
+                      <Link href="/login"
+                      className="text-sm py-5">Back to <span className="text-blue-700 underline underline-offset-1">login page</span> 
+                      </Link>
+                    </div>
                   </Form>
                 )}
               </Formik>
