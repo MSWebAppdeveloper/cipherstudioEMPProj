@@ -4,6 +4,8 @@ import { CSVLink } from "react-csv";
 import { ReportsInterface } from "./reportsInterface";
 import TableComponent from "@/components/TableComponent";
 import DateRangePickerComp from "@/components/DateRangePickerComp";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton"
+import 'react-loading-skeleton/dist/skeleton.css'
 const ReportsTemplate: React.FC<ReportsInterface> = ({
   attendance,
   reports,
@@ -137,6 +139,7 @@ const ReportsTemplate: React.FC<ReportsInterface> = ({
 
   return (
     <>
+<SkeletonTheme/>
 
       <div>
         <div className="p-5 box-shadow rounded-md mt-4 lg:px-8 lg:py-8">

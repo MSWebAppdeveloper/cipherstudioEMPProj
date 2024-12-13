@@ -12,5 +12,5 @@ export interface EmployeeAttendanceInterface {
   handleHomeActiveHoursChange: any;
   homeActiveStart: any;
   homeActiveEnd: any;
-  attendanceData: {start:Date,end:Date,title:string,date:Date, status: string}[]
+  attendanceData: {start:Date,end:Date,title:string,date:Date, status: string, comment: string;}[]
 }

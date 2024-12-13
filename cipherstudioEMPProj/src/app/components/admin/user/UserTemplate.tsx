@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { UserProps } from "./UserInterface";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import TableComponent from "@/components/TableComponent";
-import { Tabs, Tab, Card, CardBody, CardHeader } from "@nextui-org/react";
 import { CiCalendar } from "react-icons/ci";
 
 

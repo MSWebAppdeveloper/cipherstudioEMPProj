@@ -4,6 +4,7 @@ import ReportsTemplate from "./reportsTemplate";
 import { AttendanceHistory, UserDetails } from "@/services/api";
 import { ReportEntry } from "./reportsInterface";
 import CalendarWithAttendance from "@/components/CalendearWithAttendence";
+import ReportLoading from "@/skeletonComponent/ReportLoading";
 
 const Reports: React.FC = () => {
   const [attendance, setAttendance] = useState<ReportEntry[]>([]);
@@ -30,10 +31,6 @@ const Reports: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDataFetched, setIsDataFetched] = useState(false);
   
-
- 
-
-
   const OnchangeData = (e: any) => {
     setFormdata({
       ...formdata,
@@ -81,7 +78,6 @@ const Reports: React.FC = () => {
 
       if (forDownload) {
         setDownloadData(response.data);
-        setIsLoading(false);
       } else {
         const dataWithParsedTotalHours = response.data.data.map(
           (entry: any) => ({
@@ -132,10 +128,18 @@ const Reports: React.FC = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const fetchAllRecords = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     await fetchAttendanceHistory(1, true);
   };
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => setIsLoading(false), 1000); 
+    return () => clearTimeout(timer);
+  }, []);
 
+  if (isLoading) {
+    return <ReportLoading />;
+  }
   return (
     <>
       <ReportsTemplate

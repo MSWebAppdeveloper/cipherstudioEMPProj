@@ -9,6 +9,7 @@ import { LeaveTypes, deleteUser } from "@/services/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import LeaveRequestLoading from "@/skeletonComponent/LeaveRequestLoading";
 
 const LeaveRequestComponent: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -35,6 +36,7 @@ const LeaveRequestComponent: React.FC = () => {
   );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [sortColumn, setSortColumn] = useState<string>("createdAt");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -191,6 +193,16 @@ const LeaveRequestComponent: React.FC = () => {
     setFilterType(type);
     setFilterValue(value);
   };
+  useEffect (()=>{
+    setIsLoading(true)
+    const timer =setTimeout(()=>setIsLoading(false),1000)
+    return()=>clearTimeout(timer)
+  },[])
+
+  if(isLoading) {
+  return <LeaveRequestLoading/>
+  }
+  
   return (
     <>
       <LeaveRequestFormComponent

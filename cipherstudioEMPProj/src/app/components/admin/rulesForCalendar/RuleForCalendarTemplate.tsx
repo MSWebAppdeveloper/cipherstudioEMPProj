@@ -4,6 +4,8 @@ import { RiArrowDropDownLine } from 'react-icons/ri';
 import { Icon } from "@iconify/react/dist/iconify.js";
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Skeleton from 'react-loading-skeleton';
+
 const RuleForCalendarTemplate: React.FC<RulesForCalendarProps> = ({
   activeTab,
   setActiveTab,

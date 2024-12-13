@@ -15,7 +15,7 @@ const Dashboard =  () => {
               <div className="container mx-auto px-4 py-4">
                 <div className="grid md:grid-cols-1 gap-4">
                   <div className="text-center mt-4">
-                    <div>this is Admin Dashboard</div>
+                    {/* <div>this is Admin Dashboard</div> */}
                   </div>
                 </div>
               </div>

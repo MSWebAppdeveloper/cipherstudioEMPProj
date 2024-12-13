@@ -4,9 +4,12 @@ export interface SignInInterface {
     formdata: {
         email: string;
         password: string;
+
     };
     loading: boolean;
     errors: loginErrorType;
     rememberMe:boolean
 onRememberMeChange:(e: any) => void
+setModal: React.Dispatch<React.SetStateAction<boolean>>;
+
 } 

@@ -8,7 +8,6 @@ router.post("/attendance/signin", AttendanceController.signin);
 router.get("/attendance/status", AttendanceController.getStatus);
 
 router.get("/attendance", AttendanceController.getAllAttendance);
-
 router.get("/attendance/:id", AttendanceController.getAttendanceById);
 
 router.put("/attendance/:id", AttendanceController.updateAttendance);

@@ -8,6 +8,8 @@ import { TaskTemplateInterface } from "./tasksInterface";
 import TaskTemplate from "./tasksTemplate";
 import TasksFormComponent from "../tasksForm/page";
 import CommentPopup from "@/components/CommentPopup";
+import EmployeeTaskLoading from "@/skeletonComponent/EmployeeTaskLoading";
+
 
 const TaskComponent: React.FC = () => {
   const [selectedTask, setSelectedTask] = useState<any>(null);
@@ -37,7 +39,7 @@ const TaskComponent: React.FC = () => {
   const router = useRouter();
   const [history, setHistory] = useState<any[]>([]); // Updated to any[] for better type handling
   const [selectedTaskForHistory, setSelectedTaskForHistory] = useState<any>(null); // State for task history modal
-
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Fetch all tasks from the server when the component mounts
@@ -331,6 +333,15 @@ const TaskComponent: React.FC = () => {
     setFilterType(type);
     setFilterValue(value);
   };
+  useEffect (()=>{
+    setIsLoading(true)
+    const timer =setTimeout(()=>setIsLoading(false),1000)
+    return()=>clearTimeout(timer)
+  },[])
+
+  if(isLoading) {
+  return <EmployeeTaskLoading/>
+  }
 
   return (
     <>

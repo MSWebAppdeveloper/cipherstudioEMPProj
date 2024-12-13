@@ -464,7 +464,10 @@ console.log("file",req.body)
         where: { TaskId: taskId, status: "Resume" },
         order: [["resumeTime", "DESC"]],
       });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1fcb40ee9e06e2dae81020d0ef82af8023171916
       let totalSpentTime = 0;
 
       if (lastResumeEntry) {

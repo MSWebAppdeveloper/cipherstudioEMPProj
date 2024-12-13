@@ -4,6 +4,7 @@ import axios from "axios";
 import EmployeeTemplate from "./employeeTemplate";
 import toast from "react-hot-toast";
 import { title } from "process";
+import AttendanceDashboardLoading from "@/skeletonComponent/AttendanceDashboardLoading";
 
 const EmployeePage: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(
@@ -32,6 +33,7 @@ const EmployeePage: React.FC = () => {
   const [homeActiveStart, setHomeActiveStart] = useState("");
   const [homeActiveEnd, setHomeActiveEnd] = useState("");
   const [attendanceData, setAttendanceData] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(false);
   const shift = localStorage.getItem("shift");
   const handleHomeActiveHoursChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -46,7 +48,7 @@ const EmployeePage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchAttendanceData(currentDate)
+
     const updateClock = () => {
       const now = new Date();
       setCurrentTime(now.toLocaleTimeString());
@@ -182,7 +184,7 @@ const EmployeePage: React.FC = () => {
       setIsDayOutActive(false);
       setDayOutClicked(true);
       setTimerActive(false); // Stop the timer
-
+fetchAttendanceData(currentDate)
       if (intervalIdRef.current !== null) {
         clearInterval(intervalIdRef.current);
       }
@@ -283,6 +285,16 @@ const EmployeePage: React.FC = () => {
 
   // Convert the difference in seconds to a formatted time string
   const formattedElapsedTime = secondsToTime(elapsedTime);
+  useEffect (()=>{
+    setIsLoading(true)
+    const timer =setTimeout(()=>setIsLoading(false),1000)
+    return()=>clearTimeout(timer)
+  },[])
+
+  if(isLoading) {
+  return <AttendanceDashboardLoading/>
+  }
+  
 
   return (
     <EmployeeTemplate

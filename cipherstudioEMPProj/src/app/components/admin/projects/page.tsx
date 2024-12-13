@@ -4,6 +4,7 @@ import { Projects, deleteProject } from "@/services/api";
 import toast from "react-hot-toast";
 import ProjectsTemplate from "./projectsTemplate";
 import ProjectFormComponent from "../projectForm/page";
+import ProjectLoading from "@/skeletonComponent/ProjectLoading";
 
 const ProjectComponent: React.FC = () => {
     const [isModal, setModal] = useState<boolean>(false);
@@ -15,14 +16,14 @@ const ProjectComponent: React.FC = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [totalRecords, setTotalRecords] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
-
+    const [isLoading, setIsLoading] = useState(false)
     const [projects, setProjects] = useState<
         {
             id: number;
             projectName: string;
             assignedTo: string[];
-            createdBy: string; 
-            startDate: string; 
+            createdBy: string;
+            startDate: string;
         }[]
     >([]);
 
@@ -43,6 +44,7 @@ const ProjectComponent: React.FC = () => {
 
     const fetchProjects = async (page: number) => {
         try {
+
             const url = `project?page=${page}&limit=${formdata.limit}&order=${formdata.order}&year=${formdata.year}&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
             const response: any = await Projects(url);
             setProjects(response.data.data.map((proj: any) => ({
@@ -103,6 +105,15 @@ const ProjectComponent: React.FC = () => {
         setSortOrder(order);
         setSortColumn(column);
     };
+    useEffect(() => {
+        setIsLoading(true);
+        const timer = setTimeout(() => setIsLoading(false), 1000)
+        return () => clearTimeout(timer)
+    }, [])
+    if (isLoading) {
+        return <ProjectLoading />
+    }
+
     return (
         <>
             <ProjectFormComponent

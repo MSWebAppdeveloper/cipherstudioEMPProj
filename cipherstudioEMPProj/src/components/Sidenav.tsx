@@ -22,7 +22,7 @@ const SideNav = () => {
             src="/cipher.ico"
             width={25}
             height={25}
-            alt="Logo Picture" />          <span className="font-bold text-xl hidden md:flex">CipherStudio</span>
+            alt="Logo Picture" />  <span className="font-bold text-xl hidden md:flex">CipherStudio</span>
         </Link>
 
         <div className="flex flex-col space-y-2  md:px-6 ">

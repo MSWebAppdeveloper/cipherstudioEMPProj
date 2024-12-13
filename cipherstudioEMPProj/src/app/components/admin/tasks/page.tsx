@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import TaskTemplate from "./tasksTemplate";
 import { TaskInterface } from "./tasksInterface";
 import TasksFormComponent from "../../employee/tasksForm/page";
+import TaskLoading from "@/skeletonComponent/TaskLoading";
 
 const TaskComponent: React.FC = () => {
   const [taskHistory, setTaskHistory] = useState<TaskInterface[]>([]);
@@ -65,6 +66,7 @@ const TaskComponent: React.FC = () => {
   }, [filterValue, formdata.limit, formdata.order]);
 
   const fetchTasksByStatus = async (page: number, status: string, forDownload = false) => {
+
     try {
       const statusFilter = formdata.status !== "ALL" ? `&status=${formdata.status}` : "";
       const nameFilter = filterValue ? `&name=${filterValue}` : "";
@@ -123,7 +125,6 @@ const TaskComponent: React.FC = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const fetchAllRecords = async () => {
-    setIsLoading(true);
     await fetchTasksByStatus(1, status, true);
   };
 
@@ -161,6 +162,16 @@ const TaskComponent: React.FC = () => {
   const cancelDeleteUser = () => {
     setDeleteConfirmationVisible(false);
   };
+
+  useEffect (()=>{
+    setIsLoading(true);
+    const timer =setTimeout(()=>setIsLoading(false),1000)
+    return()=>clearTimeout(timer)
+  },[])
+  if(isLoading) {
+  return <TaskLoading/>
+  }
+  
 
   return (
     <>

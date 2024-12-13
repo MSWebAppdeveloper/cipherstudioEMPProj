@@ -1085,3 +1085,27 @@ select#name {
 .rbc-events-container {
   width: 100% !important;
 }
+.rbc-event-content {
+
+  text-align: center !important
+ 
+}
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #e0e0e0;
+  }
+  50% {
+    background-color: #f0f0f0;
+  }
+  100% {
+    background-color: #e0e0e0;
+  }
+}
+
+.bg-muted {
+  background-color: #f0f0f0;
+}
