@@ -184,7 +184,7 @@ const EmployeePage: React.FC = () => {
       setIsDayOutActive(false);
       setDayOutClicked(true);
       setTimerActive(false); // Stop the timer
-fetchAttendanceData(currentDate)
+      fetchAttendanceData(currentDate)
       if (intervalIdRef.current !== null) {
         clearInterval(intervalIdRef.current);
       }
@@ -200,34 +200,35 @@ fetchAttendanceData(currentDate)
 
 
   //
-  const fetchAttendanceData = async (date: string) => {
+  const fetchAttendanceData = async (userId: string) => {
     try {
       let userId = localStorage.getItem("UserId");
-      let accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        console.error("Token not found. Redirect to login page.");
-        return;
-      }
-      const response = await fetch(
-        `http://192.168.1.8:8080/api/employee/user/details?userId=${userId}`,
+      // let accessToken = localStorage.getItem("accessToken");
+      // if (!accessToken) {
+      //   console.error("Token not found. Redirect to login page.");
+      //   return;
+      // }
+      const response = await axios.get(
+        `http://192.168.1.8:8080/api/employee/users/${userId}`,
 
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-        }
+        // {
+        //   method: "GET",
+        //   headers: {
+        //     Authorization: `Bearer ${accessToken}`,
+        //     "Content-Type": "application/json",
+        //   },
+        // }
       );
-      if (response.ok) {
-        const userDetails = await response.json();
-        const formattedAttendance = await userDetails[0].attendance.map((attend: any) => ({
+      if (response.data && response.data[0].calendarReport) {
+        // const userDetails = await response.json();
+        // console.log(userDetails)
+        const formattedAttendance = response.data[0].calendarReport.map((attend: any) => ({
           title: attend.status,
           status: attend.status,
           date: attend.date,
           start: attend.timeIn,
-          end: attend.timeOut
-
+          end: attend.timeOut,
+          comment: attend.comment,
         }))
         setAttendanceData(formattedAttendance);
 
@@ -236,7 +237,10 @@ fetchAttendanceData(currentDate)
       console.error("Error fetching user details:", error.message);
     }
   }
-
+  useEffect(() => {
+    const todayDate = new Date().toISOString().split("T")[0];
+    fetchAttendanceData(todayDate);
+  }, [])
 
 
   // Function to convert time strings to seconds since midnight
@@ -285,16 +289,16 @@ fetchAttendanceData(currentDate)
 
   // Convert the difference in seconds to a formatted time string
   const formattedElapsedTime = secondsToTime(elapsedTime);
-  useEffect (()=>{
+  useEffect(() => {
     setIsLoading(true)
-    const timer =setTimeout(()=>setIsLoading(false),1000)
-    return()=>clearTimeout(timer)
-  },[])
+    const timer = setTimeout(() => setIsLoading(false), 1000)
+    return () => clearTimeout(timer)
+  }, [])
 
-  if(isLoading) {
-  return <AttendanceDashboardLoading/>
+  if (isLoading) {
+    return <AttendanceDashboardLoading />
   }
-  
+
 
   return (
     <EmployeeTemplate

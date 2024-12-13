@@ -11,11 +11,7 @@ const approvalTableRoutes = require("./Routes/approvalTableRoutes");
 const notificationLogRoutes = require("./Routes/notificationLogRoutes");
 const taskRoutes = require("./Routes/taskRoutes");
 const projectRoutes = require("./Routes/projectRoutes");
-<<<<<<< HEAD
 const rulesForCalendarRoutes = require("./Routes/rulesForCalendarRoutes");
-=======
-const rulesForCalendarRoutes=require("./Routes/rulesForCalendarRoutes")
->>>>>>> 1fcb40ee9e06e2dae81020d0ef82af8023171916
 
 const PORT = process.env.PORT || 8080;
 const app = express();

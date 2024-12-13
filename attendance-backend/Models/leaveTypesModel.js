@@ -1,33 +1,37 @@
 module.exports = (sequelize, DataTypes) => {
-  const LeaveTypes = sequelize.define("LeaveTypes", {
-    leave_type_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
+  const LeaveTypes = sequelize.define(
+    "LeaveTypes",
+    {
+      leave_type_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      leave_type_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      leave_description: {
+        type: DataTypes.TEXT,
+      },
+      allowed_leaves: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      assign_year: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
-    leave_type_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    leave_description: {
-      type: DataTypes.TEXT,
-    },
-    allowed_leaves: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0,
-    },
-    assign_year: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    deletedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-  }, {
-    paranoid: true,  // This enables the soft delete functionality
-    timestamps: true,
-  });
+    {
+      paranoid: true, // This enables the soft delete functionality
+      timestamps: true,
+    }
+  );
   return LeaveTypes;
 };

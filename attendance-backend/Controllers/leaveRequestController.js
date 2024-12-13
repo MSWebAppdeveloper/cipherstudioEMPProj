@@ -224,7 +224,7 @@ const LeaveRequestController = {
         offset,
         order: orderClause,
       });
-      console.log(leaveRequest);
+      // console.log(leaveRequest);
       if (!leaveRequest) {
         return res.status(404).json({ error: "Leave request not found" });
       }

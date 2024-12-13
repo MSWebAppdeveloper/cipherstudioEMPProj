@@ -13,7 +13,7 @@ const RulesForCalendar: React.FC = () => {
   const [selectedRule, setSelectedRule] = useState<any>(null);
   const [allRules, setAllRules] = useState<any[]>([]);
   const [selectedRuleId, setSelectedRuleId] = useState<string>("")
-  const[isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDeleteConfirmationVisible, setDeleteConfirmationVisible] =
     useState<boolean>(false);
   const getAllRules = async () => {
@@ -59,15 +59,15 @@ const RulesForCalendar: React.FC = () => {
     getAllRules()
 
   };
-  useEffect (()=>{
+  useEffect(() => {
     setIsLoading(true);
-    const timer =setTimeout(()=>setIsLoading(false),1000)
-    return()=>clearTimeout(timer)
-  },[])
-  if(isLoading) {
-  return <RuleForCalanderLoading/>
+    const timer = setTimeout(() => setIsLoading(false), 1000)
+    return () => clearTimeout(timer)
+  }, [])
+  if (isLoading) {
+    return <RuleForCalanderLoading />
   }
-  
+
 
 
   return (

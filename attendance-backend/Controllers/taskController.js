@@ -1,7 +1,7 @@
 const db = require("../Models");
 const { format } = require("date-fns");
 const { Op } = require("sequelize");
-const multer= require("multer")
+const multer = require("multer");
 const formatTime = (decimalMinutes) => {
   const totalMinutes = Math.floor(decimalMinutes * 60);
   const hours = Math.floor(totalMinutes / 60);
@@ -43,8 +43,8 @@ const TaskController = {
       if (req.file) {
         file = req.file.buffer; // Get the file buffer
       }
-console.log("file",req.body)
-// console.log("buffer",req.file.buffer)
+      console.log("file", req.body);
+      // console.log("buffer",req.file.buffer)
       if (status === "Completed" && !takenTime) {
         return res.status(400).json({
           error: "Time taken is required to mark the task as completed",
@@ -147,6 +147,7 @@ console.log("file",req.body)
       const formattedData = tasks.rows.map((task) => ({
         ...task.toJSON(),
         createdAt: format(new Date(task.createdAt), "MMMM do, yyyy, h:mm:ss a"),
+        updatedAt: format(new Date(task.updatedAt), "MMMM do,yyyy,h:mm:ss a"),
         takenTime: task.takenTime ? formatTime(task.takenTime) : null,
       }));
 
@@ -464,10 +465,6 @@ console.log("file",req.body)
         where: { TaskId: taskId, status: "Resume" },
         order: [["resumeTime", "DESC"]],
       });
-<<<<<<< HEAD
-
-=======
->>>>>>> 1fcb40ee9e06e2dae81020d0ef82af8023171916
       let totalSpentTime = 0;
 
       if (lastResumeEntry) {
@@ -475,7 +472,7 @@ console.log("file",req.body)
         totalSpentTime = (endTime - lastResumeTime) / 3600000; // Time in hours
       } else {
         // If no resume entry, calculate time from task's startTime
-        const startTime =new Date(task.startTime);
+        const startTime = new Date(task.startTime);
         totalSpentTime = (endTime - startTime) / 3600000; // Time in hours
       }
 
@@ -496,6 +493,7 @@ console.log("file",req.body)
       const taskHistories = await db.TaskHistory.findAll({
         where: { TaskId: taskId },
       });
+      console.log(taskHistories);
 
       const totalTakenTime = taskHistories.reduce((acc, history) => {
         return acc + (history.totalSpentTime || 0);

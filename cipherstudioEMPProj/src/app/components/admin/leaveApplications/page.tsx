@@ -52,7 +52,7 @@ const LeaveApplications: React.FC = () => {
   };
 
   useEffect(() => {
-   
+
     getAllUsers(currentPage);
     fetchApproverId();
   }, []);
@@ -256,16 +256,16 @@ const LeaveApplications: React.FC = () => {
     await fetchLeaveHistory(1, true);
   };
 
-  useEffect (()=>{
+  useEffect(() => {
     setIsLoading(true)
-    const timer =setTimeout(()=>setIsLoading(false),1000)
-    return()=>clearTimeout(timer)
-  },[])
+    const timer = setTimeout(() => setIsLoading(false), 1000)
+    return () => clearTimeout(timer)
+  }, [])
 
-  if(isLoading) {
-  return <LeaveApplicationLoading/>
+  if (isLoading) {
+    return <LeaveApplicationLoading />
   }
-  
+
 
   return (
     <>

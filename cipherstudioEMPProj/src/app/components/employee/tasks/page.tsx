@@ -333,14 +333,14 @@ const TaskComponent: React.FC = () => {
     setFilterType(type);
     setFilterValue(value);
   };
-  useEffect (()=>{
+  useEffect(() => {
     setIsLoading(true)
-    const timer =setTimeout(()=>setIsLoading(false),1000)
-    return()=>clearTimeout(timer)
-  },[])
+    const timer = setTimeout(() => setIsLoading(false), 1000)
+    return () => clearTimeout(timer)
+  }, [])
 
-  if(isLoading) {
-  return <EmployeeTaskLoading/>
+  if (isLoading) {
+    return <EmployeeTaskLoading />
   }
 
   return (

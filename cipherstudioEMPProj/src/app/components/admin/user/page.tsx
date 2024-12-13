@@ -55,9 +55,9 @@ const UserComponent: React.FC = () => {
 
   useEffect(() => {
     // Fetch all users from the server when the component mounts
-    
+
     getAllUsers(currentPage, currentTab === "Active");
-  
+
   }, [
     filterValue,
     isModal,

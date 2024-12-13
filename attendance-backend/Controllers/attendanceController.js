@@ -328,6 +328,45 @@ const AttendanceController = {
       });
     }
   },
+  getAttendanceData: async (req, res) => {
+    try {
+      const dateFilter = {};
+      const allAttendances = await db.Attendance.findAll({
+        include: [
+          {
+            model: db.CreateUser,
+            as: "CreateUser",
+          },
+        ],
+        where: dateFilter,
+        order: [["date", "desc"], ["timeIn", "desc"]],
+      });
+
+
+      const modifiedAttendances = allAttendances.map((attendance) => ({
+        id: attendance.id,
+        UserId: attendance.UserId,
+        date: attendance.date,
+        timeIn: formatTime(attendance.timeIn),
+        timeOut: formatTime(attendance.timeOut),
+        totalHours: attendance.totalHours,
+        status: attendance.status,
+        shift: attendance.shift,
+        createdAt: attendance.createdAt,
+        updatedAt: attendance.updatedAt,
+        userName: attendance.CreateUser ? attendance.CreateUser.name : null,
+      }));
+      return res.status(200).json({
+        totalCount: allAttendances.length,
+        data: modifiedAttendances,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: "Internal Server Error",
+      });
+    }
+  },
 
   getAttendanceById: async (req, res) => {
     try {
