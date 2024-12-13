@@ -180,7 +180,7 @@ const UserController = {
       };
       const users = await db.CreateUser.findAndCountAll({
         where: whereClause,
-        // limit: parseInt(limit),
+        limit: parseInt(limit),
         offset: parseInt(offset),
         order: orderClause,
       });
@@ -209,8 +209,12 @@ const UserController = {
       const limit = parseInt(req.query.limit) || 10;
       const offset = (page - 1) * limit;
       const order = req.query.order || "desc";
-      const sortColumns = req.query.sortColumn ? req.query.sortColumn.split(",") : ["createdAt"];
-      const sortOrders = req.query.sortOrder ? req.query.sortOrder.split(",") : ["desc"];
+      const sortColumns = req.query.sortColumn
+        ? req.query.sortColumn.split(",")
+        : ["createdAt"];
+      const sortOrders = req.query.sortOrder
+        ? req.query.sortOrder.split(",")
+        : ["desc"];
       const statusFilter = req.query.status || null;
 
       const orderClause = sortColumns.map((col, index) => [
@@ -256,7 +260,10 @@ const UserController = {
 
       const formattedData = leaveRequestDetails.rows.map((request) => ({
         ...request.toJSON(),
-        createdAt: format(new Date(request.createdAt), "MMMM do, yyyy, h:mm:ss a"),
+        createdAt: format(
+          new Date(request.createdAt),
+          "MMMM do, yyyy, h:mm:ss a"
+        ),
       }));
 
       const currentYear = parseInt(req.query.year) || new Date().getFullYear();
@@ -334,7 +341,7 @@ const UserController = {
           `,
         { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT }
       );
-      console.log(attendanceDetails)
+      console.log(attendanceDetails);
       // Fetch leave request details
       const leaveRequestDetails = await sequelize.query(
         `
@@ -344,34 +351,42 @@ const UserController = {
         { replacements: { userId: UserId }, type: sequelize.QueryTypes.SELECT }
       );
 
-       // Fetch grace rules
-    const rules = await db.RulesForCalendar.findOne({ where: { ruleName: 'Grace' } });
-    const graceTime = rules?.graceTime || 0; // Default to 0 if no grace rule exists
-    const allowedCount = rules?.allowedCount || 0;
+      // Fetch grace rules
+      const rules = await db.RulesForCalendar.findOne({
+        where: { ruleName: "Grace" },
+      });
+      const graceTime = rules?.graceTime || 0; // Default to 0 if no grace rule exists
+      const allowedCount = rules?.allowedCount || 0;
 
-    const monthlyGraceCount = {};
-    // Process calendar data
-    const updatedCalendarReport = calendarReport.map(entry => {
-      const entryDate = new Date(entry.date); // Parse entry date
-  const entryMonth = `${entryDate.getFullYear()}-${entryDate.getMonth() + 1}`; // e.g., "2024-10"
+      const monthlyGraceCount = {};
+      // Process calendar data
+      const updatedCalendarReport = calendarReport.map((entry) => {
+        const entryDate = new Date(entry.date); // Parse entry date
+        const entryMonth = `${entryDate.getFullYear()}-${
+          entryDate.getMonth() + 1
+        }`; // e.g., "2024-10"
 
-  if (!monthlyGraceCount[entryMonth]) {
-    monthlyGraceCount[entryMonth] = 0; // Initialize grace count for the month
-  }
-      if (entry.status === 'Short Leave') { // Check if the status is 'Short Leave'
-        let totalHoursWithGrace = parseFloat(entry.totalHours) + graceTime / 60; // Convert grace time to hours
-        if (totalHoursWithGrace >= 9 && monthlyGraceCount[entryMonth] < allowedCount) {
-          monthlyGraceCount[entryMonth]++;
-          return {
-            ...entry,
-            status: 'Full Day', // Update status to 'Full Day'
-            comment: `Grace time of ${graceTime} minutes applied.`, // Add comment about grace time
-          };
+        if (!monthlyGraceCount[entryMonth]) {
+          monthlyGraceCount[entryMonth] = 0; // Initialize grace count for the month
         }
-    }
-      return entry; // Retain the original entry for other statuses
-    });
-
+        if (entry.status === "Short Leave") {
+          // Check if the status is 'Short Leave'
+          let totalHoursWithGrace =
+            parseFloat(entry.totalHours) + graceTime / 60; // Convert grace time to hours
+          if (
+            totalHoursWithGrace >= 9 &&
+            monthlyGraceCount[entryMonth] < allowedCount
+          ) {
+            monthlyGraceCount[entryMonth]++;
+            return {
+              ...entry,
+              status: "Full Day", // Update status to 'Full Day'
+              comment: `Grace time of ${graceTime} minutes applied.`, // Add comment about grace time
+            };
+          }
+        }
+        return entry; // Retain the original entry for other statuses
+      });
 
       const mergedDetails = {
         ...user.toJSON(),
@@ -533,8 +548,7 @@ const UserController = {
     } catch (error) {
       return res.status(403).send("Invalid Refresh Token");
     }
-  },    
+  },
 };
-
 
 module.exports = UserController;
